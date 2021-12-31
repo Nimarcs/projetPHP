@@ -10,6 +10,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 # Importations des fichiers necessaires
+use mywishlist\controler\ControlerGestionListe;
 use mywishlist\controler\ControlerRacine;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -40,4 +41,14 @@ $app->get('/', function (Request $rq, Response $rs, array $args) use ($container
     return $controleur->racine($rq, $rs, $args);
 })->setName('accueil');
 
+/**
+ * Fonction 6, créer une liste
+ */
+$app->get('/newListe[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->creerListe($rq, $rs, $args);
+})->setName('creationListe');
+
+
+# On lance l'app
 $app->run();
