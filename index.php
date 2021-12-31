@@ -48,7 +48,10 @@ $app->get('/newListe[/]', function (Request $rq, Response $rs, array $args) use 
     $controleur = new ControlerGestionListe($container);
     return $controleur->creerListe($rq, $rs, $args);
 })->setName('creationListe');
-
+$app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->creerListe($rq, $rs, $_POST);
+})->setName('creationListe');
 
 # On lance l'app
 $app->run();
