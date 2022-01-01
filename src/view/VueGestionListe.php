@@ -24,6 +24,7 @@ class VueGestionListe
     // METHODES
 
     /**
+     * Fonction 6
      * Affichage du formulaire de la création de liste
      */
     private function htmlCreationListe() {

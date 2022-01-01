@@ -29,11 +29,12 @@ class ControlerGestionListe
     // METHODES
 
     /**
-     * Methode pour gérer la fonction 6
+     * Fonction 6
+     * Methode pour gerer la creation d'une liste
      *     GET: on obtient la page quiq permet de creer une nouvelle liste
      *     POST: s'execute lorsque trois parametres sont donnees par l'utilisateur, genere la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
      */
-    public function creerListe(Request $rq, Response $rs, $args) {
+    public function creerListe(Request $rq, Response $rs, array $args) {
         try {
             $vue = new VueGestionListe($this->container);
             // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
@@ -50,6 +51,7 @@ class ControlerGestionListe
     }
 
     /**
+     * Fonction 6
      * Methode privee qui permet de creer la liste au sein de la BDD
      */
     private function creerListeInBDD(array $args) {
