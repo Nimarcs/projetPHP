@@ -7,6 +7,7 @@ namespace mywishlist\controler;
 use Carbon\Exceptions\Exception;
 use mywishlist\modele\Liste;
 use mywishlist\view\VueGestionListe;
+use mywishlist\view\VueRender;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Container;
@@ -40,12 +41,13 @@ class ControlerGestionListe
             // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
             if (sizeof($args) == 3) {
                 $this->creerListeInBDD($args); // On insere dans la BDD
-                $rs = $rs->withRedirect($this->container->router->pathFor('listes')); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
+                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique')); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(1));
             }
         } catch (\Exception $e) {
-            $rs->getBody()->write("Erreur dans la creation de la liste...");
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la creation de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -72,7 +74,8 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
             $rs->getBody()->write($vue->render(2));
         } catch (\Exception $e) {
-            $rs->getBody()->write("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace());
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
