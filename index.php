@@ -10,6 +10,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 # Importations des fichiers necessaires
+use mywishlist\controler\ControlerGestionCompte;
 use mywishlist\controler\ControlerGestionListe;
 use mywishlist\controler\ControlerRacine;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -52,6 +53,18 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
     $controleur = new ControlerGestionListe($container);
     return $controleur->creerListe($rq, $rs, $_POST);
 })->setName('creationListe');
+
+/**
+ * Fonction 17, creer un compte
+ */
+$app->get('/newCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->creerCompte($rq, $rs, $args);
+})->setName('creationCompte');
+$app->post('/newCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->creerCompte($rq, $rs, $_POST);
+})->setName('creationCompte');
 
 /**
  * Fonction 21, afficher les listes publiques
