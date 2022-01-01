@@ -43,6 +43,7 @@ CREATE TABLE `liste` (
   `titre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
   `expiration` date DEFAULT NULL,
+  `public` int(1) DEFAULT 0,
   `token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -51,3 +52,11 @@ INSERT INTO `liste` (`no`, `user_id`, `titre`, `description`, `expiration`, `tok
 (1,	1,	'Pour fêter le bac !',	'Pour un week-end à Nancy qui nous fera oublier les épreuves. ',	'2018-06-27',	'nosecure1'),
 (2,	2,	'Liste de mariage d\'Alice et Bob',	'Nous souhaitons passer un week-end royal à Nancy pour notre lune de miel :)',	'2018-06-30',	'nosecure2'),
 (3,	3,	'C\'est l\'anniversaire de Charlie',	'Pour lui préparer une fête dont il se souviendra :)',	'2017-12-12',	'nosecure3');
+
+CREATE TABLE 'COMPTE' (
+    'user_id' int(11) NOT NULL AUTO_INCREMENT,
+    'login' varchar(256),
+    'mdp' varchar(20),
+    'sel' varchar(100),
+    PRIMARY KEY ('user_id')
+)
