@@ -1,0 +1,25 @@
+/**
+ * feuille css pour l'affichage en général
+ */
+
+html {
+    font-size: 14px;
+    font-family: Bahnschrift;
+}
+
+header {
+    font-size: 40px;
+    text-align: center;
+    font-style: italic;
+    color : crimson;
+}
+
+body {
+    color :  black;
+}
+
+.text-accueil {
+    font-size: 16px;
+}
+
+
