@@ -60,20 +60,25 @@ END;
      * @return string String: contenu html
      */
     public function affichageAccueil() {
-        return <<<END
-            <div class="text-accueil">
+        $html = '<div class="text-accueil">
                 <p>
                     Bonjour, bienvenue sur notre projet PHP de 3eme semestre. <br>
                     Crée votre liste et accès à vos listes et réserver les items !<br>
                     Où encore modifier vos items de vos listes pour créer des superbes listes.<br>
-                    <br>
-                    <p><a href={$this->container->router->pathFor('creationCompte')}>Se creer un compte</a></p>
-                    <p><a href={$this->container->router->pathFor('affichageListesPublique')}>Afficher toutes les listes publiques</a></p>
-                    <p><a href={$this->container->router->pathFor('creationListe')}>Creer nouvelles listes</a></p>
-
+                    <br>';
+        $val = isset($_SESSION['login']);
+        if ($val==0) {
+            $html .= '<p><a href='.$this->container->router->pathFor("creationCompte").'>Se creer un compte</a></p>
+                     <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>';
+        } else {
+            $html .= '<p> Bonjour a toi, '.$_SESSION["login"].'</p>
+                     <p><a href='.$this->container->router->pathFor("accueil").'>Se deconnecter</a></p>';
+        }
+        $html .= '<p><a href='.$this->container->router->pathFor("affichageListesPublique").'>Afficher toutes les listes publiques</a></p>
+                    <p><a href='.$this->container->router->pathFor("creationListe").'>Creer nouvelles listes</a></p>
                 </p>
-            </div>
-END;
+            </div>';
+        return $html;
     }
 
     public function htmlErreur($message) {

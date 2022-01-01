@@ -67,6 +67,18 @@ $app->post('/newCompte', function (Request $rq, Response $rs, array $args) use (
 })->setName('creationCompte');
 
 /**
+ * Fonction 18, se connecter un compte
+ */
+$app->get('/connectionCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->seConnecterCompte($rq, $rs, $args);
+})->setName('connectionCompte');
+$app->post('/connectionCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->seConnecterCompte($rq, $rs, $_POST);
+})->setName('connectionCompte');
+
+/**
  * Fonction 21, afficher les listes publiques
  */
 $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($container): Response {
@@ -76,4 +88,5 @@ $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($con
 
 
 # On lance l'app
+session_start();
 $app->run();

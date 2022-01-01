@@ -29,6 +29,10 @@ class ControlerGestionCompte
 
     // METHODES
 
+    /**
+     * Fonctionnalite 17
+     * creer un compte
+     */
     public function creerCompte(Request $rq, Response $rs, array $args) {
         try {
             $vue = new VueGestionCompte($this->container);
@@ -60,8 +64,55 @@ class ControlerGestionCompte
         $c = new Compte();
         $c->login = filter_var($args['login'], FILTER_SANITIZE_STRING);
         $c->sel = password_hash(filter_var($args['psw'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
-        $c->mdp = filter_var($args['psw'], FILTER_SANITIZE_STRING);
         $c->save();
+    }
+
+    /**
+     * Fonctionnalite 18
+     * Affiche get formulaire pour se connecter et post pour verifier
+     */
+    public function seConnecterCompte(Request $rq, Response $rs, array $args) {
+        try {
+            $vue = new VueGestionCompte($this->container);
+            if (sizeof($args) == 2) {
+                $login = filter_var($args['login'], FILTER_SANITIZE_STRING);
+                if ($this->loginValide($login) == false) {
+                    if ($this->mdpValide($login, filter_var($args['psw'], FILTER_SANITIZE_STRING)) == true) {
+                        $this->genereSessionConnexion($login);
+                        $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+                    } else {
+                        $vue = new VueRender($this->container);
+                        $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Erreur dans le mdp.")));
+                    }
+                } else {
+                    $vue = new VueRender($this->container);
+                    $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Erreur dans le login")));
+                }
+            } else { // Si ce n'est pas le cas, la methode est un get
+                $rs->getBody()->write($vue->render(2));
+            }
+        } catch (\Exception $e) {
+            $rs->getBody()->write("Erreur a la connexion d'un compte...<br>".$e->getMessage()."<br>".$e->getTrace());
+        }
+        return $rs;
+    }
+
+    /**
+     * Fonctionnalite 18
+     * Verifie que le mot de passe est valide
+     */
+    private function mdpValide($login, $mdp) {
+        $sel = Compte::select('sel')->where('login', '=', $login)->first();
+        return password_verify($mdp, $sel["sel"]);
+    }
+
+    /**
+     * Fonctionnalite 18
+     * Genere une variable session pour la connection
+     */
+    private function genereSessionConnexion($login){
+        session_start();
+        $_SESSION['login'] = $login;
     }
 
 }

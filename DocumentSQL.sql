@@ -55,7 +55,6 @@ INSERT INTO `liste` (`no`, `user_id`, `titre`, `description`, `expiration`, `tok
 
 CREATE TABLE `COMPTE` (
                           `login` varchar(256),
-                          `mdp` varchar(20),
-                          `sel` varchar(100),
+                          `sel` varchar(256),
                           PRIMARY KEY (`login`)
 );
