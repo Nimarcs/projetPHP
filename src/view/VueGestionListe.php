@@ -1,7 +1,9 @@
 <?php
 
+// NAMESPACE
 namespace mywishlist\view;
 
+// IMPORTS
 use mywishlist\modele\Liste;
 use Slim\Container;
 
@@ -30,7 +32,7 @@ class VueGestionListe
     private function htmlCreationListe() {
         $html = <<<END
               <h2>Creation d'une liste</h2>
-        <div>
+        <div class="formulaire">
             <form action="" method="post">
                 <label for="titre" class="form-label">Titre</label>
                 <input type="text" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
@@ -40,7 +42,7 @@ class VueGestionListe
 
                 <label for="exp" class="form-label">Date limite</label>
                 <input type="date" class="form-control" name="expiration" placeholder="" required><br>
-                <button type="submit" class="btn btn-danger btn-lg">
+                <button type="submit" class="btn submit">
                     Créer la liste
                 </button>
             </form>
@@ -76,7 +78,7 @@ END;
                         ${l['description']} <br>
                         --- Expire le ${l['expiration']}</li>
                     </p>
-                    <button type="button" class="" onclick="window.location.href='{$this->container->router->pathFor('liste', ['token'=>$l['no']])}';">
+                    <button type="button" class="" onclick="window.location.href='';">
                         VOIR LA LISTE
                     </button>
                     Token: <input type="text" value="" disabled="disabled">
@@ -107,11 +109,11 @@ END;
             }
             case 2: {
                 $content = $this->htmlAffichageListe();
+                break;
             }
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);
-
     }
 
 }
