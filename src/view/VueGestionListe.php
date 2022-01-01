@@ -2,6 +2,7 @@
 
 namespace mywishlist\view;
 
+use mywishlist\modele\Liste;
 use Slim\Container;
 
 /**
@@ -48,6 +49,49 @@ END;
     }
 
     /**
+     * Fonction 21
+     * Methode privee qui generer l'affichage de toutes les listes publique
+     */
+    private function htmlAffichageListe() {
+        $html = "";
+        $list = Liste::query()->where('public', '=', 'true')->get();
+        foreach ($list as $l) {
+            $html = $html . $this->afficherEnLigneUneListe($l);
+        }
+        return $html;
+    }
+
+    /**
+     * Fonction 21
+     * Methode privee qui genere l'affichage d'une liste sur une ligne avec les boutons adequats
+     */
+    private function afficherEnLigneUneListe($l) : String {
+        return <<<END
+<div class="boite-liste"'>
+                <div class="titreDeListe">
+                    <h2>${l['titre']}</h2>
+                </div>
+                    <p>
+                        ${l['description']} <br>
+                        --- Expire le ${l['expiration']}</li>
+                    </p>
+                    <button type="button" class="" onclick="window.location.href='{$this->container->router->pathFor('liste', ['token'=>$l['no']])}';">
+                        VOIR LA LISTE
+                    </button>
+                    Token: <input type="text" value="" disabled="disabled">
+                    <button type="button" class="" onclick="window.location.href='';">
+                        MODIFIER LISTE
+                    </button>
+                    <button type="button" class="" onclick="window.location.href='';">
+                        SUPPRIMER LISTE
+                    </button>
+            </div>
+            <br><br>
+END;
+
+    }
+
+    /**
      * Fonction qui retourne selon le selecteur choisis
      * @param $selecteur entier: choix de la page a afficher
      * @return string String: texte html, cointenu global de chaque page
@@ -59,6 +103,9 @@ END;
             case 1: {
                 $content = $this->htmlCreationListe();
                 break;
+            }
+            case 2: {
+                $content = $this->htmlAffichageListe();
             }
         }
         $vue = new VueRender($this->container);

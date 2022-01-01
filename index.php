@@ -53,5 +53,14 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
     return $controleur->creerListe($rq, $rs, $_POST);
 })->setName('creationListe');
 
+/**
+ * Fonction 21, afficher les listes publiques
+ */
+$app->get('/listes', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->afficherListesPublique($rq, $rs, $args);
+})->setName('affichageListesPublique');
+
+
 # On lance l'app
 $app->run();

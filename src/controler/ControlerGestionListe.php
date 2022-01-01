@@ -61,5 +61,18 @@ class ControlerGestionListe
         $l->save();
     }
 
+    /**
+     * Fonction 21
+     * Methode qui gere l'affichage de toutes les listes publique
+     */
+    public function afficherListesPublique(Request $rq, Response $rs, array $args) {
+        try {
+            $vue = new VueGestionListe($this->container);
+            $rs->getBody()->write($vue->render(2));
+        } catch (\Exception $e) {
+            $rs->getBody()->write("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace());
+        }
+        return $rs;
+    }
 
 }
