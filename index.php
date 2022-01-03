@@ -81,6 +81,10 @@ $app->post('/connectionCompte', function (Request $rq, Response $rs, array $args
     $controleur = new ControlerGestionCompte($container);
     return $controleur->seConnecterCompte($rq, $rs, $_POST);
 })->setName('connectionCompte');
+$app->get('/deconectionCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->seDeconnecterCompte($rq, $rs, $_POST);
+})->setName('deconectionCompte');
 
 /**
  * Fonction 21, afficher les listes publiques

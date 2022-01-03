@@ -141,4 +141,13 @@ class ControlerGestionCompte
         $_SESSION['login'] = $login;
     }
 
+    /**
+     * Fonction 18
+     * Methode qui supprime la session et donc qui deconnecte l'utilisateur
+     * @author Lucas Weiss
+     */
+    private function supprimerSessionConnexion() {
+        session_destroy();
+    }
+
 }
