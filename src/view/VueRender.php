@@ -28,6 +28,7 @@ class VueRender
      * Fonction qui retourne l'affichage général du site web
      * @param $content Container
      * @return string String: texte html, cointenu global de chaque page
+     * @author Lucas Weiss
      */
     public function render($content) {
         return <<<END
@@ -58,6 +59,7 @@ END;
      * Méthode pour afficher la page d'accueil
      * Utilisé par la fonction 0, route racine de l'accueil
      * @return string String: contenu html
+     * @author Lucas Weiss
      */
     public function affichageAccueil() {
         $html = '<div class="text-accueil">
@@ -81,6 +83,10 @@ END;
         return $html;
     }
 
+    /**
+     * Methode qui genere le html pour afficher un message d'erreu
+     * @author Lucas Weiss
+     */
     public function htmlErreur($message) {
         return <<<END
             <div class="text-erreur">

@@ -28,6 +28,7 @@ class VueGestionListe
     /**
      * Fonction 6
      * Affichage du formulaire de la création de liste
+     * @author Lucas Weiss
      */
     private function htmlCreationListe() {
         $html = <<<END
@@ -54,6 +55,7 @@ END;
     /**
      * Fonction 21
      * Methode privee qui generer l'affichage de toutes les listes publique
+     * @author Lucas Weiss
      */
     private function htmlAffichageListe() {
         $html = "";
@@ -67,6 +69,7 @@ END;
     /**
      * Fonction 21
      * Methode privee qui genere l'affichage d'une liste sur une ligne avec les boutons adequats
+     * @author Lucas Weiss
      */
     private function afficherEnLigneUneListe($l) : String {
         return <<<END
@@ -98,6 +101,7 @@ END;
      * Fonction qui retourne selon le selecteur choisis
      * @param $selecteur entier: choix de la page a afficher
      * @return string String: texte html, cointenu global de chaque page
+     * @author Lucas Weiss
      */
     public function render($selecteur)
     {

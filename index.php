@@ -36,6 +36,7 @@ $app = new App($container);
 
 /**
  * Fonction 0, route racine de l'accueil
+ * @author Lucas Weiss
  */
 $app->get('/', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerRacine($container);
@@ -44,6 +45,7 @@ $app->get('/', function (Request $rq, Response $rs, array $args) use ($container
 
 /**
  * Fonction 6, créer une liste
+ * @author Lucas Weiss
  */
 $app->get('/newListe[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionListe($container);
@@ -56,6 +58,7 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
 
 /**
  * Fonction 17, creer un compte
+ * @author Lucas Weiss
  */
 $app->get('/newCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionCompte($container);
@@ -68,6 +71,7 @@ $app->post('/newCompte', function (Request $rq, Response $rs, array $args) use (
 
 /**
  * Fonction 18, se connecter un compte
+ * @author Lucas Weiss
  */
 $app->get('/connectionCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionCompte($container);
@@ -80,6 +84,7 @@ $app->post('/connectionCompte', function (Request $rq, Response $rs, array $args
 
 /**
  * Fonction 21, afficher les listes publiques
+ * @author Lucas Weiss
  */
 $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionListe($container);
