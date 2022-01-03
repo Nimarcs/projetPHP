@@ -28,6 +28,7 @@ class ControlerRacine
 
     /**
      * Fonction 0, controleur de la route racine de l'accueil
+     * @author Lucas Weiss
      */
     public function racine(Request $rq, Response $rs, array $args) {
         $vue = new VueRender($this->container);

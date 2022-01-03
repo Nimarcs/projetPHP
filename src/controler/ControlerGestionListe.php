@@ -34,6 +34,7 @@ class ControlerGestionListe
      * Methode pour gerer la creation d'une liste
      *     GET: on obtient la page quiq permet de creer une nouvelle liste
      *     POST: s'execute lorsque trois parametres sont donnees par l'utilisateur, genere la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
+     * @author Lucas Weiss
      */
     public function creerListe(Request $rq, Response $rs, array $args) {
         try {
@@ -55,6 +56,7 @@ class ControlerGestionListe
     /**
      * Fonction 6
      * Methode privee qui permet de creer la liste au sein de la BDD
+     * @author Lucas Weiss
      */
     private function creerListeInBDD(array $args) {
         $l = new Liste();
@@ -68,6 +70,7 @@ class ControlerGestionListe
     /**
      * Fonction 21
      * Methode qui gere l'affichage de toutes les listes publique
+     * @author Lucas Weiss
      */
     public function afficherListesPublique(Request $rq, Response $rs, array $args) {
         try {

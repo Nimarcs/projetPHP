@@ -30,8 +30,9 @@ class ControlerGestionCompte
     // METHODES
 
     /**
-     * Fonctionnalite 17
+     * Fonction 17
      * creer un compte
+     * @author Lucas Weiss
      */
     public function creerCompte(Request $rq, Response $rs, array $args) {
         try {
@@ -53,6 +54,12 @@ class ControlerGestionCompte
         return $rs;
     }
 
+    /**
+     * Fonction 17
+     * Methode privée qui teste si le login existe ou non
+     * retourne un boolean
+     * @author Lucas Weiss
+     */
     private function loginValide($login) {
             $res =  Compte::where('login', '=', $login)->get();
             $r = $res->count();
@@ -60,6 +67,11 @@ class ControlerGestionCompte
             else return false;
     }
 
+    /**
+     * Fonction 17
+     * Methode privee qui creer un compte dans la base de donnees
+     * @author Lucas Weiss
+     */
     private function creerCompteInBDD(array $args) {
         $c = new Compte();
         $c->login = filter_var($args['login'], FILTER_SANITIZE_STRING);
@@ -68,8 +80,9 @@ class ControlerGestionCompte
     }
 
     /**
-     * Fonctionnalite 18
+     * Fonction 18
      * Affiche get formulaire pour se connecter et post pour verifier
+     * @author Lucas Weiss
      */
     public function seConnecterCompte(Request $rq, Response $rs, array $args) {
         try {
@@ -98,8 +111,20 @@ class ControlerGestionCompte
     }
 
     /**
-     * Fonctionnalite 18
+     * Fonction 18
+     * Methode pour se deconnecter de son compte
+     * @author Lucas Weiss
+     */
+    public function seDeconnecterCompte(Request $rq, Response $rs, array $args) {
+        $this->supprimerSessionConnexion();
+        $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+        return $rs;
+    }
+
+    /**
+     * Fonction 18
      * Verifie que le mot de passe est valide
+     * @author Lucas Weiss
      */
     private function mdpValide($login, $mdp) {
         $sel = Compte::select('sel')->where('login', '=', $login)->first();
@@ -107,8 +132,9 @@ class ControlerGestionCompte
     }
 
     /**
-     * Fonctionnalite 18
+     * Fonction 18
      * Genere une variable session pour la connection
+     * @author Lucas Weiss
      */
     private function genereSessionConnexion($login){
         session_start();
