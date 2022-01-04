@@ -16,7 +16,7 @@ class Compte extends \Illuminate\Database\Eloquent\Model
 
     public $timestamps = false;
     protected $table = 'compte';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'login';
 
     // CONSTRUCTEUR
 
