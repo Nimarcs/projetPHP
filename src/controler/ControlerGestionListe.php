@@ -31,10 +31,27 @@ class ControlerGestionListe
     // METHODES
 
     /**
+     * Fonction 1
+     * Méthode pour afficher une liste de souhaits
+     * @author Mathieu Vinot
+     */
+    public function affichageListe(Request $rq, Response $rs, array $args) {
+        try {
+            $vue = new VueGestionListe($this->container);
+            $rs->getBody()->write($vue->render(3, $args['token_lecture']));
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de la liste...<br>".$e->getMessage()."<br>".$e->getTrace())));
+        }
+        return $rs;
+    }
+
+
+    /**
      * Fonction 6
-     * Methode pour gerer la creation d'une liste
-     *     GET: on obtient la page quiq permet de creer une nouvelle liste
-     *     POST: s'execute lorsque trois parametres sont donnees par l'utilisateur, genere la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
+     * Methode pour gérer la creation d'une liste
+     *     GET: on obtient la page qui permet de créer une nouvelle liste
+     *     POST: s'execute lorsque trois paramètres sont donnees par l'utilisateur , génère la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
      * @author Lucas Weiss
      */
     public function creerListe(Request $rq, Response $rs, array $args) {

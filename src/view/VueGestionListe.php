@@ -27,6 +27,28 @@ class VueGestionListe
     // METHODES
 
     /**
+     * Fonction 1
+     * Affichage d'une liste
+     *
+     * @param string $
+     * @return string
+     *
+     * @author Mathieu Vinot
+     */
+    //L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
+    private function htmlAffichageListeToken($arg1) {
+        $html = "";
+        //on cherche la liste correspondant au token
+        //erreur -> à mettre dans controleur (idem pour liste publique)
+        $list = Liste::query()->where('token_lecture', '=', $arg1)->get();
+        foreach ($list as $l) {
+            $html = $html . $this->afficherEnLigneUneListe($l);
+        }
+        return $html;
+    }
+
+
+    /**
      * Fonction 6
      * Affichage du formulaire de la création de liste
      * @author Lucas Weiss
@@ -60,6 +82,7 @@ END;
      */
     private function htmlAffichageListe() {
         $html = "";
+        //erreur -> à mettre dans controleur (idem pour affichage liste)
         $list = Liste::query()->where('public', '=', 'true')->get();
         foreach ($list as $l) {
             $html = $html . $this->afficherEnLigneUneListe($l);
@@ -104,7 +127,7 @@ END;
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($selecteur)
+    public function render($selecteur, $arg1)
     {
         $content = "";
         switch ($selecteur) {
@@ -114,6 +137,10 @@ END;
             }
             case 2: {
                 $content = $this->htmlAffichageListe();
+                break;
+            }
+            case 3: {
+                $content = $this->htmlAffichageListeToken($arg1);
                 break;
             }
         }

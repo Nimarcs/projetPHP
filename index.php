@@ -45,6 +45,15 @@ $app->get('/', function (Request $rq, Response $rs, array $args) use ($container
 })->setName('accueil');
 
 /**
+ * Fonction 1, afficher une liste
+ * @author Mathieu Vinot
+ */
+$app->get('/liste/{token}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->AffichageListe($rq, $rs, $args);
+})->setName('afficherListe');
+
+/**
  * Fonction 6, créer une liste
  * @author Lucas Weiss
  */
