@@ -2,4 +2,4 @@ driver=mysql
 username=
 password=
 host=localhost
-database=mywishlist
+database=
