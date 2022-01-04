@@ -37,7 +37,7 @@ class VueRender
         <html>
             <head>
                 <title>MyWishList</title>
-            <link rel="stylesheet" href="{$this->container->router->pathFor('accueil')}css/style.css" type="text/css"/>
+            <link rel="stylesheet" href="{$this->container->router->pathFor('accueil')}/css/style.css" type="text/css"/>
             </head>
             <header>
 	            <p>WishList</p>
@@ -75,7 +75,7 @@ END;
                      <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>';
         } else {
             $html .= '<p> Bonjour a toi, '.$_SESSION["login"].'</p>
-                     <p><a href='.$this->container->router->pathFor("accueil").'>Se deconnecter</a></p>';
+                     <p><a href='.$this->container->router->pathFor("deconectionCompte").'>Se deconnecter</a></p>';
         }
         $html .= '<p><a href='.$this->container->router->pathFor("affichageListesPublique").'>Afficher toutes les listes publiques</a></p>
                     <p><a href='.$this->container->router->pathFor("creationListe").'>Creer nouvelles listes</a></p>
