@@ -64,8 +64,9 @@ class ControlerGestionListe
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
         $l->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
         $l->expiration = $args['expiration'];
-        $l->token = "nosecure0";
         $l->public = 1;
+        $l->token_lecture= bin2hex(random_bytes(32));
+        $l->token_edition= bin2hex(random_bytes(32));
         $l->save();
     }
 

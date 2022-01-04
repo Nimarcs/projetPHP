@@ -57,6 +57,14 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
     return $controleur->creerListe($rq, $rs, $_POST);
 })->setName('creationListe');
 
+
+/**
+ * Fonction 14, afficher une liste, avec token
+ * @author Guillaume Renard
+ */
+
+
+
 /**
  * Fonction 17, creer un compte
  * @author Lucas Weiss
