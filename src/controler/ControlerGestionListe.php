@@ -95,12 +95,22 @@ class ControlerGestionListe
     public function afficherListesPublique(Request $rq, Response $rs, array $args) {
         try {
             $vue = new VueGestionListe($this->container);
-            $rs->getBody()->write($vue->render(2));
+            $listes = $this->selectListePubliques();
+            $rs->getBody()->write($vue->render(2, $listes));
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
+    }
+
+    /**
+     * Fonction 21
+     * Methode privee qui retourne toutes les listes publique
+     */
+    private function selectListePubliques() {
+        return Liste::query()->where('public', '=', 'true')->get();
+
     }
 
 }

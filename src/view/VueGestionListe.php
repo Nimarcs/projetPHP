@@ -80,11 +80,10 @@ END;
      * Methode privee qui generer l'affichage de toutes les listes publique
      * @author Lucas Weiss
      */
-    private function htmlAffichageListe() {
+    private function htmlAffichageListes($listes) {
         $html = "";
         //erreur -> à mettre dans controleur (idem pour affichage liste)
-        $list = Liste::query()->where('public', '=', 'true')->get();
-        foreach ($list as $l) {
+        foreach ($listes as $l) {
             $html = $html . $this->afficherEnLigneUneListe($l);
         }
         return $html;
@@ -136,7 +135,7 @@ END;
                 break;
             }
             case 2: {
-                $content = $this->htmlAffichageListe();
+                $content = $this->htmlAffichageListes($arg1);
                 break;
             }
             case 3: {
