@@ -34,7 +34,7 @@ class VueRender
     public function render($content) {
         return <<<END
         <!DOCTYPE html>
-        <html>
+        <html lang="fr">
             <head>
                 <title>MyWishList</title>
             <link rel="stylesheet" href="{$this->container->router->pathFor('accueil')}/css/style.css" type="text/css"/>
