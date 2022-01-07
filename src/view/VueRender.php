@@ -37,7 +37,7 @@ class VueRender
         <html lang="fr">
             <head>
                 <title>MyWishList</title>
-            <link rel="stylesheet" href="{$this->container->router->pathFor('accueil')}/css/style.css" type="text/css"/>
+                <link rel="stylesheet" href="{$this->container->router->pathFor('accueil')}/css/style.css" type="text/css"/>
             </head>
             <header>
 	            <p>WishList</p>
