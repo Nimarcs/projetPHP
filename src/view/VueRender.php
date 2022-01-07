@@ -31,7 +31,7 @@ class VueRender
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($content) {
+    public function render(Container $content) {
         return <<<END
         <!DOCTYPE html>
         <html lang="fr">
@@ -88,7 +88,7 @@ END;
      * Methode qui genere le html pour afficher un message d'erreu
      * @author Lucas Weiss
      */
-    public function htmlErreur($message) {
+    public function htmlErreur(string $message) {
         return <<<END
             <div class="text-erreur">
                 <p>$message</p>

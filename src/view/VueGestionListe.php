@@ -137,7 +137,7 @@ END;
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($selecteur, $arg1 = null)
+    public function render($selecteur, $arg1 = null) :string
     {
         $content = "";
         switch ($selecteur) {
