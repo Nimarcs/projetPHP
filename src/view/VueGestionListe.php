@@ -37,13 +37,24 @@ class VueGestionListe
      */
     //L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
     private function htmlAffichageListeToken($arg1) {
-        $html = "";
-        //on cherche la liste correspondant au token
-        //erreur -> à mettre dans controleur (idem pour liste publique)
-        $list = Liste::query()->where('token_lecture', '=', $arg1)->get();
-        foreach ($list as $l) {
-            $html = $html . $this->afficherEnLigneUneListe($l);
-        }
+        //$html = "<h3>{$arg1['no']}</h3>";
+
+        $html = <<<END
+              <div class="boite-liste"'>
+                <div class="titreDeListe">
+                    <h2>{$arg1['titre']}</h2>
+                </div>
+                    <p>
+                        {$arg1['description']} <br>
+                        --- Expire le {$arg1['expiration']}</li>
+                    </p>
+                    <p>
+                    
+</p>
+            </div>
+            <br><br>
+END;
+
         return $html;
     }
 
