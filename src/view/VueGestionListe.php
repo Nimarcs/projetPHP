@@ -126,7 +126,7 @@ END;
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($selecteur, $arg1)
+    public function render($selecteur, $arg1 = null)
     {
         $content = "";
         switch ($selecteur) {

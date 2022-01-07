@@ -66,7 +66,7 @@ END;
 
     }
 
-    public function render($selecteur) {
+    public function render($selecteur, $args1 = null) {
         $content = "";
         switch ($selecteur) {
             case 1: {
