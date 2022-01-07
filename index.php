@@ -21,12 +21,12 @@ use Slim\App;
 use Slim\Container;
 
 # Installation de la configuration erreur de Slim
-$config = ['settings' => ['displayErrorDetails' => true, 'dbconf' => './src/config/dbconfig.ini']];
+$config = ['settings' => ['displayErrorDetails' => true, 'dbconf' => __DIR__.'/src/config/dbconfig.ini']];
 
 # Connection a la base de donnees MYSQL
 # Chargement du module Eloquent
 $db = new DB();
-$db->addConnection(parse_ini_file('src\config\dbconfig.ini'));
+$db->addConnection(parse_ini_file(__DIR__.'/src/config/dbconfig.ini'));
 $db->setAsGlobal();
 $db->bootEloquent();
 
