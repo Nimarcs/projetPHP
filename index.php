@@ -12,6 +12,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 # Importations des fichiers necessaires
 use mywishlist\controler\ControlerGestionCompte;
+use mywishlist\controler\ControlerGestionItem;
 use mywishlist\controler\ControlerGestionListe;
 use mywishlist\controler\ControlerRacine;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -66,6 +67,18 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
     return $controleur->creerListe($rq, $rs, $_POST);
 })->setName('creationListe');
 
+/**
+ * Fonction 8, ajouter un item a une liste
+ * @author Lucas Weiss
+ */
+$app->get('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->ajouterNouvelItem($rq, $rs, $args);
+})->setName('newItem');
+$app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->ajouterNouvelItem($rq, $rs, $_POST);
+})->setName('new Item');
 
 /**
  * Fonction 14, afficher une liste, avec token
