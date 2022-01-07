@@ -13,6 +13,7 @@ CREATE TABLE `item` (
   `url` text,
   `tarif` decimal(5,2) DEFAULT NULL,
   `message` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reserver` boolean DEFAULT FALSE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -56,8 +57,8 @@ INSERT INTO `liste` (`no`, `user_id`, `titre`, `description`, `expiration`, `tok
 (3,	3,	'C\'est l\'anniversaire de Charlie',	'Pour lui préparer une fête dont il se souviendra :)',	'2017-12-12',	'e789e789acce2dd749c82b7e004ec40734959e5813f1de8043d4ea67844c342c', '17aec91139923117948b66e2ee0218f02f419d809fafb92ec3bde0ff76a4724e');
 
 DROP TABLE IF EXISTS `compte`;
-CREATE TABLE `COMPTE` (
-                          `login` varchar(256),
+CREATE TABLE `compte` (
+                          `login` varchar(50),
                           `sel` varchar(256),
                           PRIMARY KEY (`login`)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
