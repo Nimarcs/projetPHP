@@ -41,7 +41,7 @@ INSERT INTO `item` (`id`, `liste_id`, `nom`, `descr`, `img`, `url`, `tarif`) VAL
 DROP TABLE IF EXISTS `liste`;
 CREATE TABLE `liste` (
   `no` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `login` varchar(50) NOT NULL,
   `titre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
   `expiration` date DEFAULT NULL,
@@ -51,10 +51,10 @@ CREATE TABLE `liste` (
   PRIMARY KEY (`no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `liste` (`no`, `user_id`, `titre`, `description`, `expiration`, `token_lecture`, `token_edition`) VALUES
-(1,	1,	'Pour fêter le bac !',	'Pour un week-end à Nancy qui nous fera oublier les épreuves. ',	'2018-06-27',	'a0b9c57b13aa1a45f2746e8fc8542096b8bad7f0395484f05150a4fce6af3257', '79c018f107985991e70f2a0e078771484265bd5e1aa73fd1fc60091abfedac88'),
-(2,	2,	'Liste de mariage d\'Alice et Bob',	'Nous souhaitons passer un week-end royal à Nancy pour notre lune de miel :)',	'2018-06-30',	'421fa716b36044f4e7fe772b93b8089bb5450149e047bf6f343e5f127afa941f','adf894da18bf1935c588c096ada5e06385dcc0ea7e8015a38bfdaf111a560fcc'),
-(3,	3,	'C\'est l\'anniversaire de Charlie',	'Pour lui préparer une fête dont il se souviendra :)',	'2017-12-12',	'e789e789acce2dd749c82b7e004ec40734959e5813f1de8043d4ea67844c342c', '17aec91139923117948b66e2ee0218f02f419d809fafb92ec3bde0ff76a4724e');
+INSERT INTO `liste` (`no`, `login`, `titre`, `description`, `expiration`, `token_lecture`, `token_edition`) VALUES
+(1,	'guenuego',	'Pour fêter le bac !',	'Pour un week-end à Nancy qui nous fera oublier les épreuves. ',	'2018-06-27',	'a0b9c57b13aa1a45f2746e8fc8542096b8bad7f0395484f05150a4fce6af3257', '79c018f107985991e70f2a0e078771484265bd5e1aa73fd1fc60091abfedac88'),
+(2,	'guenuego',	'Liste de mariage d\'Alice et Bob',	'Nous souhaitons passer un week-end royal à Nancy pour notre lune de miel :)',	'2018-06-30',	'421fa716b36044f4e7fe772b93b8089bb5450149e047bf6f343e5f127afa941f','adf894da18bf1935c588c096ada5e06385dcc0ea7e8015a38bfdaf111a560fcc'),
+(3,	'guenuego',	'C\'est l\'anniversaire de Charlie',	'Pour lui préparer une fête dont il se souviendra :)',	'2017-12-12',	'e789e789acce2dd749c82b7e004ec40734959e5813f1de8043d4ea67844c342c', '17aec91139923117948b66e2ee0218f02f419d809fafb92ec3bde0ff76a4724e');
 
 DROP TABLE IF EXISTS `compte`;
 CREATE TABLE `compte` (
