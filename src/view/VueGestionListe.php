@@ -6,6 +6,7 @@ namespace mywishlist\view;
 
 // IMPORTS
 use mywishlist\modele\Liste;
+use mywishlist\models\Item;
 use Slim\Container;
 
 /**
@@ -26,7 +27,25 @@ class VueGestionListe
 
     // METHODES
 
+
+    private static function htmlAfficherTousItem($arg2)
+    {
+        $res = "";
+        foreach ($arg2 as $itemCurr) {
+            $res .= $itemCurr->nom . "<br> <img style='width: 100px;' src=/TD/img/" . $itemCurr->img . "><br>";
+        }
+        return $res;
+    }
+
     /**
+     *
+     * $items = <?php
+    foreach($arg2 as $itemCurr){
+    echo "nom : $itemCurr->nom<br>";
+    }
+
+    ?>
+     *
      * Fonction 1
      * Affichage d'une liste
      *
@@ -36,8 +55,10 @@ class VueGestionListe
      * @author Mathieu Vinot
      */
     //L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
-    private function htmlAffichageListeToken($arg1) {
+    private function htmlAffichageListeToken($arg1, $arg2) {
         //$html = "<h3>{$arg1['no']}</h3>";
+
+        $items = self::htmlAfficherTousItem($arg2);
 
         $html = <<<END
               <div class="boite-liste"'>
@@ -48,12 +69,16 @@ class VueGestionListe
                         {$arg1['description']} <br>
                         --- Expire le {$arg1['expiration']}</li>
                     </p>
+                    $items
                     <p>
+
                     
 </p>
             </div>
             <br><br>
 END;
+
+
 
         return $html;
     }
@@ -93,7 +118,6 @@ END;
      */
     private function htmlAffichageListes($listes) {
         $html = "";
-        //erreur -> à mettre dans controleur (idem pour affichage liste)
         foreach ($listes as $l) {
             $html = $html . $this->afficherEnLigneUneListe($l);
         }
@@ -137,7 +161,7 @@ END;
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($selecteur, $arg1 = null) :string
+    public function render($selecteur, $arg1 = null, $arg2 = null) :string
     {
         $content = "";
         switch ($selecteur) {
@@ -150,7 +174,7 @@ END;
                 break;
             }
             case 3: {
-                $content = $this->htmlAffichageListeToken($arg1);
+                $content = $this->htmlAffichageListeToken($arg1, $arg2);
                 break;
             }
         }

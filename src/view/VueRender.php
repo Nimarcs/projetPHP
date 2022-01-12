@@ -31,7 +31,7 @@ class VueRender
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render(Container $content) {
+    public function render( $content) {
         return <<<END
         <!DOCTYPE html>
         <html lang="fr">

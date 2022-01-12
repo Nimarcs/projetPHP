@@ -41,7 +41,9 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
             $liste = $this->recupererListeLecture($args['token']);
             if ($liste != null) {
-                $rs->getBody()->write($vue->render(3, $liste));
+                //$items = $liste->recupererListeItem($liste['no']);
+                $items = $liste->items();
+                $rs->getBody()->write($vue->render(3, $liste, $items));
             } else {
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le token de la liste...<br>".$e->getMessage()."<br>".$e->getTrace())));
@@ -60,6 +62,18 @@ class ControlerGestionListe
             return null;
         }
     }
+
+
+    /*
+    private function recupererListeItem($idliste){
+        try {
+            return Item::query()->where('liste_id', '=', $idliste)->get();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+    }
+    */
+
 
 
     /**

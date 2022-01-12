@@ -4,6 +4,8 @@ declare(strict_types=1);
 // NAMESPACE
 namespace mywishlist\modele;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 /**
  * Classe Liste
  * Représente une liste au sein de la base de données
