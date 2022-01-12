@@ -35,19 +35,32 @@ class ControlerGestionItem{
      * Methode qui ajoute un nouvel item dans une liste precise
      * @author Lucas Weiss
      */
-    public function ajouterNouvelItem(Request $rq, Response $rs, array $args) {
+    public function ajouterNouvelItem(Request $rq, Response $rs, array $args)
+    {
         try {
-            $liste = $this->recupererListeAvecTokenCreation($args['token']);
-            if ($liste!=null) { // On teste si le token creation est correct
-                $vue = new VueGestionItem($this->container);
-                if (sizeof($args) == 4) {
-                    $rs = $rs->withRedirect($this->container->router->pathFor('liste/' . $args['token_lecture']));
-                } else {
-                    $rs->getBody()->write($vue->render(1, $liste));
+            $vue = new VueGestionItem($this->container);
+            if (sizeof($args) == 4) {
+                if ($args['fichier'] != null) {
+                    $nameImg = null;
+                    if ($_FILES['fichier']['error'] > 0) {
+                        $erreur = "Erreur lors de l'envoi de l'image.";
+                        echo $erreur;
+                    } else {
+                        move_uploaded_file($_FILES['fichier']['name'], __DIR__ . '/img');
+                        $nameImg = $_FILES['fichier']['name'];
+                    }
+                    $this->ajouterNouvelItemInBDD($args, $nameImg);
                 }
+                $valListe = Liste::query()->where('token_ecriture', '=', $args['token']);
+                $rs = $rs->withRedirect($this->container->router->pathFor('liste/' . $valListe['token_lecture']));
             } else {
-                $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render($vue->htmlErreur("Page 404")));
+                $liste = $this->recupererListeAvecTokenCreation($args['token']);
+                if ($liste != null) { // On teste si le token creation est correct
+                    $rs->getBody()->write($vue->render(1, $liste));
+                } else {
+                    $vue = new VueRender($this->container);
+                    $rs->getBody()->write($vue->render($vue->htmlErreur("Page 404")));
+                }
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
@@ -67,6 +80,22 @@ class ControlerGestionItem{
         } catch (ModelNotFoundException $e) {
             return null;
         }
+    }
+
+    /**
+     * Fonction 8
+     * Methode pour creer un nouvel item
+     * @author Lucas Weiss
+     */
+    private function ajouterNouvelItemInBDD(array $args, string $nameImage) {
+        $i = new Item();
+        $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
+        $i->descr = filter_var($args['description'], FILTER_SANITIZE_STRING);
+        $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
+        if ($nameImage!=null) {
+            $i->img = $nameImage;
+        }
+        $i->save();
     }
 
 
