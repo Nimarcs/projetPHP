@@ -39,7 +39,7 @@ class VueGestionItem
                 <input type="text" class="form-control" name="description" placeholder="" required><br>
 
                 <label for="exp" class="form-label">Prix</label>
-                <input type="number" class="form-control" name="expiration" placeholder="" required>€<br>
+                <input type="number" class="form-control" name="prix" placeholder="" required>€<br>
                 
                 <label for="exp" class="form-label">Image</label>
                 <input type="file" name="fichier" accept="image/png, image/gif, image/jpeg" /><br>
