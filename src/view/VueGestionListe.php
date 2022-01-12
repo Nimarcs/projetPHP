@@ -25,12 +25,12 @@ class VueGestionListe
 
     // METHODES
 
-    private static function htmlAfficherTousItem($arg2)
+    private function htmlAfficherTousItem($arg2)
     {
         $res = "";
         $num = 1;
         foreach ($arg2 as $itemCurr) {
-            $res .= "<p>" . $num . ". <img style='width: 100px;' src=/TD/img/" . $itemCurr->img . ">" . $itemCurr->nom;
+            $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
             $res.= ' <button type="button" class="" onclick="window.location.href="">
                         AFFICHER ITEM
                     </button><br>';
