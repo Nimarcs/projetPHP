@@ -53,6 +53,23 @@ END;
 
     }
 
+    public function htmlAfficherUnItem($i) : String {
+        return <<<END
+<dive class="boite-item">
+        <div class="nomItem">
+            <h3>${i['nom']}</h3>
+        </div>
+            <p>
+                ${i['description']}<br>
+            </p>
+        <img src="img/"+${i['image']}>
+</dive>
+
+
+END;
+
+    }
+
     /**
      * Fonction qui retourne l'html selon le selecteur choisis
      * @param $selecteur entier: choix de la page a afficher
@@ -67,6 +84,9 @@ END;
                 $content = $this->htmlCreationItemPourUneListe($arg1);
                 break;
             }
+            case 2:
+                $content = $this->htmlAfficherUnItem($arg1);
+                break;
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);

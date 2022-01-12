@@ -136,6 +136,8 @@ $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($con
 })->setName('affichageListesPublique');
 
 
+
+
 # On lance l'app
 session_start();
 $app->run();

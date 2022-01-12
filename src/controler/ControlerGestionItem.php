@@ -7,7 +7,7 @@ namespace mywishlist\controler;
 
 // IMPORTS
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use mywishlist\modele\Liste;
+use mywishlist\modele\Item;
 use mywishlist\view\VueGestionItem;
 use mywishlist\view\VueGestionListe;
 use mywishlist\view\VueRender;
@@ -29,6 +29,8 @@ class ControlerGestionItem{
     public function __construct(Container $container) {
         $this->container = $container;
     }
+
+    //METHODES
 
     /***
      * Fonction 8
@@ -97,6 +99,31 @@ class ControlerGestionItem{
         }
         $i->save();
     }
+
+    /**
+     * Fonction 9
+     * Modifier un item, juste changer ses attributs sans changer la liste
+     */
+
+    private function modifierItemBDD(array $args){
+        $i = Item::query()->where('id','=',$args['id']);
+        $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
+        $i->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
+        $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $i->image = $args['image'];
+        $i->save();
+    }
+
+    public function afficherUnItem(Request $rq, Response $rs, array $args){
+        try {
+            $vue = new VueGestionItem($this->container);
+            $rs->getBody()->write($vue->render(2));
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans l'affichage d'un item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+    }
+
 
 
 }
