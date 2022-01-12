@@ -46,13 +46,22 @@ $app->get('/', function (Request $rq, Response $rs, array $args) use ($container
 })->setName('accueil');
 
 /**
- * Fonction 1, afficher une liste
+ * Fonction 1, afficher une liste avec un token de lecture
  * @author Mathieu Vinot
  */
 $app->get('/liste/{token}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionListe($container);
-    return $controleur->AffichageListe($rq, $rs, $args);
+    return $controleur->AffichageListe($rq, $rs, $args, false);
 })->setName('afficherListe');
+
+/**
+ * Fonction 1 bis, afficher une liste avec un token d'édition
+ * @author Guillaume Renard
+ */
+$app->get('/liste/edition/{token_edition}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->AffichageListe($rq, $rs, $args, true);
+})->setName('afficherListeEdition');
 
 /**
  * Fonction 6, créer une liste

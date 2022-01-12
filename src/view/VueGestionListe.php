@@ -55,6 +55,42 @@ END;
         return $html;
     }
 
+    /**
+     * Fonction 1 bis
+     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste
+     * @author Lucas Weiss
+     * @author Guillaume Renard
+     */
+    private function afficherListeEdition($l, $i) : String {
+        $items = self::htmlAfficherTousItem($i);
+        return <<<END
+<div class="boite-liste"'>
+                <div class="titreDeListe">
+                    <h2>${l['titre']}</h2>
+                </div>
+                    <p>
+                        ${l['description']} <br>
+                        --- Expire le ${l['expiration']}</li>
+                        
+                        $items
+                    </p>
+                    <button type="button" class="" onclick="window.location.href='';">
+                        PARTAGER LA LISTE
+                    </button>
+                    Token: <input type="text" value="oui" disabled="disabled">
+                    <button type="button" class="" onclick="window.location.href='';">
+                        MODIFIER LISTE
+                    </button>
+                    <button type="button" class="" onclick="window.location.href='';">
+                        SUPPRIMER LISTE
+                    </button>
+            </div>
+            <br><br>
+END;
+
+    }
+
+
 
     /**
      *
@@ -126,6 +162,7 @@ END;
      * Fonction 21
      * Methode privee qui genere l'affichage d'une liste sur une ligne avec les boutons adequats
      * @author Lucas Weiss
+     * @author Guillaume Renard
      */
     private function afficherEnLigneUneListe($l) : String {
         return <<<END
@@ -136,11 +173,12 @@ END;
                     <p>
                         ${l['description']} <br>
                         --- Expire le ${l['expiration']}</li>
+ 
                     </p>
                     <button type="button" class="" onclick="window.location.href='';">
-                        VOIR LA LISTE
+                        AFFICHER LA LISTE
                     </button>
-                    Token: <input type="text" value="" disabled="disabled">
+                    Token: <input type="text" value="oui" disabled="disabled">
                     <button type="button" class="" onclick="window.location.href='';">
                         MODIFIER LISTE
                     </button>
@@ -174,6 +212,9 @@ END;
             case 3: {
                 $content = $this->htmlAffichageListeToken($arg1, $arg2);
                 break;
+            }
+            case 4: {
+                $content = $this->afficherListeEdition($arg1, $arg2);
             }
         }
         $vue = new VueRender($this->container);

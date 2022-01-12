@@ -34,18 +34,29 @@ class ControlerGestionListe
 
     /**
      * Fonction 1
-     * Méthode pour afficher une liste de souhaits
+     * Méthode pour afficher une liste de souhaits,
+     * Affiche une liste de lecture, lorsque l'option est à false
+     * Affiche la liste qui permet l'edition, lorsque l'option est à true
      *
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    public function affichageListe(Request $rq, Response $rs, array $args) {
+    public function affichageListe(Request $rq, Response $rs, array $args, bool $optionAff) {
         try {
             $vue = new VueGestionListe($this->container);
-            $liste = $this->recupererListeLecture($args['token']);
+            if( $optionAff){
+                $liste = $this->recupererListeEdition($args['token_edition']);
+            } else {
+                $liste = $this->recupererListeLecture($args['token']);
+            }
+
             if ($liste != null) {
                 $items = $this->recupererListeItem($liste['no']);
-                $rs->getBody()->write($vue->render(3, $liste, $items));
+                if($optionAff){
+                    $rs->getBody()->write($vue->render(4, $liste, $items));
+                } else {
+                    $rs->getBody()->write($vue->render(3, $liste, $items));
+                }
             } else {
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le token de la liste...<br>")));
@@ -75,7 +86,24 @@ class ControlerGestionListe
     }
 
     /**
-     * fonction 1.2
+     * Fonction 1.2
+     * Permet de récupérer la liste
+     *
+     * @param $token , token d'edtion  de la liste
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
+     *
+     * @author Renard Guillaume
+     */
+    private function recupererListeEdition($token){
+        try {
+            return Liste::query()->where('token_edition', '=', $token)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * fonction 1.3
      * Permet de récupérer la liste des items de la liste
      *
      * @param $idliste , id de la liste
