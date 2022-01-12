@@ -7,6 +7,7 @@ namespace mywishlist\controler;
 // IMPORTS
 use Carbon\Exceptions\Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use mywishlist\modele\Item;
 use mywishlist\modele\Liste;
 use mywishlist\view\VueGestionListe;
 use mywishlist\view\VueRender;
@@ -41,12 +42,11 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
             $liste = $this->recupererListeLecture($args['token']);
             if ($liste != null) {
-                //$items = $liste->recupererListeItem($liste['no']);
-                $items = $liste->items();
+                $items = $this->recupererListeItem($liste['no']);
                 $rs->getBody()->write($vue->render(3, $liste, $items));
             } else {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le token de la liste...<br>".$e->getMessage()."<br>".$e->getTrace())));
+                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le token de la liste...<br>")));
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
@@ -63,8 +63,6 @@ class ControlerGestionListe
         }
     }
 
-
-    /*
     private function recupererListeItem($idliste){
         try {
             return Item::query()->where('liste_id', '=', $idliste)->get();
@@ -72,8 +70,6 @@ class ControlerGestionListe
             return null;
         }
     }
-    */
-
 
 
     /**

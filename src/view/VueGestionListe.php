@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace mywishlist\view;
 
 // IMPORTS
-use mywishlist\modele\Liste;
-use mywishlist\models\Item;
 use Slim\Container;
 
 /**
@@ -27,39 +25,32 @@ class VueGestionListe
 
     // METHODES
 
-
     private static function htmlAfficherTousItem($arg2)
     {
         $res = "";
+        $num = 1;
         foreach ($arg2 as $itemCurr) {
-            $res .= $itemCurr->nom . "<br> <img style='width: 100px;' src=/TD/img/" . $itemCurr->img . "><br>";
+            $res .= "<p>" . $num . ". <img style='width: 100px;' src=/TD/img/" . $itemCurr->img . ">" . $itemCurr->nom;
+            $res.= ' <button type="button" class="" onclick="window.location.href="">
+                        AFFICHER ITEM
+                    </button><br>';
+            $num++;
         }
         return $res;
     }
 
-    /**
-     *
-     * $items = <?php
-    foreach($arg2 as $itemCurr){
-    echo "nom : $itemCurr->nom<br>";
-    }
-
-    ?>
-     *
+     /**
      * Fonction 1
      * Affichage d'une liste
+     * L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
      *
      * @param string $
      * @return string
      *
      * @author Mathieu Vinot
      */
-    //L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
     private function htmlAffichageListeToken($arg1, $arg2) {
-        //$html = "<h3>{$arg1['no']}</h3>";
-
         $items = self::htmlAfficherTousItem($arg2);
-
         $html = <<<END
               <div class="boite-liste"'>
                 <div class="titreDeListe">
@@ -70,16 +61,9 @@ class VueGestionListe
                         --- Expire le {$arg1['expiration']}</li>
                     </p>
                     $items
-                    <p>
-
-                    
-</p>
             </div>
             <br><br>
 END;
-
-
-
         return $html;
     }
 
