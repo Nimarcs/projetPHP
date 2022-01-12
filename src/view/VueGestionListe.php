@@ -25,26 +25,14 @@ class VueGestionListe
 
     // METHODES
 
-    private function htmlAfficherTousItem($arg2)
-    {
-        $res = "";
-        $num = 1;
-        foreach ($arg2 as $itemCurr) {
-            $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
-            $res.= ' <button type="button" class="" onclick="window.location.href="">
-                        AFFICHER ITEM
-                    </button><br>';
-            $num++;
-        }
-        return $res;
-    }
-
-     /**
+    /**
+     *
      * Fonction 1
-     * Affichage d'une liste
+     * Affichage d'une liste et de ses items
      * L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
      *
-     * @param string $
+     * @param $arg1, liste
+     * @param $arg2, items
      * @return string
      *
      * @author Mathieu Vinot
@@ -65,6 +53,32 @@ class VueGestionListe
             <br><br>
 END;
         return $html;
+    }
+
+
+    /**
+     *
+     * fonction 1.1
+     * permet l'affichage de tout les items de la liste
+     *
+     * @param $arg2
+     * @return string
+     *
+     * @author Mathieu Vinot
+     * @author Lucas Weiss
+     */
+    private function htmlAfficherTousItem($arg2)
+    {
+        $res = "";
+        $num = 1;
+        foreach ($arg2 as $itemCurr) {
+            $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
+            $res.= ' <button type="button" class="" onclick="window.location.href="">
+                        AFFICHER ITEM
+                    </button><br>';
+            $num++;
+        }
+        return $res;
     }
 
 

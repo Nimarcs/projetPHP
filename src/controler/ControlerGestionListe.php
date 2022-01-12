@@ -35,7 +35,9 @@ class ControlerGestionListe
     /**
      * Fonction 1
      * Méthode pour afficher une liste de souhaits
+     *
      * @author Mathieu Vinot
+     * @author Lucas Weiss
      */
     public function affichageListe(Request $rq, Response $rs, array $args) {
         try {
@@ -55,6 +57,15 @@ class ControlerGestionListe
         return $rs;
     }
 
+    /**
+     * Fonction 1.1
+     * Permet de récupérer la liste
+     *
+     * @param $token , token d'identification de la liste
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
+     *
+     * @author Mathieu Vinot
+     */
     private function recupererListeLecture($token){
         try {
             return Liste::query()->where('token_lecture', '=', $token)->firstOrFail();
@@ -63,6 +74,15 @@ class ControlerGestionListe
         }
     }
 
+    /**
+     * fonction 1.2
+     * Permet de récupérer la liste des items de la liste
+     *
+     * @param $idliste , id de la liste
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|null
+     *
+     * @author Mathieu Vinot
+     */
     private function recupererListeItem($idliste){
         try {
             return Item::query()->where('liste_id', '=', $idliste)->get();
