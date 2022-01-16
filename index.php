@@ -91,6 +91,19 @@ $app->post('/liste/edition/{token_edition}/modification[/]', function (Request $
     return $controleur->modifierListe($rq, $rs, $_POST);
 })->setName('modifierListe');
 
+/**
+ * Fonction ?, supprimer une liste
+ * @author Guillaume Renard
+ */
+$app->get('/liste/edition/{token_edition}/supression[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->supprimerListe($rq, $rs, $args);
+})->setName('suprimerListe');
+$app->post('/liste/edition/{token_edition}/supression[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->supprimerListe($rq, $rs, $_POST);
+})->setName('suprimerListe');
+
 
 /**
  * Fonction 8, ajouter un item a une liste

@@ -162,7 +162,7 @@ class ControlerGestionListe
     }
 
     /**
-     * Fonction 7 
+     * Fonction 7
      * La méthode est utilisée lorsque l'on veut modifier les données de la liste
      * on a donc un get et un post
      * le get affiche ce que l'utilsateur a mis
@@ -172,17 +172,15 @@ class ControlerGestionListe
     public function modifierListe(Request $rq, Response $rs, array $args) {
         try {
             $vue = new VueGestionListe($this->container);
-            var_dump($args);
+
 
             if (sizeof($args) == 5) {
                 //on est dans un post
                 //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
                 $liste = $this->recupererListeEdition($args['token_edition']);
-                var_dump($args);
+
                 $this->modifierListeInBDD($liste, $args);
                 $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
-
-
             } else {
                 //on est dans le get
 
@@ -200,7 +198,7 @@ class ControlerGestionListe
     /**
      * Fonction 7
      * Methode privee qui permet de modifier la liste au sein de la BDD grâce à la méthode save()
-     * @author Lucas Weiss
+     * @author Guillaume Renard
      */
     private function modifierListeInBDD( $l,array $args) {
 
@@ -211,9 +209,38 @@ class ControlerGestionListe
         $l->save();
     }
 
-
-
     /**
+     * Fonction ?
+     * Methode privee qui permet de suprimer la liste au sein de la BDD grâce à la méthode save()
+     * @author Guillaume Renard
+     */
+    public function supprimerListe(Request $rq, Response $rs, array $args)
+    {
+        try {
+            $vue = new VueGestionListe($this->container);
+            if (sizeof($args) == 2) {
+
+                if($args["supr"]==0){
+
+                    Liste::query()->where('token_edition', '=', $args['token_edition'])->delete();
+                }
+
+                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+            } else {
+                //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
+                $liste = $this->recupererListeEdition($args['token_edition']);
+                $rs->getBody()->write($vue->render(6, $liste));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>" . $e->getMessage() . "<br>" . $e->getTrace()));
+        }
+        return $rs;
+    }
+
+
+
+        /**
      * Fonction 21
      * Methode qui gere l'affichage de toutes les listes publique
      * @author Lucas Weiss

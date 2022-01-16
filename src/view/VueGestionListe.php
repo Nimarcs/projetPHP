@@ -146,6 +146,7 @@ END;
     /**
      * Fonction 7
      * Affichage formulaire pour modifier la liste
+     * @author Guillaume Renard
      */
     private function afficherModifierListe($l){
 
@@ -183,6 +184,33 @@ END;
         </div>
 END;
         return $html;
+    }
+
+
+    /**
+     * Fonction ?
+     * Affichage pour supprimer une liste ou non
+     * @author Guillaume Renard
+     */
+    private function afficherSupressionListe($l){
+        $html= <<<END
+  <h2>Supression d'une liste</h2>
+        <div class="formulaire">
+            <form action="" method="post">
+            
+                <label for="listeSupression" class="form-label">Etes-vous vraiment sûre de vouloir suprimer cette liste</label><br> 
+                <label for="supression" class="form-label">Oui</label>
+                <input type="radio" value="0" class="form-control" name="supr" placeholder="" required >
+                 <label for="supression" class="form-label">Non</label>
+                <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br> 
+                
+                <button type="submit" class="btn submit" value="{$l["token_edition"]}" name="token_edition">
+                   Valider
+                </button>
+            </form>
+        </div>
+END;
+    return $html;
     }
 
 
@@ -259,6 +287,10 @@ END;
             }
             case 5 : {
                 $content = $this->afficherModifierListe($arg1);
+                break;
+            }
+            case 6 : {
+                $content = $this->afficherSupressionListe($arg1);
                 break;
             }
         }
