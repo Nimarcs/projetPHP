@@ -55,7 +55,7 @@ $app->get('/liste/{token}[/]', function (Request $rq, Response $rs, array $args)
 })->setName('afficherListe');
 
 /**
- * Fonction 1 bis, afficher une liste avec un token d'édition
+ * Fonction 1 bis, afficher une liste avec un token d'édition + Fonction 14, partager une liste
  * @author Guillaume Renard
  */
 $app->get('/liste/edition/{token_edition}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
@@ -75,6 +75,22 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
     $controleur = new ControlerGestionListe($container);
     return $controleur->creerListe($rq, $rs, $_POST);
 })->setName('creationListe');
+
+
+
+/**
+ * Fonction 7, modifier information sur la liste
+ * @author Guillaume Renard
+ */
+$app->get('/liste/edition/{token_edition}/modification[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->modifierListe($rq, $rs, $args);
+})->setName('modifierListe');
+$app->post('/liste/edition/{token_edition}/modification[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->modifierListe($rq, $rs, $_POST);
+})->setName('modifierListe');
+
 
 /**
  * Fonction 8, ajouter un item a une liste

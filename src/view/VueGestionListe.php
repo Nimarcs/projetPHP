@@ -57,7 +57,7 @@ END;
 
     /**
      * Fonction 1 bis
-     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager 
+     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager
      * @author Lucas Weiss
      * @author Guillaume Renard
      */
@@ -144,6 +144,33 @@ END;
     }
 
     /**
+     * Fonction 7
+     * Affichage formulaire pour modifier la liste
+     */
+    private function afficherModifierListe($l){
+        $html = <<<END
+              <h2>Modification des informations d'une liste</h2>
+        <div class="formulaire">
+            <form action="" method="post">
+                <label for="titre" class="form-label">Modifier le titre</label>
+                <input type="text" value=  "${l['titre']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
+                
+                <label for="desc" class="form-label">Modifier la description</label>
+                <input type="text" value="{$l['description']}" class="form-control" name="description" placeholder="" required><br>
+
+                <label for="exp" class="form-label">Modifier la date limite</label>
+                <input type="date" value="{$l["expiration"]}" class="form-control" name="expiration" placeholder="" required><br> 
+                <button type="submit" class="btn submit" value="{$l["token_edition"]}" name="token_edition">
+                   Enregistrer les modifications
+                </button>
+            </form>
+        </div>
+END;
+        return $html;
+    }
+
+
+    /**
      * Fonction 21
      * Methode privee qui generer l'affichage de toutes les listes publique
      * @author Lucas Weiss
@@ -212,6 +239,11 @@ END;
             }
             case 4: {
                 $content = $this->afficherListeEdition($arg1, $arg2);
+                break;
+            }
+            case 5 : {
+                $content = $this->afficherModifierListe($arg1);
+                break;
             }
         }
         $vue = new VueRender($this->container);

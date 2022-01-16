@@ -162,6 +162,57 @@ class ControlerGestionListe
     }
 
     /**
+     * Fonction 7
+     * La méthode est utilisée lorsque l'on veut modifier les données de la liste
+     * on a donc un get et un post
+     * le get affiche ce que l'utilsateur a mis
+     * le post renvoie les valeurs qu'il a changé
+     * @author Guillaume Renard
+     */
+    public function modifierListe(Request $rq, Response $rs, array $args) {
+        try {
+            $vue = new VueGestionListe($this->container);
+
+            if (sizeof($args) == 4) {
+                //on est dans un post
+                //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
+                $liste = $this->recupererListeEdition($args['token_edition']);
+                var_dump($args);
+                $this->modifierListeInBDD($liste, $args);
+                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+
+
+            } else {
+                //on est dans le get
+
+                //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
+                $liste = $this->recupererListeEdition($args['token_edition']);
+                $rs->getBody()->write($vue->render(5, $liste));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+    /**
+     * Fonction 7
+     * Methode privee qui permet de modifier la liste au sein de la BDD grâce à la méthode save()
+     * @author Lucas Weiss
+     */
+    private function modifierListeInBDD( $l,array $args) {
+
+        $l['titre'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
+        $l['description']= filter_var($args['description'], FILTER_SANITIZE_STRING);
+        $l['expiration'] = $args['expiration'];
+        //$l->public = 1;
+        $l->save();
+    }
+
+
+
+    /**
      * Fonction 21
      * Methode qui gere l'affichage de toutes les listes publique
      * @author Lucas Weiss
