@@ -148,6 +148,15 @@ END;
      * Affichage formulaire pour modifier la liste
      */
     private function afficherModifierListe($l){
+
+        if( $l["public"]=="0"){
+            $p_oui="checked";
+            $p_non="";
+        } else {
+            $p_oui="";
+            $p_non="checked";
+        }
+
         $html = <<<END
               <h2>Modification des informations d'une liste</h2>
         <div class="formulaire">
@@ -160,6 +169,13 @@ END;
 
                 <label for="exp" class="form-label">Modifier la date limite</label>
                 <input type="date" value="{$l["expiration"]}" class="form-control" name="expiration" placeholder="" required><br> 
+                
+                <label for="listePublic" class="form-label">Mettre en public</label><br> 
+                <label for="public" class="form-label">Oui</label>
+                <input type="radio" value="0" class="form-control" name="public" placeholder="" required $p_oui>
+                 <label for="public" class="form-label">Non</label>
+                <input type="radio" value="1" class="form-control" name="public" placeholder="" required $p_non><br> 
+                
                 <button type="submit" class="btn submit" value="{$l["token_edition"]}" name="token_edition">
                    Enregistrer les modifications
                 </button>
