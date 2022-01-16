@@ -23,6 +23,7 @@ class VueGestionItem
         $this->container = $c;
     }
 
+
     /**
      * Fonction 8
      * Methode vue qui retourne l'html de la page afin d'ajouter un item sur une liste bien précise
@@ -53,6 +54,14 @@ END;
 
     }
 
+    /**
+     * Fonction 2
+     * affichage d'un item
+     * @param $i, item
+     * @return String
+     *
+     * @author
+     */
     public function htmlAfficherUnItem($i) : String {
         return <<<END
 <dive class="boite-item">
@@ -84,9 +93,10 @@ END;
                 $content = $this->htmlCreationItemPourUneListe($arg1);
                 break;
             }
-            case 2:
+            case 2: {
                 $content = $this->htmlAfficherUnItem($arg1);
                 break;
+            }
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);

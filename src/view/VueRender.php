@@ -85,14 +85,13 @@ END;
     }
 
     /**
-     * Methode qui genere le html pour afficher un message d'erreu
+     * Methode qui genere le html pour afficher un message d'erreur
      * @author Lucas Weiss
      */
     public function htmlErreur(string $message) {
         return <<<END
             <div class="text-erreur">
                 <p>$message</p>
-                <p><a href={$this->container->router->pathFor('accueil')}>Retour a l'accueil</a></p>
             </div>
 END;
     }

@@ -32,6 +32,28 @@ class ControlerGestionItem{
 
     //METHODES
 
+    /**
+     * Fonction 2
+     * affichage d'un item
+     * @author Mathieu Vinot
+     */
+    public function affichageItem(Request $rq, Response $rs, array $args) {
+        try {
+            $vue = new VueGestionItem($this->container);
+            $item = Item::query()->where('id', '=', $args)->firstOrFail();
+            if ($item != null) {
+                $rs->getBody()->write($vue->render(2, $item));
+            } else {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>".$e->getMessage()."<br>".$e->getTrace())));
+        }
+        return $rs;
+    }
+
     /***
      * Fonction 8
      * Methode qui ajoute un nouvel item dans une liste precise

@@ -41,7 +41,7 @@ class ControlerGestionListe
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    public function affichageListe(Request $rq, Response $rs, array $args, bool $optionAff) {
+    public function affichageListe(Request $rq, Response $rs, array $args) {
         try {
             $vue = new VueGestionListe($this->container);
             if( $optionAff){

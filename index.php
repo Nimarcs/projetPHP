@@ -64,6 +64,16 @@ $app->get('/liste/edition/{token_edition}[/]', function (Request $rq, Response $
 })->setName('afficherListeEdition');
 
 /**
+ * Fonction 2
+ * Afficher item
+ * @author Mathieu Vinot
+ */
+$app->get('/item/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->affichageItem($rq, $rs, $args);
+})->setName('afficherItem');
+
+/**
  * Fonction 6, créer une liste
  * @author Lucas Weiss
  */
