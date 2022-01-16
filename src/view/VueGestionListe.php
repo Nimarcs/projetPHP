@@ -76,10 +76,10 @@ END;
                     </p>
                     
                      PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']} disabled="disabled" style="width: 700px;">
-                    <button type="button" class="" onclick="window.location.href='';">
+                    <button type="button" class="" onclick="window.location.href='modification';">
                         MODIFIER LISTE
                     </button>
-                    <button type="button" class="" onclick="window.location.href='';">
+                    <button type="button" class="" onclick="window.location.href='supression';">
                         SUPPRIMER LISTE
                     </button>
             </div>
@@ -243,7 +243,7 @@ END;
                         --- Expire le ${l['expiration']}</li>
  
                     </p>
-                    <button type="button" class="" onclick="window.location.href='';">
+                    <button type="button" class="" onclick="window.location.href='liste/${l['token_lecture']}';">
                         AFFICHER LA LISTE
                     </button>
                     Token: <input type="text" value="oui" disabled="disabled">
