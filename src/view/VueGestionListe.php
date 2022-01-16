@@ -260,6 +260,45 @@ END;
     }
 
     /**
+     * Fonction 26
+     * @param $arg1
+     * @return string
+     */
+    private function afficherListeCreateur($arg1) {
+
+        $content=self::recupererListeCreateur($arg1);
+
+        $html = <<<END
+              <div class="boite-liste"'>
+                $content
+            </div>
+            <br><br>
+END;
+        return $html;
+    }
+
+    /**
+     * Fonction 26
+     * @param $arg1
+     * @return string
+     */
+    private function recupererListeCreateur($arg1)
+    {
+        $res = "";
+
+        foreach ($arg1 as $listeCurr) {
+            $res .= "<div class='titreDeListe'>";
+            $res .=   "    <h2>{$listeCurr['titre']}</h2>";
+            $res .=  "  </div>";
+            $res .=  "<p>";
+            $res .= "           {$listeCurr['description']} <br>";
+            $res .= "--- Expire le {$listeCurr['expiration']}</li>";
+            $res .=   "     </p>";
+        }
+        return $res;
+    }
+
+    /**
      * Fonction qui retourne selon le selecteur choisis
      * @param $selecteur entier: choix de la page a afficher
      * @return string String: texte html, cointenu global de chaque page
@@ -287,6 +326,10 @@ END;
             }
             case 5 : {
                 $content = $this->afficherModifierListe($arg1);
+                break;
+            }
+            case 6 : {
+                $content = $this->afficherListeCreateur($arg1);
                 break;
             }
             case 6 : {

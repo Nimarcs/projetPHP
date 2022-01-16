@@ -114,15 +114,20 @@ class ControlerGestionItem{
         $i->save();
     }
 
-    public function afficherUnItem(Request $rq, Response $rs, array $args){
-        try {
-            $vue = new VueGestionItem($this->container);
-            $rs->getBody()->write($vue->render(2));
-        } catch (\Exception $e) {
+    /**
+     * Fonction 13
+     *
+     */
+    /*
+    private function supprimerImageItem(Request $rq, Response $rs, array $args){
+        try{
+
+        }catch (\Exception $e){
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans l'affichage d'un item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("Erreur dans la suppression de l'image de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
     }
+    */
 
 
 

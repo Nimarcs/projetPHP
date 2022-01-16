@@ -119,6 +119,17 @@ $app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, arr
 })->setName('new Item');
 
 
+/**
+ * Fonction 13, Supprimer une image d'un item
+ * @author Mathieu Vinot
+ */
+/*
+$app->post('/item/{id}/supprimerImage[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->supprimerImageItem($rq, $rs, $_POST);
+})->setName('supprimerImageItem');
+*/
+
 
 
 
@@ -163,6 +174,15 @@ $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($con
 
 
 
+
+/**
+ * Fonction 26, afficher les listes du créateur
+ * @author Mathieu Vinot
+ */
+$app->get('/listesCreateur/{login}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->afficherListesCreateur($rq, $rs, $args);
+})->setName('affichageListesCreateur');
 
 # On lance l'app
 session_start();

@@ -266,4 +266,42 @@ class ControlerGestionListe
 
     }
 
+    /**
+     * Fonction 26
+     * Métjo
+     */
+    public function afficherListesCreateur(Request $rq, Response $rs, array $args){
+        try {
+            $vue = new VueGestionListe($this->container);
+            $liste = $this->recupererListesLogin($args['login']);
+            if ($liste != null) {
+                $rs->getBody()->write($vue->render(6, $liste));
+            } else {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le login...<br>")));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+    /**
+     * Fonction 26.2
+     * Permet de récupérer les listes d'une personne
+     *
+     * @param $login, login du createur
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|null
+     *
+     * @author Mathieu Vinot
+     */
+    private function recupererListesLogin($login){
+        try {
+            return Liste::query()->where('login', '=', $login)->get();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+    }
+
 }
