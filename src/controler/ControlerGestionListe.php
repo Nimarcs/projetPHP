@@ -51,6 +51,7 @@ class ControlerGestionListe
             }
 
             if ($liste != null) {
+
                 $items = $this->recupererListeItem($liste['no']);
                 if($optionAff){
                     $rs->getBody()->write($vue->render(4, $liste, $items));

@@ -57,7 +57,7 @@ END;
 
     /**
      * Fonction 1 bis
-     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste
+     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager 
      * @author Lucas Weiss
      * @author Guillaume Renard
      */
@@ -74,10 +74,8 @@ END;
                         
                         $items
                     </p>
-                    <button type="button" class="" onclick="window.location.href='';">
-                        PARTAGER LA LISTE
-                    </button>
-                    Token: <input type="text" value="oui" disabled="disabled">
+                    
+                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']} disabled="disabled" style="width: 700px;">
                     <button type="button" class="" onclick="window.location.href='';">
                         MODIFIER LISTE
                     </button>
@@ -162,7 +160,6 @@ END;
      * Fonction 21
      * Methode privee qui genere l'affichage d'une liste sur une ligne avec les boutons adequats
      * @author Lucas Weiss
-     * @author Guillaume Renard
      */
     private function afficherEnLigneUneListe($l) : String {
         return <<<END

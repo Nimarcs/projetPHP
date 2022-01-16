@@ -89,10 +89,7 @@ $app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, arr
     return $controleur->ajouterNouvelItem($rq, $rs, $_POST);
 })->setName('new Item');
 
-/**
- * Fonction 14, afficher une liste, avec token
- * @author Guillaume Renard
- */
+
 
 
 
