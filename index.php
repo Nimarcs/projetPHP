@@ -74,6 +74,20 @@ $app->get('/item/{id}[/]', function (Request $rq, Response $rs, array $args) use
 })->setName('afficherItem');
 
 /**
+ * Fonction 3, reserver un item
+ * @author Marcus Richier
+ */
+$app->get('/reserverItem/{token}/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->reserverItem($rq, $rs, $args);
+})->setName('reserverItem');
+$app->post('/reserverItem/{token}/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->reserverItem($rq, $rs, $_POST);
+})->setName('reserverItem');
+
+
+/**
  * Fonction 6, créer une liste
  * @author Lucas Weiss
  */

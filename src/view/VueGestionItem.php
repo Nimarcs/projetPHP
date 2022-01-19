@@ -89,12 +89,19 @@ END;
     {
         $content = "";
         switch ($selecteur) {
-            case 1: {
+            case 1:
+            {
                 $content = $this->htmlCreationItemPourUneListe($arg1);
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 $content = $this->htmlAfficherUnItem($arg1);
+                break;
+            }
+            case 3:
+            {
+                $content = $this->htmlReserverItem($arg1);
                 break;
             }
         }
@@ -102,4 +109,22 @@ END;
         return $vue->render($content);
     }
 
+    private function htmlReserverItem($args)
+    {
+        return <<<END
+        <h2>Reserver l'item suivant ?</h2>
+        <form action="" method="post">     
+            <input type="hidden" name="token" value="{$args['token']}" required>
+            <input type="hidden" name="id" value="{$args['id']}" required>
+            <button name="btn" type="submit" class="btn submit">
+                Réserver l'item
+            </button>
+        </form>
+
+END;
+    }
+
 }
+/*
+ *
+ */

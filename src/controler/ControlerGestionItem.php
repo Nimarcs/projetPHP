@@ -8,6 +8,8 @@ namespace mywishlist\controler;
 // IMPORTS
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use mywishlist\modele\Item;
+use mywishlist\modele\Liste;
+
 use mywishlist\view\VueGestionItem;
 use mywishlist\view\VueGestionListe;
 use mywishlist\view\VueRender;
@@ -37,7 +39,8 @@ class ControlerGestionItem{
      * affichage d'un item
      * @author Mathieu Vinot
      */
-    public function affichageItem(Request $rq, Response $rs, array $args) {
+    public function affichageItem(Request $rq, Response $rs, array $args)
+    {
         try {
             $vue = new VueGestionItem($this->container);
             $item = Item::query()->where('id', '=', $args)->firstOrFail();
@@ -49,12 +52,100 @@ class ControlerGestionItem{
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>".$e->getMessage()."<br>".$e->getTrace())));
+            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>" . $e->getMessage() . "<br>" . $e->getTrace())));
+        }
+    }
+
+    /**
+     * Fonction 3
+     * Methode pour gérer la reservation d'un item
+     *     GET: on obtient la page qui permet de reserver un item
+     *     POST:
+     * @author Marcus Richier
+     */
+    public function reserverItem(Request $rq, Response $rs, array $args) : Response {
+        try {
+
+            $vue = new VueGestionItem($this->container);
+
+            //on recupere les parametre
+            if ($rq->isPost()){
+                $token = $rq->getParsedBody()['token'];
+                $id = intval( $rq->getParsedBody()['id']);
+            } else {
+                $token= $args['token'];
+                $id = intval( $args['id']);
+            }
+
+            // On recupere l'item
+            $item = $this->recupererItem($token,$id, false);
+            if ($item == null){
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("Erreur: item non trouvé avec :<br> token = {$args['token']},<br> id = {$args['id']}"));
+                return $rs;
+            }
+
+            //on fait l'action correspondante
+            if ($rq->isPost()) {
+                $this->reserverItemDansBDD($item); // On insere dans la BDD
+                $rs = $rs->withRedirect($this->container->router->pathFor('reserverItem', ['id'=>$id, 'token' => $token])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
+            } else { // Si ce n'est pas le cas, la methode est un get
+                $rs->getBody()->write($vue->render(3, ['token' => $token, 'id' => $id]));
+            }
+        } catch (\ImagickDrawException $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la reservation de l'item...<br>"));
+
         }
         return $rs;
     }
 
-    /***
+    /**
+     * Fonction 3
+     * Methode privee qui permet de reserver l'item au sein de la BDD
+     * @author Marcus RICHIER
+     */
+    private function reserverItemDansBDD(Item $item) : bool {
+        if (!isset($item)) return false;
+        if ($item->reserver == true) return false;
+
+        $item->reserver = true;
+        $item->save();
+        return true;
+    }
+
+    /**
+     * Methode qui permet de recuperer un item a partir du token et de son numero
+     * @param $token token de la liste
+     * @param $id numero de l'item dans la liste
+     * @param bool $edition permet de preciser si c'est le token d'edition qui est fourni, si precise a faux, le token de lecture est attendu
+     * @return item correspondant ou null
+     * @author Marcus Richier
+     */
+    private function recupererItem(string $token, int $id, bool $edition = true) : ?Item{
+        try {
+            //Choix du type de token
+            $type_token = 'token_edition';
+            if (!$edition){
+                $type_token = 'token_lecture';
+            }
+
+            //requete
+            $item = Item::query()
+                ->join("liste", "liste_id", "=", "no")
+                ->where('id', '=', $id)
+                ->where($type_token, '=', $token)
+                ->firstOrFail();
+
+            //on revoi l'item trouve
+            return $item;
+        } catch (\Exception $e) {
+            //s'il y a une erreur on renvoi null
+            return null;
+        }
+    }
+
+    /**
      * Fonction 8
      * Methode qui ajoute un nouvel item dans une liste precise
      * @author Lucas Weiss
