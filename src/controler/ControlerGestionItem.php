@@ -42,10 +42,24 @@ class ControlerGestionItem{
     public function affichageItem(Request $rq, Response $rs, array $args)
     {
         try {
+            //création de la vue
             $vue = new VueGestionItem($this->container);
-            $item = Item::query()->where('id', '=', $args)->firstOrFail();
+
+            //récupération de l'item
+            $token = $args['token'];
+            $id = intval($args['id']);
+            $item = $this->recupererItem($token,$id, false);
+
+            //si l'item n'est pas trouvé, possiblement un token édition
+            if ($item == null) {
+                $item = $this->recupererItem($token,$id, true);
+            }
+
+            //l'item où l'item existe
             if ($item != null) {
                 $rs->getBody()->write($vue->render(2, $item));
+
+            //cas où l'item n'esxiste pas
             } else {
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
@@ -54,6 +68,7 @@ class ControlerGestionItem{
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>" . $e->getMessage() . "<br>" . $e->getTrace())));
         }
+        return $rs;
     }
 
     /**

@@ -68,7 +68,7 @@ $app->get('/liste/edition/{token_edition}[/]', function (Request $rq, Response $
  * Afficher item
  * @author Mathieu Vinot
  */
-$app->get('/item/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->get('/item/{token}/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionItem($container);
     return $controleur->affichageItem($rq, $rs, $args);
 })->setName('afficherItem');
