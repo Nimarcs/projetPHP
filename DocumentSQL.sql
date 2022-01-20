@@ -62,8 +62,3 @@ CREATE TABLE `compte` (
                           `sel` varchar(256),
                           PRIMARY KEY (`login`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-UPDATE liste
-SET login = 'aaa'
-WHERE no=2;
