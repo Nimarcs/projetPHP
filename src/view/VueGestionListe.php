@@ -319,6 +319,7 @@ END;
      * @param $arg1
      * @return string
      */
+    /*
     private function afficherListeCreateur($arg1) {
 
         $content=self::recupererListeCreateur($arg1);
@@ -331,12 +332,13 @@ END;
 END;
         return $html;
     }
-
+*/
     /**
      * Fonction 26
      * @param $arg1
      * @return string
      */
+    /*
     private function recupererListeCreateur($arg1)
     {
         $res = "";
@@ -352,6 +354,7 @@ END;
         }
         return $res;
     }
+    */
 
     /**
      * Fonction qui retourne selon le selecteur choisis
@@ -384,7 +387,7 @@ END;
                 break;
             }
             case 6 : {
-                $content = $this->afficherListeCreateur($arg1);
+                $content = $this->afficherSupressionListe($arg1);
                 break;
             }
             case 7 :
