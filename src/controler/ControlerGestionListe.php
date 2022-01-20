@@ -123,6 +123,11 @@ class ControlerGestionListe
 
     /**
      * Fonction afficher listes personnels
+     * @param $rq
+     * @param $rs
+     * @param $args
+     * @return mixed
+     * @author Mathieu Vinot
      */
     public function AffichageListePerso($rq, $rs, $args){
         try {
@@ -136,7 +141,13 @@ class ControlerGestionListe
         return $rs;
     }
 
+    /**
+     * Fonction qui permet la récupération de ses listes personneles
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @author Mathieu Vinot
+     */
     private function selectListePerso() {
+        //on récupère à l'aide du login contenue dans notre variable session, cela permet de sécuriser
         return Liste::query()->where('login', '=', $_SESSION["login"])->get();
 
     }
@@ -169,10 +180,12 @@ class ControlerGestionListe
      * Fonction 6
      * Methode privee qui permet de creer la liste au sein de la BDD
      * @author Lucas Weiss
+     * @author Mathieu Vinot (ajout du login pour suivre l'évolution de notre bdd)
      */
     private function creerListeInBDD(array $args) {
         $l = new Liste();
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
+        $l->login = $_SESSION['login'];
         $l->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
         $l->expiration = $args['expiration'];
         $l->public = 1;
