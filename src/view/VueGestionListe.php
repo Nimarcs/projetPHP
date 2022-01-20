@@ -38,7 +38,7 @@ class VueGestionListe
      * @author Mathieu Vinot
      */
     private function htmlAffichageListeToken($arg1, $arg2) {
-        $items = self::htmlAfficherTousItem($arg2);
+        $items = self::htmlAfficherTousItem($arg1, $arg2);
         $html = <<<END
               <div class="boite-liste"'>
                 <div class="titreDeListe">
@@ -62,7 +62,7 @@ END;
      * @author Guillaume Renard
      */
     private function afficherListeEdition($l, $i) : String {
-        $items = self::htmlAfficherTousItem($i);
+        $items = self::htmlAfficherTousItem($l, $i);
         return <<<END
 <div class="boite-liste"'>
                 <div class="titreDeListe">
@@ -101,15 +101,17 @@ END;
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    private function htmlAfficherTousItem($arg2)
+    private function htmlAfficherTousItem($l, $i)
     {
         $res = "";
         $num = 1;
-        foreach ($arg2 as $itemCurr) {
+        foreach ($i as $itemCurr) {
             $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
-            $res.= ' <button type="button" class="" onclick="window.location.href="">
-                        AFFICHER ITEM
-                    </button><br>';
+            $res.= <<<END
+<form action="{$this->container->router->pathFor('afficherItem', ['token' => $l['token_lecture'], 'id' => $itemCurr->id])}" method="get">
+    <button type="submit" class="btn submit">AFFICHER ITEM</button>
+</form><br>
+END;
             $num++;
         }
         return $res;

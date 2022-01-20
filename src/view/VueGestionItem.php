@@ -61,6 +61,7 @@ END;
      * @return String html coorespondant
      *
      * @author Mathieu VINOT
+     * @author Fabrice Arnout
      * @author Marcus RICHIER (reservation)
      */
     public function htmlAfficherUnItem($args) : String {
@@ -91,7 +92,8 @@ END;
         <p>
             ${i['description']}<br>
         </p>
-        <img src="img/"+${i['image']}>
+        <img style='width: 100px;' src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
+        <br>
         <div class="reservation">
             $texteReservation
         </div>
