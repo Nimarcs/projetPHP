@@ -57,22 +57,45 @@ END;
     /**
      * Fonction 2
      * affichage d'un item
-     * @param $i, item
-     * @return String
+     * @param $args tableau avec l'item, le token et l'id
+     * @return String html coorespondant
      *
-     * @author
+     * @author Mathieu VINOT
+     * @author Marcus RICHIER (reservation)
      */
-    public function htmlAfficherUnItem($i) : String {
+    public function htmlAfficherUnItem($args) : String {
+        $i = $args['item'];
+
+        //reservation
+        if ($i->reserverPar == null) $texteReservation = <<<END
+<p>L'item n'est pas encore reservé</p>
+<form action="{$this->container->router->pathFor('reserverItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
+    <button type="submit" class="btn submit">Réserver l'item</button>
+</form>
+END;
+        else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
+
+
+        //vision du propriétaire
+        if ($args['edition']) {
+            if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
+            else $texteReservation = "L'item n'est pas réservé";
+        }
+
+        //html
         return <<<END
-<dive class="boite-item">
+<div class="boite-item">
         <div class="nomItem">
             <h3>${i['nom']}</h3>
         </div>
-            <p>
-                ${i['description']}<br>
-            </p>
+        <p>
+            ${i['description']}<br>
+        </p>
         <img src="img/"+${i['image']}>
-</dive>
+        <div class="reservation">
+            $texteReservation
+        </div>
+</div>
 
 
 END;
@@ -111,16 +134,29 @@ END;
 
     private function htmlReserverItem($args)
     {
-        return <<<END
-        <h2>Reserver l'item suivant ?</h2>
-        <form action="" method="post">     
-            <input type="hidden" name="token" value="{$args['token']}" required>
-            <input type="hidden" name="id" value="{$args['id']}" required>
-            <button name="btn" type="submit" class="btn submit">
-                Réserver l'item
-            </button>
-        </form>
+        if ($args['reserverPar'] == null) $form = <<<END
+            <p>l'item n'est pas reservé</p>
+            <form action="" method="post">     
+                <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
+                <input type="text" name="reservateur" maxlength="50" required>
+                <input type="hidden" name="token" value="{$args['token']}" required>
+                <input type="hidden" name="id" value="{$args['id']}" required>
+                <button type="submit" class="btn submit">
+                    Réserver l'item
+                </button>
+            </form>
+END;
+        else $form = "<p>l'item est reserver par {$args['reserverPar']}</p>";
 
+
+        return <<<END
+        <h2>Reserver l'item "{$args['nom']}" ?</h2>
+        <div class="formulaire">
+            $form
+            <form action="{$this->container->router->pathFor('afficherItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
+                <button type="submit" class="btn submit">Retourner sur la page de l'item</button>
+            </form>
+        </div>
 END;
     }
 

@@ -13,7 +13,7 @@ CREATE TABLE `item` (
   `url` text,
   `tarif` decimal(5,2) DEFAULT NULL,
   `message` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `reserver` boolean DEFAULT FALSE,
+  `reserverPar` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

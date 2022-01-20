@@ -46,6 +46,7 @@ class ControlerGestionItem{
             $vue = new VueGestionItem($this->container);
 
             //récupération de l'item
+            $edition = false;
             $token = $args['token'];
             $id = intval($args['id']);
             $item = $this->recupererItem($token,$id, false);
@@ -53,11 +54,12 @@ class ControlerGestionItem{
             //si l'item n'est pas trouvé, possiblement un token édition
             if ($item == null) {
                 $item = $this->recupererItem($token,$id, true);
+                $edition = true;
             }
 
             //l'item où l'item existe
             if ($item != null) {
-                $rs->getBody()->write($vue->render(2, $item));
+                $rs->getBody()->write($vue->render(2, ['item' => $item, 'token' => $token, 'id' => $id, 'edition' => $edition]));
 
             //cas où l'item n'esxiste pas
             } else {
@@ -75,7 +77,7 @@ class ControlerGestionItem{
      * Fonction 3
      * Methode pour gérer la reservation d'un item
      *     GET: on obtient la page qui permet de reserver un item
-     *     POST:
+     *     POST: on reserve l'item et on affiche si on a reussi a faire la reservation
      * @author Marcus Richier
      */
     public function reserverItem(Request $rq, Response $rs, array $args) : Response {
@@ -102,12 +104,12 @@ class ControlerGestionItem{
 
             //on fait l'action correspondante
             if ($rq->isPost()) {
-                $this->reserverItemDansBDD($item); // On insere dans la BDD
+                $this->reserverItemDansBDD($item, $args['reservateur']); // On insere dans la BDD
                 $rs = $rs->withRedirect($this->container->router->pathFor('reserverItem', ['id'=>$id, 'token' => $token])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
-                $rs->getBody()->write($vue->render(3, ['token' => $token, 'id' => $id]));
+                $rs->getBody()->write($vue->render(3, ['token' => $token, 'id' => $id, 'reserverPar' => $item->reserverPar, 'nom' => $item->nom]));
             }
-        } catch (\ImagickDrawException $e) {
+        } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la reservation de l'item...<br>"));
 
@@ -118,13 +120,15 @@ class ControlerGestionItem{
     /**
      * Fonction 3
      * Methode privee qui permet de reserver l'item au sein de la BDD
+     * @param Item $item item a reserver
+     * @param string $nom nom de la personne qui reserve
      * @author Marcus RICHIER
      */
-    private function reserverItemDansBDD(Item $item) : bool {
+    private function reserverItemDansBDD(Item $item, string $nom) : bool {
         if (!isset($item)) return false;
-        if ($item->reserver == true) return false;
+        if ($item->reserverPar != null) return false;
 
-        $item->reserver = true;
+        $item->reserverPar = $nom;
         $item->save();
         return true;
     }
