@@ -251,12 +251,6 @@ END;
                         AFFICHER LA LISTE
                     </button>
                     Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
-                    <button type="button" class="" onclick="window.location.href='';">
-                        MODIFIER LISTE
-                    </button>
-                    <button type="button" class="" onclick="window.location.href='';">
-                        SUPPRIMER LISTE
-                    </button>
             </div>
             <br><br>
 END;
