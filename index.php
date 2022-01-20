@@ -64,6 +64,16 @@ $app->get('/liste/edition/{token_edition}[/]', function (Request $rq, Response $
 })->setName('afficherListeEdition');
 
 /**
+ * Fonction afficher ses listes personnelles
+ * @author Mathieu Vinot
+ */
+//on affiche les listes où le login est le même que celui de $_session
+$app->get('/listePerso[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->AffichageListePerso($rq, $rs, $args);
+})->setName('afficherListePerso');
+
+/**
  * Fonction 2
  * Afficher item
  * @author Mathieu Vinot

@@ -121,6 +121,25 @@ class ControlerGestionListe
         }
     }
 
+    /**
+     * Fonction afficher listes personnels
+     */
+    public function AffichageListePerso($rq, $rs, $args){
+        try {
+            $vue = new VueGestionListe($this->container);
+            $listes = $this->selectListePerso();
+            $rs->getBody()->write($vue->render(7, $listes));
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes personnelles...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+    private function selectListePerso() {
+        return Liste::query()->where('login', '=', $_SESSION["login"])->get();
+
+    }
 
     /**
      * Fonction 6

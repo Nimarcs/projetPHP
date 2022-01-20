@@ -38,7 +38,8 @@ class VueGestionListe
      * @author Mathieu Vinot
      */
     private function htmlAffichageListeToken($arg1, $arg2) {
-        $items = self::htmlAfficherTousItem($arg1, $arg2);
+        $tokenL = $arg1['token_lecture'];
+        $items = self::htmlAfficherTousItem($tokenL, $arg2);
         $html = <<<END
               <div class="boite-liste"'>
                 <div class="titreDeListe">
@@ -62,7 +63,8 @@ END;
      * @author Guillaume Renard
      */
     private function afficherListeEdition($l, $i) : String {
-        $items = self::htmlAfficherTousItem($l, $i);
+        $tokenL = $l['token_edition'];
+        $items = self::htmlAfficherTousItem($tokenL, $i);
         return <<<END
 <div class="boite-liste"'>
                 <div class="titreDeListe">
@@ -75,7 +77,7 @@ END;
                         $items
                     </p>
                     
-                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']} disabled="disabled" style="width: 700px;">
+                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_edition']} disabled="disabled" style="width: 700px;">
                     <button type="button" class="" onclick="window.location.href='modification';">
                         MODIFIER LISTE
                     </button>
@@ -101,14 +103,14 @@ END;
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    private function htmlAfficherTousItem($l, $i)
+    private function htmlAfficherTousItem($tokenL, $i)
     {
         $res = "";
         $num = 1;
         foreach ($i as $itemCurr) {
             $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
             $res.= <<<END
-<form action="{$this->container->router->pathFor('afficherItem', ['token' => $l['token_lecture'], 'id' => $itemCurr->id])}" method="get">
+<form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
     <button type="submit" class="btn submit">AFFICHER ITEM</button>
 </form><br>
 END;
@@ -262,6 +264,57 @@ END;
     }
 
     /**
+     * Fonction qui permet d'afficher ses listes personnelles
+     *
+     * @param $listes, listees
+     * @return string
+     *
+     * @author Mathieu Vinot
+     */
+    private function afficherListePerso($listes) {
+        $html = "";
+        foreach ($listes as $l) {
+            $html = $html .$this->afficherEnLigneUneListePerso($l);
+        }
+        return $html;
+    }
+
+    /**
+     * Fonction qui permet l'affichage de ses listes personnelles
+     *
+     * @param $l
+     * @return String
+     *
+     * @author Mathieu Vinot
+     */
+    private function afficherEnLigneUneListePerso($l) : String {
+        return <<<END
+<div class="boite-liste"'>
+                <div class="titreDeListe">
+                    <h2>${l['titre']}</h2>
+                </div>
+                    <p>
+                        ${l['description']} <br>
+                        --- Expire le ${l['expiration']}</li>
+ 
+                    </p>
+                    <form action="{$this->container->router->pathFor('afficherListeEdition', ['token_edition' => $l['token_edition']])}" method="get">
+                         <button type="submit" class="btn submit">AFFICHER LA LISTE</button>
+                    </form><br>
+                    Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
+                    <button type="button" class="" onclick="window.location.href='';">
+                        MODIFIER LISTE
+                    </button>
+                    <button type="button" class="" onclick="window.location.href='';">
+                        SUPPRIMER LISTE
+                    </button>
+            </div>
+            <br><br>
+END;
+
+    }
+
+    /**
      * Fonction 26
      * @param $arg1
      * @return string
@@ -334,10 +387,9 @@ END;
                 $content = $this->afficherListeCreateur($arg1);
                 break;
             }
-            case 6 : {
-                $content = $this->afficherSupressionListe($arg1);
+            case 7 :
+                $content = $this->afficherListePerso($arg1);
                 break;
-            }
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);

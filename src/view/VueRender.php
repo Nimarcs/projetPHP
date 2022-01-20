@@ -75,7 +75,8 @@ END;
                      <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>';
         } else {
             $html .= '<p> Bonjour a toi, '.$_SESSION["login"].'</p>
-                     <p><a href='.$this->container->router->pathFor("deconectionCompte").'>Se deconnecter</a></p>';
+                    <p><a href='.$this->container->router->pathFor("afficherListePerso").'>Afficher ses listes personnels</a></p>
+                    <p><a href='.$this->container->router->pathFor("deconectionCompte").'>Se deconnecter</a></p>';
         }
         $html .= '<p><a href='.$this->container->router->pathFor("affichageListesPublique").'>Afficher toutes les listes publiques</a></p>
                     <p><a href='.$this->container->router->pathFor("creationListe").'>Creer nouvelles listes</a></p>
