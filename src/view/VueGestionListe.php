@@ -302,12 +302,12 @@ END;
                          <button type="submit" class="btn submit">AFFICHER LA LISTE</button>
                     </form><br>
                     Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
-                    <button type="button" class="" onclick="window.location.href='';">
-                        MODIFIER LISTE
-                    </button>
-                    <button type="button" class="" onclick="window.location.href='';">
-                        SUPPRIMER LISTE
-                    </button>
+                    <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $l['token_edition']])}" method="get">
+                         <button type="submit" class="btn submit">MODIFIER LISTE</button>
+                    </form><br>
+                    <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $l['token_edition']])}" method="get">
+                         <button type="submit" class="btn submit">SUPPRIMER LISTE</button>
+                    </form><br>
             </div>
             <br><br>
 END;
