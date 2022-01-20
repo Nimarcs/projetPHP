@@ -248,7 +248,7 @@ END;
                     <button type="button" class="" onclick="window.location.href='liste/${l['token_lecture']}';">
                         AFFICHER LA LISTE
                     </button>
-                    Token: <input type="text" value="oui" disabled="disabled">
+                    Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
                     <button type="button" class="" onclick="window.location.href='';">
                         MODIFIER LISTE
                     </button>
