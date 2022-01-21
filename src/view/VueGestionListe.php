@@ -42,7 +42,7 @@ class VueGestionListe
     private function htmlAffichageListeToken(Liste $arg1, Collection $arg2) {
         $tokenL = $arg1['token_lecture'];
         $items = self::htmlAfficherTousItem($tokenL, $arg2);
-        if ($arg1['public']) $public = 'La liste est actuellement publique.';
+        if (!$arg1['public']) $public = 'La liste est actuellement publique.';
         else $public = 'La liste est actuellement privée.';
         $html = <<<END
               <div class="boite-liste"'>
