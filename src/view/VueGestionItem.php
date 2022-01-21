@@ -87,13 +87,11 @@ END;
             $estProprietaire = false;
             if (isset($_COOKIE['listeCree'])) {
                 $a = unserialize($_COOKIE['listeCree']);
-                print "ICI";
-                var_dump($a);
+
                 foreach ($a as $noListe) {
                     if ($noListe == $i->liste_id) $estProprietaire = true;
                 }
             }
-            var_dump($estProprietaire);
 
             if ($estProprietaire || $args['edition'] || (isset($_SESSION['login']) && $_SESSION['login'] == $i->liste->login)) {
 

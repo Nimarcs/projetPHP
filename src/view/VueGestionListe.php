@@ -28,72 +28,67 @@ class VueGestionListe
     // METHODES
 
     /**
-     *
      * Fonction 1
      * Affichage d'une liste et de ses items
      * L'affichage d'une liste précise se fait grace à son token, qui l'identifie de façon unique
+     * genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager si et seulement si c'est un token d'edition qui est utlise
      *
-     * @param $arg1, liste
-     * @param $arg2, items
-     * @return string
+     * @param $liste Liste liste a afficher
+     * @param $arg2 bool est ce que le token d'edition a été utilisé
+     * @return string html a afficher
      *
-     * @author Mathieu Vinot
+     * @author Mathieu Vinot (lecture)
+     * @author Marcus (fusion des deux fonctionnalités (1 et 1bis))
+     * @author Lucas Weiss (modification)
+     * @author Guillaume Renard (modifcation)
      */
-    private function htmlAffichageListeToken(Liste $arg1, Collection $arg2) {
-        $tokenL = $arg1['token_lecture'];
-        $items = self::htmlAfficherTousItem($tokenL, $arg2);
-        if (!$arg1['public']) $public = 'La liste est actuellement publique.';
+    private function htmlAffichageListe(Liste $liste, bool $arg2) {
+
+        //on recupere le token
+        if ($arg2)
+            $token = $liste['token_edition'];
+        else
+            $token = $liste['token_lecture'];
+
+        //on recupere l'affichage des items
+        $items = self::htmlAfficherTousItem($token, $liste->items);
+
+        //on change l'affichage en fonction de sis c'est public
+        if (!$liste['public']) $public = 'La liste est actuellement publique.';
         else $public = 'La liste est actuellement privée.';
+
+        if ($arg2){
+            $boutonsEdition = <<<END
+<div id="boutonModificationListe"
+    <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" style="width: 700px;">
+    <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
+        <button type="submit" class="btn submit"> MODIFIER LISTE</button>
+    </form>
+    <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
+        <button type="submit" class="btn submit"> SUPPRIMER LISTE</button>
+    </form>
+</div>
+END;
+        } else $boutonsEdition ="";
+
         $html = <<<END
               <div class="boite-liste"'>
                 <div class="titreDeListe">
-                    <h2>{$arg1['titre']}</h2>
+                    <h2>{$liste['titre']}</h2>
                 </div>
                 <p>
-                    {$arg1['description']} <br>
-                    Créer par {$arg1['login']} --- Expire le {$arg1['expiration']} --- $public
+                    {$liste['description']} <br>
+                    Créer par {$liste['login']} --- Expire le {$liste['expiration']} --- $public
                 </p>
+                
+                $boutonsEdition
+                
                 $items
             </div>
             <br><br>
 END;
         return $html;
     }
-
-    /**
-     * Fonction 1 bis
-     * Methode privee qui genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager
-     * @author Lucas Weiss
-     * @author Guillaume Renard
-     */
-    private function afficherListeEdition($l, $i) : String {
-        $tokenL = $l['token_edition'];
-        $items = self::htmlAfficherTousItem($tokenL, $i);
-        return <<<END
-<div class="boite-liste"'>
-                <div class="titreDeListe">
-                    <h2>${l['titre']}</h2>
-                </div>
-                    <p>
-                        ${l['description']} <br>
-                        --- Expire le ${l['expiration']}</li>
-                        
-                        $items
-                    </p>
-                    
-                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']} disabled="disabled" style="width: 700px;">
-                    <button type="button" class="" onclick="window.location.href='modification';">
-                        MODIFIER LISTE
-                    </button>
-                    <button type="button" class="" onclick="window.location.href='supression';">
-                        SUPPRIMER LISTE
-                    </button>
-            </div>
-            <br><br>
-END;
-
-    }
-
 
 
     /**
@@ -300,7 +295,7 @@ END;
                         --- Expire le ${l['expiration']}</li>
  
                     </p>
-                    <form action="{$this->container->router->pathFor('afficherListeEdition', ['token_edition' => $l['token_edition']])}" method="get">
+                    <form action="{$this->container->router->pathFor('afficherListe', ['token' => $l['token_edition']])}" method="get">
                          <button type="submit" class="btn submit">AFFICHER LA LISTE</button>
                     </form><br>
                     Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
@@ -377,11 +372,7 @@ END;
                 break;
             }
             case 3: {
-                $content = $this->htmlAffichageListeToken($arg1, $arg2);
-                break;
-            }
-            case 4: {
-                $content = $this->afficherListeEdition($arg1, $arg2);
+                $content = $this->htmlAffichageListe($arg1, $arg2);
                 break;
             }
             case 5 : {
