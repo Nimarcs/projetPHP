@@ -186,17 +186,23 @@ class ControlerGestionListe
      * Methode privee qui permet de creer la liste au sein de la BDD
      * @author Lucas Weiss
      * @author Mathieu Vinot (ajout du login pour suivre l'évolution de notre bdd)
+     * @author Marcus RICHIER (creation de liste sans etre connecte)
      */
-    private function creerListeInBDD(array $args):void {
+    private function creerListeInBDD(array $args):int {
         $l = new Liste();
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
-        $l->login = $_SESSION['login'];
+
+        //si la personne est connecte c'est son login, sinon c'est "anonyme"
+        if (isset($_SESSION['login'])) $l->login = $_SESSION['login'];
+        else $l->login = "anonyme";
+
         $l->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
         $l->expiration = $args['expiration'];
         $l->public = 1;
         $l->token_lecture= bin2hex(random_bytes(32));
         $l->token_edition= bin2hex(random_bytes(32));
         $l->save();
+        return $l->no;
     }
 
     /**
