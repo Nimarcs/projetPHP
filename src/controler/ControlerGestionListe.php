@@ -163,12 +163,14 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
             // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
             if (sizeof($args) == 3) {
-                $no = $this->creerListeInBDD($args); // On insere dans la BDD
+                $liste = $this->creerListeInBDD($args); // On insere dans la BDD
+                $no = $liste->no;
                 if (isset($_COOKIE['listeCree'])) $a = unserialize( $_COOKIE['listeCree']);
                 else $a = [];
                 $a[] = $no;
                 setcookie("listeCree", serialize($a), 0, "/" );
-                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique')); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
+                var_dump($args);
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token'=>$liste['token_edition']])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(1));
             }
@@ -186,7 +188,7 @@ class ControlerGestionListe
      * @author Mathieu Vinot (ajout du login pour suivre l'évolution de notre bdd)
      * @author Marcus RICHIER (creation de liste sans etre connecte)
      */
-    private function creerListeInBDD(array $args):int {
+    private function creerListeInBDD(array $args):?Liste {
         $l = new Liste();
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
 
@@ -200,7 +202,7 @@ class ControlerGestionListe
         $l->token_lecture= bin2hex(random_bytes(32));
         $l->token_edition= bin2hex(random_bytes(32));
         $l->save();
-        return $l->no;
+        return $l;
     }
 
     /**
@@ -222,7 +224,7 @@ class ControlerGestionListe
                 $liste = $this->recupererListeEdition($args['token_edition']);
 
                 $this->modifierListeInBDD($liste, $args);
-                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token'=>$liste['token_edition']]));
             } else {
                 //on est dans le get
 
@@ -267,7 +269,7 @@ class ControlerGestionListe
                     Liste::query()->where('token_edition', '=', $args['token_edition'])->delete();
                 }
 
-                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+                $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
             } else {
                 //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
                 $liste = $this->recupererListeEdition($args['token_edition']);
