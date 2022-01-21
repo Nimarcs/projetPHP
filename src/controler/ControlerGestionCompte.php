@@ -41,6 +41,7 @@ class ControlerGestionCompte
             if (sizeof($args) == 2) {
                 if ($this->loginValide(filter_var($args['login'], FILTER_SANITIZE_STRING)) == true) {
                     $this->creerCompteInBDD($args);
+                    setcookie("lastPSEUDO", "", time() - 60*60, "/"); //On supprime le cookie qui stocke le pseudo utilise en dernier car le compte le fait deja
                     $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
                 } else {
                     $vue = new VueRender($this->container);
@@ -93,6 +94,7 @@ class ControlerGestionCompte
                 if ($this->loginValide($login) == false) {
                     if ($this->mdpValide($login, filter_var($args['psw'], FILTER_SANITIZE_STRING)) == true) {
                         $this->genereSessionConnexion($login);
+                        setcookie("lastPSEUDO", "", time() - 60*60, "/"); //On supprime le cookie qui stocke le pseudo utilise en dernier car le compte le fait deja
                         $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
                     } else {
                         $vue = new VueRender($this->container);

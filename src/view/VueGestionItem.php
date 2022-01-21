@@ -136,11 +136,18 @@ END;
 
     private function htmlReserverItem($args)
     {
-        if ($args['reserverPar'] == null) $form = <<<END
+        //si quelqu'un est connecté on préremplit son login
+        $login = $_SESSION['login'] ?? "";
+        //s'il a deja rempli une demande de pseudo, c'est prérempli aussi
+        if (isset($_COOKIE["lastPSEUDO"])) $login = $_COOKIE["lastPSEUDO"];
+
+        //on cache le formulaire si c'est deja reserve
+        if ($args['reserverPar'] == null)
+            $form = <<<END
             <p>l'item n'est pas reservé</p>
             <form action="" method="post">     
                 <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
-                <input type="text" name="reservateur" maxlength="50" required autofocus placeholder="nom">
+                <input type="text" name="reservateur" maxlength="50" placeholder="nom" size="50" value="$login" required autofocus>
                 <input type="hidden" name="token" value="{$args['token']}" required>
                 <input type="hidden" name="id" value="{$args['id']}" required>
                 <button type="submit" class="btn submit">
@@ -151,6 +158,7 @@ END;
         else $form = "<p>l'item est reserver par {$args['reserverPar']}</p>";
 
 
+        //on renvoie la page complete
         return <<<END
         <h2>Reserver l'item "{$args['nom']}" ?</h2>
         <div class="formulaire">

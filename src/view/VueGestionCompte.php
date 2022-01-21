@@ -30,13 +30,17 @@ class VueGestionCompte
      * Vue pour avoir le formulaire de creation de compte
      */
     private function htmlCreationCompte() {
+        //si il a deja utilise un pseudo on precomplete le champ
+        if (isset($_COOKIE["lastPSEUDO"])) $lastPSEUDO = $_COOKIE["lastPSEUDO"];
+        else $lastPSEUDO = "";
+
         return <<<END
 <h2>Creation d'un nouveau compte</h2>
 <div class="formulaire">
     <p>Afin de créer un nouveau compte, veuillez remplir ce formulaire.</p>
     <form action="" method="post">
         <label for="NomUser">Login</label>
-        <input type="text" name="login" required maxlength="30"><br>
+        <input type="text" name="login" required maxlength="30" value="$lastPSEUDO"><br>
         <label for="Mdp">Mot de passe</label>
         <input type="password" name="psw" required maxlength="20"><br>
         <button type="submit" class="btn submit">Créer son compte</button>
@@ -51,12 +55,16 @@ END;
      * affiche formulaire connection compte
      */
     private function htmlConnectionCompte() {
+        //si il a deja utilise un pseudo on precomplete le champ
+        if (isset($_COOKIE["lastPSEUDO"])) $lastPSEUDO = $_COOKIE["lastPSEUDO"];
+        else $lastPSEUDO = "";
+
         return <<<END
 <h2>Connection a un compte</h2>
 <div class="formulaire">
     <form action="" method="post">
         <label for="NomUser">Login</label>
-        <input type="text" name="login" required maxlength="30"><br>
+        <input type="text" name="login" required maxlength="30" value="$lastPSEUDO"><br>
         <label for="Mdp">Mot de passe</label>
         <input type="password" name="psw" required maxlength="20"><br>
         <button type="submit" class="btn submit">Connexion</button>
