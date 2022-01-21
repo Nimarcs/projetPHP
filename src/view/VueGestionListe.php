@@ -42,16 +42,18 @@ class VueGestionListe
     private function htmlAffichageListeToken(Liste $arg1, Collection $arg2) {
         $tokenL = $arg1['token_lecture'];
         $items = self::htmlAfficherTousItem($tokenL, $arg2);
+        if ($arg1['public']) $public = 'La liste est actuellement publique.';
+        else $public = 'La liste est actuellement privée.';
         $html = <<<END
               <div class="boite-liste"'>
                 <div class="titreDeListe">
                     <h2>{$arg1['titre']}</h2>
                 </div>
-                    <p>
-                        {$arg1['description']} <br>
-                        --- Expire le {$arg1['expiration']}</li>
-                    </p>
-                    $items
+                <p>
+                    {$arg1['description']} <br>
+                    Créer par {$arg1['login']} --- Expire le {$arg1['expiration']} --- $public
+                </p>
+                $items
             </div>
             <br><br>
 END;
@@ -110,11 +112,15 @@ END;
         $res = "";
         $num = 1;
         foreach ($i as $itemCurr) {
-            $res .= "<p>" . $num . ". <img style='width: 100px;' src=".$this->container->router->pathFor('accueil')."img/" . $itemCurr->img . ">" . $itemCurr->nom;
+
+            if ($itemCurr->reserverPar == null) $reserver = 'état : disponible';
+            else $reserver = 'état : reservée';
+
+            $res .= "<div class='item'><h4>$num. {$itemCurr->nom}</h4> <p><img style='width: 100px;' src={$this->container->router->pathFor('accueil')}img/{$itemCurr->img}></p> <p>{$reserver}</p>";
             $res.= <<<END
 <form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
     <button type="submit" class="btn submit">AFFICHER ITEM</button>
-</form><br>
+</form><br></div>
 END;
             $num++;
         }
