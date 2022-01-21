@@ -104,7 +104,8 @@ class ControlerGestionItem{
 
             //on fait l'action correspondante
             if ($rq->isPost()) {
-                $this->reserverItemDansBDD($item, $args['reservateur']); // On insere dans la BDD
+                $reservateur = filter_var( $rq->getParsedBody()['reservateur'] , FILTER_SANITIZE_STRING);
+                $this->reserverItemDansBDD($item, $reservateur); // On insere dans la BDD
                 $rs = $rs->withRedirect($this->container->router->pathFor('reserverItem', ['id'=>$id, 'token' => $token])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(3, ['token' => $token, 'id' => $id, 'reserverPar' => $item->reserverPar, 'nom' => $item->nom]));
