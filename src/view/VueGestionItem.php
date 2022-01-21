@@ -138,7 +138,7 @@ END;
             <p>l'item n'est pas reservé</p>
             <form action="" method="post">     
                 <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
-                <input type="text" name="reservateur" maxlength="50" required>
+                <input type="text" name="reservateur" maxlength="50" required autofocus placeholder="nom">
                 <input type="hidden" name="token" value="{$args['token']}" required>
                 <input type="hidden" name="id" value="{$args['id']}" required>
                 <button type="submit" class="btn submit">
