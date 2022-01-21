@@ -29,7 +29,7 @@ class VueGestionCompte
      * Fonctionnalite 17
      * Vue pour avoir le formulaire de creation de compte
      */
-    private function htmlCreationCompte() {
+    private function htmlCreationCompte() : string {
         //si il a deja utilise un pseudo on precomplete le champ
         if (isset($_COOKIE["lastPSEUDO"])) $lastPSEUDO = $_COOKIE["lastPSEUDO"];
         else $lastPSEUDO = "";
@@ -54,7 +54,7 @@ END;
      * Fonctionnalite 18
      * affiche formulaire connection compte
      */
-    private function htmlConnectionCompte() {
+    private function htmlConnectionCompte() : string {
         //si il a deja utilise un pseudo on precomplete le champ
         if (isset($_COOKIE["lastPSEUDO"])) $lastPSEUDO = $_COOKIE["lastPSEUDO"];
         else $lastPSEUDO = "";
@@ -74,7 +74,7 @@ END;
 
     }
 
-    public function render($selecteur, $args1 = null) {
+    public function render($selecteur, $args1 = null) : string{
         $content = "";
         switch ($selecteur) {
             case 1: {

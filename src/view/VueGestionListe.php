@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace mywishlist\view;
 
 // IMPORTS
+use Illuminate\Database\Eloquent\Collection;
+use mywishlist\modele\Liste;
 use Slim\Container;
 
 /**
@@ -37,7 +39,7 @@ class VueGestionListe
      *
      * @author Mathieu Vinot
      */
-    private function htmlAffichageListeToken($arg1, $arg2) {
+    private function htmlAffichageListeToken(Liste $arg1, Collection $arg2) {
         $tokenL = $arg1['token_lecture'];
         $items = self::htmlAfficherTousItem($tokenL, $arg2);
         $html = <<<END
@@ -103,7 +105,7 @@ END;
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    private function htmlAfficherTousItem($tokenL, $i)
+    private function htmlAfficherTousItem(string $tokenL, $i)
     {
         $res = "";
         $num = 1;
@@ -125,7 +127,7 @@ END;
      * Affichage du formulaire de la création de liste
      * @author Lucas Weiss
      */
-    private function htmlCreationListe() {
+    private function htmlCreationListe() :string{
         $html = <<<END
               <h2>Creation d'une liste</h2>
         <div class="formulaire">
@@ -152,7 +154,7 @@ END;
      * Affichage formulaire pour modifier la liste
      * @author Guillaume Renard
      */
-    private function afficherModifierListe($l){
+    private function afficherModifierListe(Liste $l):string{
 
         if( $l["public"]=="0"){
             $p_oui="checked";
@@ -196,7 +198,7 @@ END;
      * Affichage pour supprimer une liste ou non
      * @author Guillaume Renard
      */
-    private function afficherSupressionListe($l){
+    private function afficherSupressionListe(Liste $l):string{
         $html= <<<END
   <h2>Supression d'une liste</h2>
         <div class="formulaire">
@@ -223,7 +225,7 @@ END;
      * Methode privee qui generer l'affichage de toutes les listes publique
      * @author Lucas Weiss
      */
-    private function htmlAffichageListes($listes) {
+    private function htmlAffichageListes($listes):string {
         $html = "";
         foreach ($listes as $l) {
             $html = $html . $this->afficherEnLigneUneListe($l);
@@ -352,11 +354,11 @@ END;
 
     /**
      * Fonction qui retourne selon le selecteur choisis
-     * @param $selecteur entier: choix de la page a afficher
+     * @param $selecteur int: choix de la page a afficher
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render($selecteur, $arg1 = null, $arg2 = null) :string
+    public function render(int $selecteur, $arg1 = null, $arg2 = null) :string
     {
         $content = "";
         switch ($selecteur) {

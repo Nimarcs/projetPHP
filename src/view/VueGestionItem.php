@@ -28,7 +28,7 @@ class VueGestionItem
      * Fonction 8
      * Methode vue qui retourne l'html de la page afin d'ajouter un item sur une liste bien précise
      */
-    private function htmlCreationItemPourUneListe($arg) {
+    private function htmlCreationItemPourUneListe(array $arg) :string {
         return <<<END
         <h2>Ajouter un item</h2>
         <h3>Pour la liste n°{$arg['no']}.</h3>
@@ -64,7 +64,7 @@ END;
      * @author Fabrice Arnout
      * @author Marcus RICHIER (reservation)
      */
-    public function htmlAfficherUnItem($args) : String {
+    public function htmlAfficherUnItem( array $args) : String {
         $i = $args['item'];
 
         //reservation
@@ -110,7 +110,7 @@ END;
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render(int $selecteur, $arg1 = null)
+    public function render(int $selecteur, array $arg1 = null):string
     {
         $content = "";
         switch ($selecteur) {
@@ -134,7 +134,13 @@ END;
         return $vue->render($content);
     }
 
-    private function htmlReserverItem($args)
+    /**
+     * Methode qui genere le contenu de la page de reservation
+     * @param array $args parametre necessaire a la creation de cette page
+     * @return string html du content de la page ou l'on reserve
+     * @author Marcus Richier
+     */
+    private function htmlReserverItem(array $args):string
     {
         //si quelqu'un est connecté on préremplit son login
         $login = $_SESSION['login'] ?? "";

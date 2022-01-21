@@ -39,7 +39,7 @@ class ControlerGestionItem{
      * affichage d'un item
      * @author Mathieu Vinot
      */
-    public function affichageItem(Request $rq, Response $rs, array $args)
+    public function affichageItem(Request $rq, Response $rs, array $args): Response
     {
         try {
             //création de la vue
@@ -171,7 +171,7 @@ class ControlerGestionItem{
      * Methode qui ajoute un nouvel item dans une liste precise
      * @author Lucas Weiss
      */
-    public function ajouterNouvelItem(Request $rq, Response $rs, array $args)
+    public function ajouterNouvelItem(Request $rq, Response $rs, array $args): Response
     {
         try {
             $vue = new VueGestionItem($this->container);
@@ -210,7 +210,7 @@ class ControlerGestionItem{
      * On recupere la liste avec ce token d'edition
      * @author Lucas Weiss
      */
-    private function recupererListeAvecTokenCreation($token) {
+    private function recupererListeAvecTokenCreation(string $token) {
         try {
             return Liste::query()->where('token_edition', '=', $token)->firstOrFail();
         } catch (ModelNotFoundException $e) {
@@ -223,7 +223,7 @@ class ControlerGestionItem{
      * Methode pour creer un nouvel item
      * @author Lucas Weiss
      */
-    private function ajouterNouvelItemInBDD(array $args, string $nameImage) {
+    private function ajouterNouvelItemInBDD(array $args, string $nameImage) : void{
         $i = new Item();
         $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
         $i->descr = filter_var($args['description'], FILTER_SANITIZE_STRING);
@@ -239,7 +239,7 @@ class ControlerGestionItem{
      * Modifier un item, juste changer ses attributs sans changer la liste
      */
 
-    private function modifierItemBDD(array $args){
+    private function modifierItemBDD(array $args) :void{
         $i = Item::query()->where('id','=',$args['id']);
         $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
         $i->description = filter_var($args['description'], FILTER_SANITIZE_STRING);

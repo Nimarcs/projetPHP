@@ -6,6 +6,7 @@ namespace mywishlist\controler;
 
 // IMPORTS
 use Carbon\Exceptions\Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use mywishlist\modele\Item;
 use mywishlist\modele\Liste;
@@ -41,7 +42,7 @@ class ControlerGestionListe
      * @author Mathieu Vinot
      * @author Lucas Weiss
      */
-    public function affichageListe(Request $rq, Response $rs, array $args, bool $optionAff) {
+    public function affichageListe(Request $rq, Response $rs, array $args, bool $optionAff): Response {
         try {
             $vue = new VueGestionListe($this->container);
 
@@ -79,7 +80,7 @@ class ControlerGestionListe
      *
      * @author Mathieu Vinot
      */
-    private function recupererListeLecture($token){
+    private function recupererListeLecture(string $token): ?Liste{
         try {
             return Liste::query()->where('token_lecture', '=', $token)->firstOrFail();
         } catch (ModelNotFoundException $e) {
@@ -96,7 +97,7 @@ class ControlerGestionListe
      *
      * @author Renard Guillaume
      */
-    private function recupererListeEdition($token){
+    private function recupererListeEdition(string $token) :?Liste{
         try {
             return Liste::query()->where('token_edition', '=', $token)->firstOrFail();
         } catch (ModelNotFoundException $e) {
@@ -113,7 +114,7 @@ class ControlerGestionListe
      *
      * @author Mathieu Vinot
      */
-    private function recupererListeItem($idliste){
+    private function recupererListeItem(int $idliste): ?Collection{
         try {
             return Item::query()->where('liste_id', '=', $idliste)->get();
         } catch (ModelNotFoundException $e) {
@@ -126,10 +127,10 @@ class ControlerGestionListe
      * @param $rq
      * @param $rs
      * @param $args
-     * @return mixed
+     * @return Response
      * @author Mathieu Vinot
      */
-    public function AffichageListePerso($rq, $rs, $args){
+    public function AffichageListePerso(Request $rq,Response $rs,array $args): Response{
         try {
             $vue = new VueGestionListe($this->container);
             $listes = $this->selectListePerso();
@@ -146,7 +147,7 @@ class ControlerGestionListe
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * @author Mathieu Vinot
      */
-    private function selectListePerso() {
+    private function selectListePerso(){
         //on récupère à l'aide du login contenue dans notre variable session, cela permet de sécuriser
         return Liste::query()->where('login', '=', $_SESSION["login"])->get();
 
@@ -159,7 +160,7 @@ class ControlerGestionListe
      *     POST: s'execute lorsque trois paramètres sont donnees par l'utilisateur , génère la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
      * @author Lucas Weiss
      */
-    public function creerListe(Request $rq, Response $rs, array $args) {
+    public function creerListe(Request $rq, Response $rs, array $args):Response {
         try {
             $vue = new VueGestionListe($this->container);
             // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
@@ -182,7 +183,7 @@ class ControlerGestionListe
      * @author Lucas Weiss
      * @author Mathieu Vinot (ajout du login pour suivre l'évolution de notre bdd)
      */
-    private function creerListeInBDD(array $args) {
+    private function creerListeInBDD(array $args):void {
         $l = new Liste();
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
         $l->login = $_SESSION['login'];
@@ -202,7 +203,7 @@ class ControlerGestionListe
      * le post renvoie les valeurs qu'il a changé
      * @author Guillaume Renard
      */
-    public function modifierListe(Request $rq, Response $rs, array $args) {
+    public function modifierListe(Request $rq, Response $rs, array $args):Response {
         try {
             $vue = new VueGestionListe($this->container);
 
@@ -233,7 +234,7 @@ class ControlerGestionListe
      * Methode privee qui permet de modifier la liste au sein de la BDD grâce à la méthode save()
      * @author Guillaume Renard
      */
-    private function modifierListeInBDD( $l,array $args) {
+    private function modifierListeInBDD(Liste $l, array $args):void {
 
         $l['titre'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
         $l['description']= filter_var($args['description'], FILTER_SANITIZE_STRING);
@@ -247,7 +248,7 @@ class ControlerGestionListe
      * Methode privee qui permet de suprimer la liste au sein de la BDD grâce à la méthode save()
      * @author Guillaume Renard
      */
-    public function supprimerListe(Request $rq, Response $rs, array $args)
+    public function supprimerListe(Request $rq, Response $rs, array $args): Response
     {
         try {
             $vue = new VueGestionListe($this->container);
@@ -278,7 +279,7 @@ class ControlerGestionListe
      * Methode qui gere l'affichage de toutes les listes publique
      * @author Lucas Weiss
      */
-    public function afficherListesPublique(Request $rq, Response $rs, array $args) {
+    public function afficherListesPublique(Request $rq, Response $rs, array $args): Response {
         try {
             $vue = new VueGestionListe($this->container);
             $listes = $this->selectListePubliques();
@@ -303,7 +304,7 @@ class ControlerGestionListe
      * Fonction 26
      * Métjo
      */
-    public function afficherListesCreateur(Request $rq, Response $rs, array $args){
+    public function afficherListesCreateur(Request $rq, Response $rs, array $args): Response{
         try {
             $vue = new VueGestionListe($this->container);
             $liste = $this->recupererListesLogin($args['login']);
@@ -329,7 +330,7 @@ class ControlerGestionListe
      *
      * @author Mathieu Vinot
      */
-    private function recupererListesLogin($login){
+    private function recupererListesLogin(string $login){
         try {
             return Liste::query()->where('login', '=', $login)->get();
         } catch (ModelNotFoundException $e) {

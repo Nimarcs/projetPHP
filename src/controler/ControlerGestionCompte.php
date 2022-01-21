@@ -35,7 +35,7 @@ class ControlerGestionCompte
      * creer un compte
      * @author Lucas Weiss
      */
-    public function creerCompte(Request $rq, Response $rs, array $args) {
+    public function creerCompte(Request $rq, Response $rs, array $args): Response {
         try {
             $vue = new VueGestionCompte($this->container);
             if (sizeof($args) == 2) {
@@ -62,7 +62,7 @@ class ControlerGestionCompte
      * retourne un boolean
      * @author Lucas Weiss
      */
-    private function loginValide($login) {
+    private function loginValide( string $login) : bool{
             $res =  Compte::where('login', '=', $login)->get();
             $r = $res->count();
             if ($r==0) return true;
@@ -74,7 +74,7 @@ class ControlerGestionCompte
      * Methode privee qui creer un compte dans la base de donnees
      * @author Lucas Weiss
      */
-    private function creerCompteInBDD(array $args) {
+    private function creerCompteInBDD(array $args) : void{
         $c = new Compte();
         $c->login = filter_var($args['login'], FILTER_SANITIZE_STRING);
         $c->sel = password_hash(filter_var($args['psw'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
@@ -86,7 +86,7 @@ class ControlerGestionCompte
      * Affiche get formulaire pour se connecter et post pour verifier
      * @author Lucas Weiss
      */
-    public function seConnecterCompte(Request $rq, Response $rs, array $args) {
+    public function seConnecterCompte(Request $rq, Response $rs, array $args): Response {
         try {
             $vue = new VueGestionCompte($this->container);
             if (sizeof($args) == 2) {
@@ -118,7 +118,7 @@ class ControlerGestionCompte
      * Methode pour se deconnecter de son compte
      * @author Lucas Weiss
      */
-    public function seDeconnecterCompte(Request $rq, Response $rs, array $args) {
+    public function seDeconnecterCompte(Request $rq, Response $rs, array $args): Response {
         $this->supprimerSessionConnexion();
         $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
         return $rs;
@@ -129,7 +129,7 @@ class ControlerGestionCompte
      * Verifie que le mot de passe est valide
      * @author Lucas Weiss
      */
-    private function mdpValide($login, $mdp) {
+    private function mdpValide($login, $mdp): bool {
         $sel = Compte::select('sel')->where('login', '=', $login)->first();
         return password_verify($mdp, $sel["sel"]);
     }
@@ -139,7 +139,7 @@ class ControlerGestionCompte
      * Genere une variable session pour la connection
      * @author Lucas Weiss
      */
-    private function genereSessionConnexion($login){
+    private function genereSessionConnexion($login): void{
         session_start();
         $_SESSION['login'] = $login;
     }
@@ -149,7 +149,7 @@ class ControlerGestionCompte
      * Methode qui supprime la session et donc qui deconnecte l'utilisateur
      * @author Lucas Weiss
      */
-    private function supprimerSessionConnexion() {
+    private function supprimerSessionConnexion() :void {
         session_destroy();
     }
 

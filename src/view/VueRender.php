@@ -31,7 +31,7 @@ class VueRender
      * @return string String: texte html, cointenu global de chaque page
      * @author Lucas Weiss
      */
-    public function render(String $content) {
+    public function render(String $content) :string{
         return <<<END
         <!DOCTYPE html>
         <html lang="fr">
@@ -62,7 +62,7 @@ END;
      * @return string String: contenu html
      * @author Lucas Weiss
      */
-    public function affichageAccueil() {
+    public function affichageAccueil() : string {
         $html = '<div class="text-accueil">
                 <p>
                     Bonjour, bienvenue sur notre projet PHP de 3eme semestre. <br>
@@ -89,7 +89,7 @@ END;
      * Methode qui genere le html pour afficher un message d'erreur
      * @author Lucas Weiss
      */
-    public function htmlErreur(string $message) {
+    public function htmlErreur(string $message): string {
         return <<<END
             <div class="text-erreur">
                 <p>$message</p>

@@ -31,7 +31,7 @@ class ControlerRacine
      * Fonction 0, controleur de la route racine de l'accueil
      * @author Lucas Weiss
      */
-    public function racine(Request $rq, Response $rs, array $args) {
+    public function racine(Request $rq, Response $rs, array $args) :Response {
         $vue = new VueRender($this->container);
         $rs->getBody()->write($vue->render($vue->affichageAccueil()));
         return $rs;
