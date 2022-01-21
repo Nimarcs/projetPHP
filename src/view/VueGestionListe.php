@@ -81,7 +81,7 @@ END;
                         $items
                     </p>
                     
-                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_edition']} disabled="disabled" style="width: 700px;">
+                     PARTAGER LA LISTE : <input type="text" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']} disabled="disabled" style="width: 700px;">
                     <button type="button" class="" onclick="window.location.href='modification';">
                         MODIFIER LISTE
                     </button>
