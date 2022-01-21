@@ -150,6 +150,11 @@ END;
                 $content = $this->htmlReserverItem($arg1);
                 break;
             }
+            case 4:
+            {
+                $content = $this->htmlModifierUnItem($arg1);
+            }
+
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);
@@ -195,6 +200,40 @@ END;
             </form>
         </div>
 END;
+    }
+    /**
+     * Methode qui genere le contenu de la page de modification
+     *
+     * @author Fabrice Arnout
+     */
+    private function htmlModifierUnItem(array $args):string{
+        $i = $args['item'];
+
+        $html = <<<END
+            <h2> Modifications des informations d'un item</h2>
+        <div class="formulaire">
+            <form action="" method="post">
+                <label for="nom" class="form-label">Modifier le nom</label>
+                <input type="text" value=  "${i['nom']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
+
+                <label for="desc" class="form-label">Modifier la description</label>
+                <input type="text" value="{$i['description']}" class="form-control" name="description" placeholder="" required><br>
+                
+                <label for="img" class="form-label">Modifier l'image</label>
+                <input type="text" value="{$i['image']}" class="form-control" name="expiration" placeholder="" required><br> 
+              
+                <label for="prix" class="form-label">Modifier la date limite</label>
+                <input type="text" value="{$i['prix']}" class="form-control" name="expiration" placeholder="" required><br> 
+                
+                <button type="submit" class="btn submit" value="{$i['id']}" name="id_item">
+                   Enregistrer les modifications
+                </button>
+            </form>
+        </div>    
+END;
+
+
+        return $html;
     }
 
 }

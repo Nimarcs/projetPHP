@@ -145,6 +145,16 @@ $app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, arr
     return $controleur->ajouterNouvelItem($rq, $rs, $_POST);
 })->setName('new Item');
 
+/**
+ * Fonction 9, Modifier un item
+ * @Author Fabrice Arnout
+ */
+
+$app->get('liste/{token}/modifierItem/{id}', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->modifierItem($rq, $rs, $args);
+})->setName('modifierItem');
+
 
 /**
  * Fonction 13, Supprimer une image d'un item

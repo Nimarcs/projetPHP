@@ -236,15 +236,47 @@ class ControlerGestionItem{
 
     /**
      * Fonction 9
-     * Modifier un item, juste changer ses attributs sans changer la liste
+     * La methode est utilisee lorsque que le createur de la liste veut modifier un item
+     *
+     * @author Fabrice Arnout
+     */
+    public function modifierItem(Request $rq, Response $rs, array $args):Response {
+        try {
+            $vue = new VueGestionItem($this->container);
+
+            if (sizeof($args) == 5) {
+
+                $item = $this->recupererItem($args['token_edition'], $args['id']);
+
+                $this->modifierItemInBDD($item, $args);
+                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+            } else {
+
+                $item = $this->recupererItem();
+                $rs->getBody()->write($vue->render(4, $item));
+            }
+
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+
+        }
+        return $rs;
+    }
+
+
+
+    /**
+     * Fonction 9
+     * Methode prive qui permet de modifier un item dans la bdd
+     * @author Fabrice Arnout
      */
 
-    private function modifierItemBDD(array $args) :void{
-        $i = Item::query()->where('id','=',$args['id']);
-        $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
-        $i->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
-        $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
-        $i->image = $args['image'];
+    private function modifierItemInBDD(Item $i, array $args) :void{
+        $i['nom'] = filter_var($args['nom'], FILTER_SANITIZE_STRING);
+        $i['descr'] = filter_var($args['descr'], FILTER_SANITIZE_STRING);
+        $i['img'] = filter_var($args['img'], FILTER_SANITIZE_STRING);
+        $i['tarif'] = filter_var($args['tarif'], FILTER_SANITIZE_STRING);
         $i->save();
     }
 
