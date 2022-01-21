@@ -98,7 +98,7 @@ END;
             $texteReservation
         </div>
         <form action="{$this->container->router->pathFor('afficherListe', ['token' => $args['token']])}" method="get"> 
-            <button type="submit" class="btn submit">Retourner a la liste</button>
+            <button type="submit" class="btn submit">Retourner à la liste</button>
         </form>
 </div>
 
