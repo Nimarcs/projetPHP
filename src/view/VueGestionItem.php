@@ -63,7 +63,7 @@ END;
      *
      * @author Mathieu VINOT
      * @author Fabrice Arnout
-     * @author Marcus RICHIER (reservation)
+     * @author Marcus RICHIER (reservation + affichage différent si createur / date)
      */
     public function htmlAfficherUnItem( array $args) : String
     {

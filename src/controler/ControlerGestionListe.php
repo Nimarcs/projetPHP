@@ -159,6 +159,7 @@ class ControlerGestionListe
      *     GET: on obtient la page qui permet de créer une nouvelle liste
      *     POST: s'execute lorsque trois paramètres sont donnees par l'utilisateur, génère la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
      * @author Lucas Weiss
+     * @author Marcus Richier (cookie listeCree)
      */
     public function creerListe(Request $rq, Response $rs, array $args):Response {
         try {
