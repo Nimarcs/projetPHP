@@ -7,6 +7,7 @@ namespace mywishlist\view;
 
 // IMPORTS
 use mywishlist\modele\Item;
+use mywishlist\modele\Liste;
 use Slim\Container;
 
 /**
@@ -64,7 +65,8 @@ END;
      * @author Fabrice Arnout
      * @author Marcus RICHIER (reservation)
      */
-    public function htmlAfficherUnItem( array $args) : String {
+    public function htmlAfficherUnItem( array $args) : String
+    {
         $i = $args['item'];
 
         //reservation
@@ -77,10 +79,28 @@ END;
         else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
 
 
-        //vision du propriétaire
-        if ($args['edition']) {
-            if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
-            else $texteReservation = "L'item n'est pas réservé";
+        //si la date d'échéance est pas passé
+        if ($i->liste->expiration > date('YYYY-MM-DD')) {
+            //la vision du propriétaire change
+
+            //on check s'il est le propriétaire
+            $estProprietaire = false;
+            if (isset($_COOKIE['listeCree'])) {
+                $a = unserialize($_COOKIE['listeCree']);
+                print "ICI";
+                var_dump($a);
+                foreach ($a as $noListe) {
+                    if ($noListe == $i->liste_id) $estProprietaire = true;
+                }
+            }
+            var_dump($estProprietaire);
+
+            if ($estProprietaire || $args['edition'] || (isset($_SESSION['login']) && $_SESSION['login'] == $i->liste->login)) {
+
+                //on change l'affichage de la reservation si c'est le propriétaire
+                if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
+                else $texteReservation = "L'item n'est pas réservé";
+            }
         }
 
         //html

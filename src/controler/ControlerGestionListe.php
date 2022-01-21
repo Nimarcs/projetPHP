@@ -157,7 +157,7 @@ class ControlerGestionListe
      * Fonction 6
      * Methode pour gérer la creation d'une liste
      *     GET: on obtient la page qui permet de créer une nouvelle liste
-     *     POST: s'execute lorsque trois paramètres sont donnees par l'utilisateur , génère la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
+     *     POST: s'execute lorsque trois paramètres sont donnees par l'utilisateur, génère la creation de la liste de la BDD, puis dirige vers la page d'affichage de toutes les listes
      * @author Lucas Weiss
      */
     public function creerListe(Request $rq, Response $rs, array $args):Response {
@@ -165,7 +165,11 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
             // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
             if (sizeof($args) == 3) {
-                $this->creerListeInBDD($args); // On insere dans la BDD
+                $no = $this->creerListeInBDD($args); // On insere dans la BDD
+                if (isset($_COOKIE['listeCree'])) $a = unserialize( $_COOKIE['listeCree']);
+                else $a = [];
+                $a[] = $no;
+                setcookie("listeCree", serialize($a), 0, "/" );
                 $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique')); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(1));
