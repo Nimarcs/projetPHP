@@ -109,11 +109,11 @@ $app->post('/newListe[/]', function (Request $rq, Response $rs, array $args) use
  * Fonction 7, modifier information sur la liste
  * @author Guillaume Renard
  */
-$app->get('/liste/edition/{token_edition}/modification[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->get('/liste/modification/{token_edition}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionListe($container);
     return $controleur->modifierListe($rq, $rs, $args);
 })->setName('modifierListe');
-$app->post('/liste/edition/{token_edition}/modification[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->post('/liste/modification/{token_edition}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionListe($container);
     return $controleur->modifierListe($rq, $rs, $_POST);
 })->setName('modifierListe');
