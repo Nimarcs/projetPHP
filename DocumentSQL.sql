@@ -46,6 +46,7 @@ CREATE TABLE `liste` (
   `description` text COLLATE utf8_unicode_ci,
   `expiration` date DEFAULT NULL,
   `public` int(1) DEFAULT 0,
+    `messages` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token_lecture` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token_edition` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`no`)
