@@ -40,6 +40,7 @@ class ControlerGestionListe
      *
      * @author Mathieu Vinot
      * @author Lucas Weiss
+     * @author Marcus (fusion avec affichage modification)
      */
     public function affichageListe(Request $rq, Response $rs, array $args): Response {
         try {
