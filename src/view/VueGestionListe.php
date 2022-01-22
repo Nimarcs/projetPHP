@@ -63,10 +63,10 @@ class VueGestionListe
 <div id="boutonModificationListe"
     <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" style="width: 700px;">
     <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
-        <button type="submit" class="btn submit"> MODIFIER LISTE</button>
+        <button class="btn btn-primary" type="submit"> MODIFIER LISTE</button>
     </form>
     <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
-        <button type="submit" class="btn submit"> SUPPRIMER LISTE</button>
+        <button class="btn btn-primary" type="submit"> SUPPRIMER LISTE</button>
     </form>
 </div>
 END;
@@ -82,17 +82,15 @@ END;
         }
 
         $html = <<<END
+            <div class="block-heading">
+                    <h2 class="text-info">Liste - {$liste['titre']}</h2>
+                    <p>
+                    {$liste['description']} <br><br>
+                    Créer par {$liste['login']}.<br>Expire le {$liste['expiration']}.<br>$public
+                    </p>
+            </div>
               <div class="boite-liste"'>
-                <div class="titreDeListe">
-                    <h2>{$liste['titre']}</h2>
-                </div>
-                <p>
-                    {$liste['description']} <br>
-                    Créer par {$liste['login']} --- Expire le {$liste['expiration']} --- $public
-                </p>
-                
                 $boutonsEdition
-                
                 $items
                 
                 $boutonAjouterItem
@@ -122,12 +120,23 @@ END;
 
             if ($itemCurr->reserverPar == null) $reserver = 'état : disponible';
             else $reserver = 'état : reservée';
+            if ($itemCurr->img == "NULL") $lienImage = "{$this->container->router->pathFor('accueil')}assets/gift1.jpg";
+            else $lienImage = "{$this->container->router->pathFor('accueil')}img/{$itemCurr->img}";
 
-            $res .= "<div class='item'><h4>$num. {$itemCurr->nom}</h4> <p><img style='width: 100px;' src={$this->container->router->pathFor('accueil')}img/{$itemCurr->img}></p> <p>{$reserver}</p>";
-            $res.= <<<END
-<form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
-    <button type="submit" class="btn submit">AFFICHER ITEM</button>
-</form><br></div>
+            $res .= <<<END
+                <div class="row align-items-center" style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="col-md-6" style="width: 296px;"><img class="img-thumbnail" src=$lienImage style="width: 250px;text-align: center;margin-left: 20px;" /></div>
+            <div class="col-md-6" style="width: 1000px;">
+                <h3>$num. {$itemCurr->nom}</h3>
+                <form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
+                    <button class="btn btn-primary" type="submit">AFFICHER ITEM</button>
+                </form><br>
+                <div class="getting-started-info">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
+                <p>{$reserver}</p>
+            </div>
+        </div>
 END;
             $num++;
         }
@@ -142,7 +151,9 @@ END;
      */
     private function htmlCreationListe() :string{
         $html = <<<END
-              <h2>Creation d'une liste</h2>
+            <div class="block-heading">
+                        <h2 class="text-info">Creation d'une liste</h2>
+            </div>
         <div class="formulaire">
             <form action="" method="post">
                 <label for="titre" class="form-label">Titre</label>
@@ -153,7 +164,7 @@ END;
 
                 <label for="exp" class="form-label">Date limite</label>
                 <input type="date" class="form-control" name="expiration" placeholder="" required><br>
-                <button type="submit" class="btn submit">
+                <button class="btn btn-primary" type="submit">
                     Créer la liste
                 </button>
             </form>
@@ -178,7 +189,9 @@ END;
         }
 
         $html = <<<END
-              <h2>Modification des informations d'une liste</h2>
+            <div class="block-heading">
+                        <h2 class="text-info">Modification des informations d'une liste</h2>
+            </div>
         <div class="formulaire">
             <form action="" method="post">
                 <label for="titre" class="form-label">Modifier le titre</label>
@@ -196,7 +209,7 @@ END;
                  <label for="public" class="form-label">Non</label>
                 <input type="radio" value="1" class="form-control" name="public" placeholder="" required $p_non><br> 
                 
-                <button type="submit" class="btn submit" value="{$l["token_edition"]}" name="token_edition">
+                <button type="submit" class="btn btn-primary" value="{$l["token_edition"]}" name="token_edition">
                    Enregistrer les modifications
                 </button>
             </form>
@@ -213,8 +226,10 @@ END;
      */
     private function afficherSupressionListe(Liste $l):string{
         $html= <<<END
-  <h2>Supression d'une liste</h2>
-        <div class="formulaire">
+            <div class="block-heading">
+                        <h2 class="text-info">Supression d'une liste</h2>
+            </div>
+            <div class="formulaire">
             <form action="" method="post">
             
                 <label for="listeSupression" class="form-label">Etes-vous vraiment sûre de vouloir suprimer cette liste</label><br> 
@@ -223,7 +238,7 @@ END;
                  <label for="supression" class="form-label">Non</label>
                 <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br> 
                 
-                <button type="submit" class="btn submit" value="{$l["token_edition"]}" name="token_edition">
+                <button type="submit" class="btn btn-primary" value="{$l["token_edition"]}" name="token_edition">
                    Valider
                 </button>
             </form>
@@ -239,7 +254,12 @@ END;
      * @author Lucas Weiss
      */
     private function htmlAffichageListes($listes):string {
-        $html = "";
+        $html = <<<END
+            <div class="block-heading">
+                        <h2 class="text-info">Listes publique</h2>
+            </div>
+END;
+
         foreach ($listes as $l) {
             $html = $html . $this->afficherEnLigneUneListe($l);
         }
@@ -262,10 +282,10 @@ END;
                         --- Expire le ${l['expiration']}</li>
  
                     </p>
-                    <button type="button" class="" onclick="window.location.href='liste/${l['token_lecture']}';">
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='liste/${l['token_lecture']}';">
                         AFFICHER LA LISTE
                     </button>
-                    Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
+                    Token: <input type="text" size="80" value="{$l['token_lecture']}" disabled="disabled">
             </div>
             <br><br>
 END;
@@ -281,7 +301,11 @@ END;
      * @author Mathieu Vinot
      */
     private function afficherListePerso($listes) {
-        $html = "";
+        $html = <<<END
+            <div class="block-heading">
+                        <h2 class="text-info">Listes personnelle</h2>
+            </div>
+END;
         foreach ($listes as $l) {
             $html = $html .$this->afficherEnLigneUneListePerso($l);
         }
@@ -308,14 +332,14 @@ END;
  
                     </p>
                     <form action="{$this->container->router->pathFor('afficherListe', ['token' => $l['token_edition']])}" method="get">
-                         <button type="submit" class="btn submit">AFFICHER LA LISTE</button>
+                         <button class="btn btn-primary" type="submit">AFFICHER LA LISTE</button>
                     </form><br>
                     Partager la liste: <input type="text" value="{$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']}" disabled="disabled" style="width: 700px;">
                     <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $l['token_edition']])}" method="get">
-                         <button type="submit" class="btn submit">MODIFIER LISTE</button>
+                         <button class="btn btn-primary" type="submit">MODIFIER LISTE</button>
                     </form><br>
                     <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $l['token_edition']])}" method="get">
-                         <button type="submit" class="btn submit">SUPPRIMER LISTE</button>
+                         <button class="btn btn-primary" type="submit">SUPPRIMER LISTE</button>
                     </form><br>
             </div>
             <br><br>
