@@ -34,7 +34,7 @@ class VueGestionListe
      * genere l'affichage d'une liste avec ces items et des boutons pour modifier la liste et affiche le lien à partager si et seulement si c'est un token d'edition qui est utlise
      *
      * @param $liste Liste liste a afficher
-     * @param $arg2 bool est ce que le token d'edition a été utilisé
+     * @param $isTokenEdition bool est ce que le token d'edition a été utilisé
      * @return string html a afficher
      *
      * @author Mathieu Vinot (lecture)
@@ -42,10 +42,10 @@ class VueGestionListe
      * @author Lucas Weiss (modification)
      * @author Guillaume Renard (modifcation)
      */
-    private function htmlAffichageListe(Liste $liste, bool $arg2) {
+    private function htmlAffichageListe(Liste $liste, bool $isTokenEdition) {
 
         //on recupere le token
-        if ($arg2)
+        if ($isTokenEdition)
             $token = $liste['token_edition'];
         else
             $token = $liste['token_lecture'];
@@ -57,7 +57,7 @@ class VueGestionListe
         if (!$liste['public']) $public = 'La liste est actuellement publique.';
         else $public = 'La liste est actuellement privée.';
 
-        if ($arg2){
+        if ($isTokenEdition){
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
 <div id="boutonModificationListe"
@@ -70,7 +70,16 @@ class VueGestionListe
     </form>
 </div>
 END;
-        } else $boutonsEdition ="";
+            $boutonAjouterItem = <<<END
+<form action="{$this->container->router->pathFor('newItem', ['token' => $liste['token_edition']])}" method="get"> 
+    <button type="submit" class="btn submit"> AJOUTER ITEM</button>
+</form>
+END;
+
+        } else{
+            $boutonsEdition ="";
+            $boutonAjouterItem ="";
+        }
 
         $html = <<<END
               <div class="boite-liste"'>
@@ -85,6 +94,8 @@ END;
                 $boutonsEdition
                 
                 $items
+                
+                $boutonAjouterItem
             </div>
             <br><br>
 END;

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace mywishlist\controler;
 
 // IMPORTS
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use mywishlist\modele\Item;
 use mywishlist\modele\Liste;
@@ -180,29 +181,80 @@ class ControlerGestionItem{
      * Fonction 8
      * Methode qui ajoute un nouvel item dans une liste precise
      * @author Lucas Weiss
+     * @author Mathieu Vinot
+     * @author Marcus Richier
      */
     public function ajouterNouvelItem(Request $rq, Response $rs, array $args): Response
     {
         try {
             $vue = new VueGestionItem($this->container);
-            if (sizeof($args) == 4) {
-                if ($args['fichier'] != null) {
-                    $nameImg = null;
-                    if ($_FILES['fichier']['error'] > 0) {
-                        $erreur = "Erreur lors de l'envoi de l'image.";
-                        echo $erreur;
-                    } else {
-                        move_uploaded_file($_FILES['fichier']['name'], __DIR__ . '/img');
-                        $nameImg = $_FILES['fichier']['name'];
-                    }
-                    $this->ajouterNouvelItemInBDD($args, $nameImg);
-                }
-                $valListe = Liste::query()->where('token_ecriture', '=', $args['token']);
-                $rs = $rs->withRedirect($this->container->router->pathFor('liste/' . $valListe['token_lecture']));
+
+            if ($rq->isPost()) {
+                $token = filter_var( $rq->getParsedBody()['token'], FILTER_SANITIZE_STRING);
+                $nom = filter_var( $rq->getParsedBody()['nom'], FILTER_SANITIZE_STRING);
+                $description = filter_var( $rq->getParsedBody()['description'], FILTER_SANITIZE_STRING);
+                $prix = filter_var( $rq->getParsedBody()['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
             } else {
-                $liste = $this->recupererListeAvecTokenCreation($args['token']);
+                $token = $args['token'];
+            }
+
+            if ($token == null) {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("Erreur : aucun token fourni"));
+                return $rs;
+            }
+
+            //on recupere la liste
+            $liste = $this->recupererListeAvecTokenCreation($token);
+            if ($liste == null) {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("Erreur la liste n'existe pas"));
+                return $rs;
+            }
+
+            if ($rq->isPost()) {
+
+                //on recupere le fichier uploads
+                $fichiers = $rq->getUploadedFiles();
+                $fichier = $fichiers['fichier'];
+
+                //on verifie qu'il n'y pas de probleme
+                if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK) {
+                    throw new \Exception("Erreur lors de l'envoi de l'image.");
+                }
+
+
+
+                //on ajoute la liste au arguments
+                $args['liste'] = $liste;
+                $args['nom'] = $nom;
+                $args['description'] = $description;
+                $args['prix'] = $prix;
+
+                $nomImg = 'temp';
+
+                //on cree l'item
+                $item = $this->ajouterNouvelItemInBDD($args, $nomImg);
+
+                //on recupere l'extension du fichier
+                $nomFichier =(explode("." ,$fichier->getClientFilename()));
+                $extension = $nomFichier[array_key_last($nomFichier)];
+
+                //on met l'image au bon endroit
+                $nomImg = $nom . $item->id . "." . $extension;
+                $route = __DIR__ . DIRECTORY_SEPARATOR. '..'. DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
+                $fichier->moveTo($route);
+
+                //on redefini le bon nom de l'image
+                $item->img = $nomImg;
+                $item->save();
+
+                //on redirige
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token' => $liste->token_edition]));
+            } else {
+
                 if ($liste != null) { // On teste si le token creation est correct
-                    $rs->getBody()->write($vue->render(1, $liste));
+                    $rs->getBody()->write($vue->render(1, ['liste'=>$liste]));
                 } else {
                     $vue = new VueRender($this->container);
                     $rs->getBody()->write($vue->render($vue->htmlErreur("Page 404")));
@@ -233,15 +285,22 @@ class ControlerGestionItem{
      * Methode pour creer un nouvel item
      * @author Lucas Weiss
      */
-    private function ajouterNouvelItemInBDD(array $args, string $nameImage) : void{
+    private function ajouterNouvelItemInBDD(array $args, string $nameImage) : Item{
         $i = new Item();
         $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
         $i->descr = filter_var($args['description'], FILTER_SANITIZE_STRING);
         $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $i->liste_id = $args['liste']->no;
         if ($nameImage!=null) {
             $i->img = $nameImage;
         }
-        $i->save();
+        $i->message = null;
+        $i->reserverPar = null;
+        $res = $i->save();
+        if (!$res){
+            throw new \Exception("Sauvegarde de l'item a échoué");
+        }
+        return $i;
     }
 
     /**

@@ -142,8 +142,8 @@ $app->get('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, arra
 })->setName('newItem');
 $app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionItem($container);
-    return $controleur->ajouterNouvelItem($rq, $rs, $_POST);
-})->setName('new Item');
+    return $controleur->ajouterNouvelItem($rq, $rs, $args);
+})->setName('newItem');
 
 /**
  * Fonction 9, Modifier un item

@@ -32,8 +32,8 @@ class VueGestionItem
     private function htmlCreationItemPourUneListe(array $arg) :string {
         return <<<END
         <h2>Ajouter un item</h2>
-        <h3>Pour la liste n°{$arg['no']}.</h3>
-        <form action="" method="post">
+        <h3>Pour la liste n°{$arg['liste']->no}.</h3>
+        <form action="" method="post" enctype="multipart/form-data">
                 <label for="titre" class="form-label">Nom</label>
                 <input type="text" class="form-control" name="nom" placeholder="" required maxlength="30"><br>
                 
@@ -45,6 +45,8 @@ class VueGestionItem
                 
                 <label for="exp" class="form-label">Image</label>
                 <input type="file" name="fichier" accept="image/png, image/gif, image/jpeg" /><br>
+                
+                <input type="hidden" name="token" value="{$arg['liste']->token_edition}">
                 
                 <button type="submit" class="btn submit">
                     Créer l'item
