@@ -41,8 +41,29 @@ class VueGestionCompte
     <form action="" method="post">
         <label for="NomUser">Login</label>
         <input type="text" name="login" required maxlength="30" value="$lastPSEUDO"><br>
+        
         <label for="Mdp">Mot de passe</label>
         <input type="password" name="psw" required maxlength="20"><br>
+        
+         <label for="Email">Email</label>
+        <input type="email" name="email" required maxlength="30"><br>
+        
+         <label for="DateNais">Date anniversaire</label>
+        <input type="date" name="dateN" required maxlength="30"><br>
+        
+          <label for="numDep">Numéro de votre département</label>
+        <input type="text" name="numDep" required maxlength="6"><br>
+        
+          <label for="ville">Nom de votre ville</label>
+        <input type="text" name="ville" required maxlength="30"><br>
+        
+          <label for="adresse">Adresse</label>
+        <input type="text" name="adresse" required maxlength="80"><br>
+        
+         
+        <input type="radio"  required>
+        <label for="condition_gene">J'ai lue et j'accepte les <a href=''> conditions générales d'utilisation </a> et <a href=''>la politique de confidentialité </a></label><br>
+        
         <button type="submit" class="btn submit">Créer son compte</button>
     </form>
 </div>

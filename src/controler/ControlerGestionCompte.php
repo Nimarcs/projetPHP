@@ -37,8 +37,10 @@ class ControlerGestionCompte
      */
     public function creerCompte(Request $rq, Response $rs, array $args): Response {
         try {
+            var_dump($args);
             $vue = new VueGestionCompte($this->container);
-            if (sizeof($args) == 2) {
+            if (sizeof($args) == 7) {
+
                 if ($this->loginValide(filter_var($args['login'], FILTER_SANITIZE_STRING)) == true) {
                     $this->creerCompteInBDD($args);
                     setcookie("lastPSEUDO", "", time() - 60*60, "/"); //On supprime le cookie qui stocke le pseudo utilise en dernier car le compte le fait deja
@@ -78,6 +80,11 @@ class ControlerGestionCompte
         $c = new Compte();
         $c->login = filter_var($args['login'], FILTER_SANITIZE_STRING);
         $c->sel = password_hash(filter_var($args['psw'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
+        $c->email = filter_var($args['email'], FILTER_SANITIZE_EMAIL);
+        $c->date_naissance = $args['dateN'];
+        $c->num_dep = filter_var($args['numDep'], FILTER_SANITIZE_NUMBER_INT);
+        $c->ville = filter_var($args['ville'], FILTER_SANITIZE_STRING);
+        $c->adresse = filter_var($args['adresse'], FILTER_SANITIZE_STRING);
         $c->save();
     }
 

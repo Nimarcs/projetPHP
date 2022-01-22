@@ -58,7 +58,12 @@ INSERT INTO `liste` (`no`, `login`, `titre`, `description`, `expiration`, `token
 
 DROP TABLE IF EXISTS `compte`;
 CREATE TABLE `compte` (
-                          `login` varchar(50),
-                          `sel` varchar(256),
+                          `login` varchar(50) NOT NULL,
+                          `sel` varchar(256) NOT NULL,
+			  `date_naissance` date NOT NULL,
+			  `email` varchar(256) NOT NULL,
+			  `adresse` varchar(256)  NOT NULL,
+			  `ville` varchar(256) NOT NULL,
+			  `num_dep` int(3) NOT NULL,
                           PRIMARY KEY (`login`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
