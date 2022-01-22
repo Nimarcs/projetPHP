@@ -7,19 +7,32 @@ html {
     font-family: Bahnschrift;
 }
 
-header {
-    font-size: 40px;
-    text-align: center;
-    font-style: italic;
-    color : crimson;
-}
-
-body {
-    color :  black;
-}
-
-.text-accueil {
-    font-size: 16px;
+.clean-block.clean-info.dark {
+    padding-bottom: 0px;
+    margin-top: 40px;
+    height: auto;
+    min-height: 750px;
+    background: var(--bs-gray-500);
 }
 
 
+.clean-block.add-on.call-to-action.blue {
+    height: 60px;
+    padding: 9px 0px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.text-info {
+    padding-top: 20px;
+}
+
+.clean-block.add-on.call-to-action.blue {
+    margin-top: 0px;
+}
+
+.auteurs {
+    font-size: 20px;
+    margin-top: 16px;
+    padding-top: 0px;
+}
