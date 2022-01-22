@@ -88,8 +88,9 @@ END;
             if (isset($_COOKIE['listeCree'])) {
                 $a = unserialize($_COOKIE['listeCree']);
 
-                foreach ($a as $noListe) {
-                    if ($noListe == $i->liste_id) $estProprietaire = true;
+                foreach ($a as $k => $noListe) {
+                    if ($k != 'exp')//on ne prend pas la date d'expiration
+                        if ($noListe == $i->liste_id) $estProprietaire = true;
                 }
             }
 

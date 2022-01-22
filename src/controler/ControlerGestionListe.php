@@ -162,15 +162,28 @@ class ControlerGestionListe
     public function creerListe(Request $rq, Response $rs, array $args):Response {
         try {
             $vue = new VueGestionListe($this->container);
-            // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres, donc un post
-            if (sizeof($args) == 3) {
-                $liste = $this->creerListeInBDD($args); // On insere dans la BDD
+            // Dans la creation d'une liste, l'utilisateur doit rentrer 3 parametres
+            if ($rq->isPost() && sizeof($args) == 3) {
+
+                // On insere dans la BDD
+                $liste = $this->creerListeInBDD($args);
                 $no = $liste->no;
+
+                //on regarde si on avait deja un cookie de sauvegrade le liste créé
                 if (isset($_COOKIE['listeCree'])) $a = unserialize( $_COOKIE['listeCree']);
-                else $a = [];
+                else $a = ['exp'=>(strtotime($liste->expiration) + 60*60*2)];
+
+                //on stocke dans le cookie un tableau avec les no des liste et la date d'expiration la plus vielle
+                //on ajoute le no
                 $a[] = $no;
-                setcookie("listeCree", serialize($a), 0, "/" );
-                var_dump($args);
+                //on change la valeur d'expiration si necessaire
+                if ($a['exp'] <(strtotime($liste->expiration) + 60*60*2) )
+                    $a['exp'] = (strtotime($liste->expiration) + 60*60*2);
+
+                //on defini le cookie
+                setcookie("listeCree", serialize($a), $a['exp'] , "/" );
+
+                //on redirige
                 $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token'=>$liste['token_edition']])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(1));
