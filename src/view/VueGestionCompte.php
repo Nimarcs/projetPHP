@@ -107,16 +107,17 @@ END;
     */
     private function htmlModificationCompte($compte): string{
         $html= <<<END
-<div class="container"> 
+
 <div class="block-heading">
-<h2 class="text-info">Modification des informations du compte</h2>
+    <h2 class="text-info">Modification des informations du compte</h2>
+</div>
 <p>Modifiez vos informations en remplissant les formulaires</p>
 <div class="formulaire">
     
-    <form action="" method="post">
-       
-      <button type="submit" class="btn btn-primary">Modifier mot de passe</button><br>
-        
+        <form action="{$this->container->router->pathFor('modificationMotDePasse')}" method="get"> 
+            <button type="submit" class="btn btn-primary">Modifier mot de passe</button><br>
+        </form>
+        <form action="" method="post">
          <label for="Email"  class="form-label">Email</label>
         <input type="email" name="email" value="${compte['email']}" required maxlength="30"  ><br>
         
@@ -136,12 +137,33 @@ END;
         <button type="submit" class="btn btn-primary" >Sauvegarder les modifications</button>
     </form>
 </div>
-</div>
-</div>
 
 END;
         return $html;
 
+    }
+
+    private function htmlModificationMotDePasse(){
+        $html = <<<END
+ <div class="block-heading">
+                        <h2 class="text-info">Changer votre mot de passe</h2>
+            </div><div class="formulaire">
+            
+            <form action="{$this->container->router->pathFor('modificationCompte')}" method="get"> 
+            <button type="submit" class="btn btn-primary">Retournez en arrière</button><br>
+        </form>
+            <form action="" method="post">
+                <div class="mb-3"><label class="form-label" for="ancien Mdp">Mettez votre ancien mot de passe</label><input class="form-control" type="password" name="anc_Mdp" required maxlength="20"></div>
+                <div class="mb-3"><label class="form-label" for="nouveau Mdp">Mettez votre nouveau mot de passe</label><input class="form-control" type="password" name="new_Mdp" required maxlength="20" minlength="4"></div>
+                <div class="mb-3"><label class="form-label" for="confimrer nouveau Mdp">confirmez votre mot de passe</label><input class="form-control" type="password" name="conf_Mdp" required maxlength="20" minlength="4"></div>
+            
+
+            <button type="submit" class="btn btn-primary">Confirmez modification</button><br>
+        </form>
+
+</div>
+END;
+        return $html;
     }
 
     /**
@@ -163,6 +185,11 @@ END;
             }
             case 3 :  {
                 $content = $this->htmlModificationCompte($args1);
+                break;
+            }
+            case 4 :  {
+                $content = $this->htmlModificationMotDePasse();
+                break;
             }
         }
         $vue = new VueRender($this->container);

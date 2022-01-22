@@ -209,14 +209,24 @@ $app->get('/deconectionCompte', function (Request $rq, Response $rs, array $args
  * Fonction 19, modification des information du compte
  * @author Guillaume Renard
  */
-$app->get('/modificationCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->get('/modificationCompte[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionCompte($container);
     return $controleur->modifierCompte($rq, $rs, $args);
 })->setName('modificationCompte');
-$app->post('/modificationCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->post('/modificationCompte[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionCompte($container);
     return $controleur->modifierCompte($rq, $rs, $_POST);
 })->setName('modificationCompte');
+$app->get('/modificationCompte/mdp[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->modifierMdp($rq, $rs, $args);
+})->setName('modificationMotDePasse');
+$app->post('/modificationCompte/mdp[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->modifierMdp($rq, $rs, $_POST);
+})->setName('modificationMotDePasse');
+
+
 
 
 /**

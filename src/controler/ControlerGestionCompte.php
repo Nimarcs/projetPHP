@@ -172,7 +172,7 @@ class ControlerGestionCompte
         try {
             $vue = new VueGestionCompte($this->container);
 
-            var_dump($args);
+
             if ($rq->isPost() && sizeof($args) == 5) {
                 $c = $this->recupererCompte($_SESSION['login']);
 
@@ -185,7 +185,7 @@ class ControlerGestionCompte
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("Erreur dans la modification du compte...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -207,6 +207,44 @@ class ControlerGestionCompte
         $compte->ville = filter_var($chgemnt['ville'], FILTER_SANITIZE_STRING);
         $compte->adresse = filter_var($chgemnt['adresse'], FILTER_SANITIZE_STRING);
         $compte->save();
+    }
+
+
+    public function modifierMdp(Request $rq, Response $rs, array $args) : Response {
+        try {
+            $vue = new VueGestionCompte($this->container);
+
+            var_dump($args);
+            if ($rq->isPost() && sizeof($args) == 3) {
+                $log= $_SESSION['login'];
+                $psw=filter_var($args['anc_Mdp'], FILTER_SANITIZE_STRING);
+                if ($this->mdpValide($log, $psw) == true) {
+
+                    if($args['new_Mdp']===$args['conf_Mdp']){
+                        $c= $this->recupererCompte($log);
+                        $c->sel = password_hash(filter_var($args['new_Mdp'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
+                        $c->save();
+                        var_dump($args);
+                        $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
+                    }else {
+                        $vue = new VueRender($this->container);
+                        $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Il y a une différence entre les 2 nouveaux mot de passe.")));
+                    }
+
+                } else {
+                    $vue = new VueRender($this->container);
+                    $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Vous avez mis le mauvais mot de passe.")));
+                }
+
+            } else {
+
+                $rs->getBody()->write($vue->render(4));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
     }
 
 }
