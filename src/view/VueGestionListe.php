@@ -61,7 +61,7 @@ class VueGestionListe
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
 <div id="boutonModificationListe"
-    <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" style="width: 700px;">
+    <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" size="100">
     <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
         <button class="btn btn-primary" type="submit"> MODIFIER LISTE</button>
     </form>
@@ -72,7 +72,7 @@ class VueGestionListe
 END;
             $boutonAjouterItem = <<<END
 <form action="{$this->container->router->pathFor('newItem', ['token' => $liste['token_edition']])}" method="get"> 
-    <button type="submit" class="btn submit"> AJOUTER ITEM</button>
+    <button type="submit" class="btn btn-primary"> AJOUTER ITEM</button>
 </form>
 END;
 
@@ -124,9 +124,9 @@ END;
             else $lienImage = "{$this->container->router->pathFor('accueil')}img/{$itemCurr->img}";
 
             $res .= <<<END
-                <div class="row align-items-center" style="margin-top: 10px;margin-bottom: 10px;">
-            <div class="col-md-6" style="width: 296px;"><img class="img-thumbnail" src=$lienImage style="width: 250px;text-align: center;margin-left: 20px;" /></div>
-            <div class="col-md-6" style="width: 1000px;">
+                <div class="row align-items-center">
+            <div class="col-md-6Img"><img class="img-thumbnail imgItem" src=$lienImage  /></div>
+            <div class="col-md-6Texte">
                 <h3>$num. {$itemCurr->nom}</h3>
                 <form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
                     <button class="btn btn-primary" type="submit">AFFICHER ITEM</button>

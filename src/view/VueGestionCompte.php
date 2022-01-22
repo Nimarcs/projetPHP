@@ -36,8 +36,9 @@ class VueGestionCompte
         else $lastPSEUDO = "";
 
         return <<<END
-<h2>Creation d'un nouveau compte</h2>
-<div class="formulaire">
+            <div class="block-heading">
+                        <h2 class="text-info">Creation d'un nouveau compte</h2>
+            </div><div class="formulaire">
     <p>Afin de créer un nouveau compte, veuillez remplir ce formulaire.</p>
     <form action="" method="post">
         <label for="NomUser">Login</label>
@@ -82,15 +83,17 @@ END;
         else $lastPSEUDO = "";
 
         return <<<END
-<h2>Connection a un compte</h2>
-<div class="formulaire">
-    <form action="" method="post">
-        <label for="NomUser">Login</label>
-        <input type="text" name="login" required maxlength="30" value="$lastPSEUDO"><br>
-        <label for="Mdp">Mot de passe</label>
-        <input type="password" name="psw" required maxlength="20"><br>
-        <button type="submit" class="btn submit">Connexion</button>
-    </form>
+            <div class="block-heading">
+                        <h2 class="text-info">Connection à un compte</h2>
+            </div><div class="formulaire">
+            <form action="" method="post">
+        <div class="mb-3"><label class="form-label" for="NomUser">Login</label><input class="form-control item" type="text" name="login" required maxlength="30" value="$lastPSEUDO"></div>
+        <div class="mb-3"><label class="form-label" for="Mdp">Mot de passe</label><input class="form-control" type="password" name="psw" required maxlength="20"></div>
+        <div class="mb-3">
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox"><label class="form-check-label" for="checkbox">Remember me</label></div>
+        </div><button class="btn btn-primary" type="submit">Connexion</button>
+    </form><br>
+    <p>Pas de compte ? </p> <a href={$this->container->router->pathFor("creationCompte")}><button class="btn btn-primary">S'inscrire</button></a>
 </div>
 END;
 

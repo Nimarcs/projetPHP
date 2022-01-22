@@ -50,11 +50,11 @@ class VueRender
                 <header>
                     <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
                         <div class="container"><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-                            <div class="collapse navbar-collapse" id="navcol-1"><img src="{$this->container->router->pathFor("accueil")}assets/img/MyWishList_logo.png" style="width: 100px;">
+                            <div class="collapse navbar-collapse" id="navcol-1"><a class="nav-link" href={$this->container->router->pathFor("accueil")}><img class="logoPrincipal" src="{$this->container->router->pathFor("accueil")}assets/img/MyWishList_logo.png"></a>
                                 <ul class="navbar-nav ms-auto">
-                                    <li class="nav-item"><a class="nav-link active" href={$this->container->router->pathFor("accueil")}>Accueil</a></li>
-                                    <li class="nav-item"><a class="nav-link" href={$this->container->router->pathFor("affichageListesPublique")}>Listes publique</a></li>
-                                    <li class="nav-item"><a class="nav-link" href={$this->container->router->pathFor("connectionCompte")}>Se connecter</a></li>
+                                    <li class="nav-item"><a class="nav-link" href={$this->container->router->pathFor("accueil")}><p class="textNav">Accueil</p></a></li>
+                                    <li class="nav-item"><a class="nav-link" href={$this->container->router->pathFor("affichageListesPublique")}><p class="textNav">Listes publique</p></a></li>
+                                    <li class="nav-item"><a class="nav-link" href={$this->container->router->pathFor("connectionCompte")}><p class="textNav">Se connecter</p></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -105,9 +105,9 @@ END;
                         <p>Bienvenue sur notre projet PHP de 3ème semestre.<br>Crée votre liste et accès à vos listes et réserver les items ! Où encore modifier vos items de vos listes pour créer des superbes listes.<br><br></p>
                     </div>
                     <div class="row align-items-center">
-                        <div class="col-md-6" style="width: 521px;"><img class="img-thumbnail" src="assets/img/gift1.jpg" style="width: 491px;text-align: center;"></div>
+                        <div class="col-md-6ImgAccueil"><img class="img-thumbnail" src="assets/img/gift1.jpg"></div>
                             <div class="col-md-6">
-                                <h3>Envie d'avoir des cadeaux qui vous plaient ? A vous de jouer !</h3>
+                                <h3>Envie d'avoir des cadeaux qui vous plaisent ?<br>A vous de jouer !</h3>
                                 <div class="getting-started-info">
                                     <p><a href={$this->container->router->pathFor("affichageListesPublique")}>Afficher toutes les listes publiques</a></p>
                                     {$txt}
@@ -126,7 +126,10 @@ END;
      */
     public function htmlErreur(string $message): string {
         return <<<END
-<p>$message</p>
+                    <div class="block-heading">
+                        <h2 class="text-info">Erreur</h2>
+                        <p>$message</p>
+                    </div>
 END;
     }
 

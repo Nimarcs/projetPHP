@@ -31,8 +31,10 @@ class VueGestionItem
      */
     private function htmlCreationItemPourUneListe(array $arg) :string {
         return <<<END
-        <h2>Ajouter un item</h2>
-        <h3>Pour la liste n°{$arg['liste']->no}.</h3>
+            <div class="block-heading">
+                <h2 class="text-info">Ajouter un item</h2>
+            </div> 
+            <h3>Pour la liste n°{$arg['liste']->no}.</h3>
         <form action="" method="post" enctype="multipart/form-data">
                 <label for="titre" class="form-label">Nom</label>
                 <input type="text" class="form-control" name="nom" placeholder="" required maxlength="30"><br>
@@ -40,15 +42,15 @@ class VueGestionItem
                 <label for="desc" class="form-label">Description</label>
                 <input type="text" class="form-control" name="description" placeholder="" required><br>
 
-                <label for="exp" class="form-label">Prix</label>
-                <input type="number" class="form-control" name="prix" placeholder="" required>€<br>
+                <label for="exp" class="form-label">Prix (en €)</label>
+                <input type="number" class="form-control" name="prix" placeholder="" required><br>
                 
                 <label for="exp" class="form-label">Image</label>
                 <input type="file" name="fichier" accept="image/png, image/gif, image/jpeg" /><br>
                 
                 <input type="hidden" name="token" value="{$arg['liste']->token_edition}">
                 
-                <button type="submit" class="btn submit">
+                <button type="submit" class="btn btn-primary">
                     Créer l'item
                 </button>
             </form>
@@ -114,21 +116,21 @@ END;
 
         //html
         return <<<END
+            <div class="block-heading">
+                <h2 class="text-info">Item: ${i['nom']}</h2>
+            </div>
 <div class="boite-item">
-        <div class="nomItem">
-            <h3>${i['nom']}</h3>
-        </div>
         <p>
             ${i['descr']}<br>
             prix : <strong>{$i['tarif']}</strong>
         </p>
-        <img style='width: 100px;' src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
+        <img class="imgItem img-thumbnail" src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
         <br>
         <div class="reservation">
             $texteReservation
         </div>
         <form action="{$this->container->router->pathFor('afficherListe', ['token' => $args['token']])}" method="get"> 
-            <button type="submit" class="btn submit">Retourner à la liste</button>
+            <button type="submit" class="btn btn-primary">Retourner à la liste</button>
         </form>
 </div>
 
@@ -198,7 +200,7 @@ END;
                 <input type="checkbox" name="memoriser"><br>
                 <label for="message">Un message à ajouter ? </label>
                 <input type="text" name="message" maxlength="50" size="50"><br>
-                <button type="submit" class="btn submit">
+                <button type="submit" class="btn btn-primary">
                     Réserver l'item
                 </button>
             </form>
@@ -208,11 +210,13 @@ END;
 
         //on renvoie la page complete
         return <<<END
-        <h2>Reserver l'item "{$args['nom']}" ?</h2>
+            <div class="block-heading">
+                        <h2 class="text-info">Reserver l'item "{$args['nom']}" ?</h2>
+            </div>
         <div class="formulaire">
             $form
             <form action="{$this->container->router->pathFor('afficherItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
-                <button type="submit" class="btn submit">Retourner sur la page de l'item</button>
+                <button type="submit" class="btn btn-primary">Retourner sur la page de l'item</button>
             </form>
         </div>
 END;
@@ -226,8 +230,9 @@ END;
         $i = $args['item'];
 
         $html = <<<END
-            <h2> Modifications des informations d'un item</h2>
-        <div class="formulaire">
+            <div class="block-heading">
+                        <h2 class="text-info">Reserver l'item "{$args['nom']}" ?</h2>
+            </div>        <div class="formulaire">
             <form action="" method="post">
                 <label for="nom" class="form-label">Modifier le nom</label>
                 <input type="text" value=  "${i['nom']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
@@ -241,7 +246,7 @@ END;
                 <label for="prix" class="form-label">Modifier la date limite</label>
                 <input type="text" value="{$i['prix']}" class="form-control" name="expiration" placeholder="" required><br> 
                 
-                <button type="submit" class="btn submit" value="{$i['id']}" name="id_item">
+                <button type="submit" class="btn btn-primary" value="{$i['id']}" name="id_item">
                    Enregistrer les modifications
                 </button>
             </form>

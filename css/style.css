@@ -36,3 +36,35 @@ html {
     margin-top: 16px;
     padding-top: 0px;
 }
+
+.textNav {
+    font-size: 16px;
+}
+
+.logoPrincipal {
+    width: 100px;
+}
+
+.col-md-6ImgAccueil {
+    width: 500px;
+    text-align: center;
+}
+
+.col-md-6Img {
+    width: 300px;
+    text-align: center;
+}
+
+.col-md-6Txt {
+    width: 1000px;
+}
+
+.imgItem {
+    width: 250px;
+    text-align: center;margin-left: 20px;
+}
+
+.row.align-items-center {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

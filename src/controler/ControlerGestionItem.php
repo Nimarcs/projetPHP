@@ -266,7 +266,7 @@ class ControlerGestionItem{
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la creation de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans la creation de l'item...<br>".$e->getMessage()."<br>".$e->getTrace())));
         }
         return $rs;
     }
