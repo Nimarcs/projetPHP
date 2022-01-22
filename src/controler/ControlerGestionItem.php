@@ -198,6 +198,8 @@ class ControlerGestionItem{
                 $nom = filter_var( $rq->getParsedBody()['nom'], FILTER_SANITIZE_STRING);
                 $description = filter_var( $rq->getParsedBody()['description'], FILTER_SANITIZE_STRING);
                 $prix = filter_var( $rq->getParsedBody()['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
+                $typeEntree = $rq->getParsedBody()['typeEntree'] ;
+                $imageChoisi = $rq->getParsedBody()['image'];
             } else {
                 $token = $args['token'];
             }
@@ -218,40 +220,50 @@ class ControlerGestionItem{
 
             if ($rq->isPost()) {
 
-                //on recupere le fichier uploads
-                $fichiers = $rq->getUploadedFiles();
-                $fichier = $fichiers['fichier'];
-
-                //on verifie qu'il n'y pas de probleme
-                if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK) {
-                    throw new \Exception("Erreur lors de l'envoi de l'image.");
-                }
-
-
-
                 //on ajoute la liste au arguments
                 $args['liste'] = $liste;
                 $args['nom'] = $nom;
                 $args['description'] = $description;
                 $args['prix'] = $prix;
 
-                $nomImg = 'temp';
 
-                //on cree l'item
-                $item = $this->ajouterNouvelItemInBDD($args, $nomImg);
+                //on recupere le fichier uploads
+                $fichiers = $rq->getUploadedFiles();
+                $fichier = $fichiers['fichier'];
+                //on verifie s'il y a un fichier
+                if ($typeEntree == 'predef') {
+                    //pas de fichier
+                    throw new \Exception("predefstr");
+                    //on cree l'item
+                    $item = $this->ajouterNouvelItemInBDD($args, $imageChoisi);
 
-                //on recupere l'extension du fichier
-                $nomFichier =(explode("." ,$fichier->getClientFilename()));
-                $extension = $nomFichier[array_key_last($nomFichier)];
+                } else {
+                    if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK){
+                        //pas d'image
+                        $this->ajouterNouvelItemInBDD($args, null);
+                    } else {
 
-                //on met l'image au bon endroit
-                $nomImg = $nom . $item->id . "." . $extension;
-                $route = __DIR__ . DIRECTORY_SEPARATOR. '..'. DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
-                $fichier->moveTo($route);
+                        //s'il y a un fichier
+                        $nomImg = 'temp';
 
-                //on redefini le bon nom de l'image
-                $item->img = $nomImg;
-                $item->save();
+                        //on cree l'item
+                        $item = $this->ajouterNouvelItemInBDD($args, $nomImg);
+
+                        //on recupere l'extension du fichier
+                        $nomFichier = (explode(".", $fichier->getClientFilename()));
+                        $extension = $nomFichier[array_key_last($nomFichier)];
+
+                        //on met l'image au bon endroit
+                        $nomImg = "custom" . DIRECTORY_SEPARATOR . $nom . $item->id . "." . $extension;
+                        $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
+                        $fichier->moveTo($route);
+
+                        //on redefini le bon nom de l'image
+                        $item->img = $nomImg;
+                        $item->save();
+                    }
+                }
+
 
                 //on redirige
                 $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token' => $liste->token_edition]));
@@ -289,15 +301,13 @@ class ControlerGestionItem{
      * Methode pour creer un nouvel item
      * @author Lucas Weiss
      */
-    private function ajouterNouvelItemInBDD(array $args, string $nameImage) : Item{
+    private function ajouterNouvelItemInBDD(array $args, ?string $nameImage) : Item{
         $i = new Item();
         $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
         $i->descr = filter_var($args['description'], FILTER_SANITIZE_STRING);
         $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
         $i->liste_id = $args['liste']->no;
-        if ($nameImage!=null) {
-            $i->img = $nameImage;
-        }
+        $i->img = $nameImage;
         $i->message = null;
         $i->reserverPar = null;
         $res = $i->save();
