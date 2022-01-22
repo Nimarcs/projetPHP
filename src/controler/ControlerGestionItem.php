@@ -200,6 +200,10 @@ class ControlerGestionItem{
                 $prix = filter_var( $rq->getParsedBody()['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
                 $typeEntree = $rq->getParsedBody()['typeEntree'] ;
                 $imageChoisi = $rq->getParsedBody()['image'];
+                if (isset($rq->getParsedBody()['url']))
+                    $url = filter_var( $rq->getParsedBody()['url'], FILTER_SANITIZE_URL);
+                else
+                    $url = "";
             } else {
                 $token = $args['token'];
             }
@@ -225,6 +229,7 @@ class ControlerGestionItem{
                 $args['nom'] = $nom;
                 $args['description'] = $description;
                 $args['prix'] = $prix;
+                $args['url'] = $url;
 
 
                 //on recupere le fichier uploads
@@ -240,7 +245,7 @@ class ControlerGestionItem{
                 } else {
                     if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK){
                         //pas d'image
-                        $this->ajouterNouvelItemInBDD($args, null);
+                        $this->ajouterNouvelItemInBDD($args, 'no-image.png');
                     } else {
 
                         //s'il y a un fichier
@@ -299,14 +304,20 @@ class ControlerGestionItem{
     /**
      * Fonction 8
      * Methode pour creer un nouvel item
+     * /!\ les variables doivent être nettoyé en amont !
+     * @param array $args attributs de l'item
+     * @param string $nameImage nom de l'image a ajouter
      * @author Lucas Weiss
+     * @author Marcus Richier
      */
-    private function ajouterNouvelItemInBDD(array $args, ?string $nameImage) : Item{
+    private function ajouterNouvelItemInBDD(array $args, string $nameImage) : Item{
         $i = new Item();
-        $i->nom = filter_var($args['nom'], FILTER_SANITIZE_STRING);
-        $i->descr = filter_var($args['description'], FILTER_SANITIZE_STRING);
-        $i->tarif = filter_var($args['prix'], FILTER_SANITIZE_NUMBER_FLOAT);
+        $i->nom = $args['nom'];
+        $i->descr = $args['description'];
+        $i->tarif = $args['prix'];
         $i->liste_id = $args['liste']->no;
+        if ($args['url'] != "")
+            $i->url = $args['url'];
         $i->img = $nameImage;
         $i->message = null;
         $i->reserverPar = null;

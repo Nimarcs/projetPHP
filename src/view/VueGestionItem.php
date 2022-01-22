@@ -53,6 +53,8 @@ class VueGestionItem
                 <label for="prix" class="form-label">Prix (en €)</label>
                 <input type="number" step="0.01" min="0" id="prix" class="form-control" name="prix" placeholder="" required><br>
                 
+                <label for="url" class="form-label">Url (optionnel) :</label>
+                <input type="url" id="url" class="form-control" name="url" placeholder="url du site externe"><br>
                 
                 <h4>Image</h4>
                 
@@ -80,6 +82,11 @@ class VueGestionItem
                     Créer l'item
                 </button>
             </form>
+            
+            <form action="{$this->container->router->pathFor('afficherListe', ['token' => $arg['liste']->token_edition])}" method="get"> 
+                <button type="submit" class="btn btn-primary">Annuler</button>
+            </form>
+            <br>
 
 END;
 
@@ -155,6 +162,11 @@ END;
             else $texteReservation = "L'item n'étais pas reservé";
         }
 
+        //url
+        if ($i->url != ""){
+            $url = "<p>Lien externe :<a href='$i->url'>$i->url</a></p>";
+        } else $url = "";
+
         //html
         return <<<END
             <div class="block-heading">
@@ -164,6 +176,7 @@ END;
         <p>
             ${i['descr']}<br>
             prix : <strong>{$i['tarif']}</strong>
+            $url
         </p>
         <img class="imgItem img-thumbnail" src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
         <br>
