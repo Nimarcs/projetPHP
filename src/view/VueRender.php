@@ -92,13 +92,17 @@ END;
         $val = isset($_SESSION['login']);
         if ($val==0) {
             $txt = '<p><a href='.$this->container->router->pathFor("creationCompte").'>Se creer un compte</a></p>
-                     <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>';
+                    <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>
+                    <p><a href='.$this->container->router->pathFor("creationListe").'>Creer une nouvelle liste</a></p>';
         } else {
-            $txt = '<p> Bonjour a toi, '.$_SESSION["login"].'</p>
-                    <p><a href='.$this->container->router->pathFor("afficherListePerso").'>Afficher ses listes personnels</a></p>
-                     <p><a href='.$this->container->router->pathFor("creationListe").'>Creer une nouvelle liste</a></p>
-                    <p><a href='.$this->container->router->pathFor("modificationCompte").'>Modifier les informations du compte</a></p>
-                    <p><a href='.$this->container->router->pathFor("deconectionCompte").'>Se deconnecter</a></p>';
+            $txt = <<<END
+<p> Bonjour a toi, {$_SESSION["login"]}</p>
+<p><a href={$this->container->router->pathFor("afficherListePerso")}>Afficher ses listes personnels</a></p>
+<p><a href={$this->container->router->pathFor("creationListe")}>Creer une nouvelle liste</a></p>
+<p>Ajouter une liste dans les listes perso : <form action="{$this->container->router->pathFor('ajouterProprietaire')}" method="post"><input type="text" size="50" name="token" placeholder="notez votre token d'édition ici" autocomplete="off" required> <button type="submit" class="btn btn-primary">Ajouter</button></form></p>
+<p><a href={$this->container->router->pathFor("modificationCompte")}>Modifier les informations du compte</a></p>
+<p><a href={$this->container->router->pathFor("deconectionCompte")}>Se deconnecter</a></p>
+END;
         }
 
         $html = <<<END

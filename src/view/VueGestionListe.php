@@ -81,12 +81,15 @@ END;
             $boutonAjouterItem ="";
         }
 
+        if ($liste->login == "anonyme") $createur = "anonyme";
+        else $createur = str_replace( ",", ", ", substr($liste->login, 1, -1));
+
         $html = <<<END
             <div class="block-heading">
                     <h2 class="text-info">Liste - {$liste['titre']}</h2>
                     <p>
                     {$liste['description']} <br><br>
-                    Créer par {$liste['login']}.<br>Expire le {$liste['expiration']}.<br>$public
+                    Créer par {$createur}.<br>Expire le {$liste['expiration']}.<br>$public
                     </p>
             </div>
               <div class="boite-liste"'>

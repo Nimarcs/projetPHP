@@ -250,6 +250,16 @@ $app->get('/listesCreateur/{login}[/]', function (Request $rq, Response $rs, arr
     return $controleur->afficherListesCreateur($rq, $rs, $args);
 })->setName('affichageListesCreateur');
 
+
+/**
+ * Fonction 28, Joindre des listes à son compte
+ * @author Marcus Richier
+ */
+$app->post('/ajouterProprietaire[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->ajouterProprietaire($rq, $rs, $_POST);
+})->setName('ajouterProprietaire');
+
 # On lance l'app
 session_start();
 $app->run();

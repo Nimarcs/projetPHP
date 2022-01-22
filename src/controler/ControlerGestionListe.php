@@ -131,24 +131,15 @@ class ControlerGestionListe
     public function AffichageListePerso(Request $rq,Response $rs,array $args): Response{
         try {
             $vue = new VueGestionListe($this->container);
-            $listes = $this->selectListePerso();
-            $rs->getBody()->write($vue->render(7, $listes));
+            if (isset($_SESSION['login'])) {
+                $listes = $this->recupererListesLogin($_SESSION['login']);
+                $rs->getBody()->write($vue->render(7, $listes));
+            } else throw new \Exception("Vous devez être connecté !");
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes personnelles...<br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
-    }
-
-    /**
-     * Fonction qui permet la récupération de ses listes personneles
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     * @author Mathieu Vinot
-     */
-    private function selectListePerso(){
-        //on récupère à l'aide du login contenue dans notre variable session, cela permet de sécuriser
-        return Liste::query()->where('login', '=', $_SESSION["login"])->get();
-
     }
 
     /**
@@ -207,7 +198,7 @@ class ControlerGestionListe
         $l->titre = filter_var($args['titre'], FILTER_SANITIZE_STRING);
 
         //si la personne est connecte c'est son login, sinon c'est "anonyme"
-        if (isset($_SESSION['login'])) $l->login = $_SESSION['login'];
+        if (isset($_SESSION['login'])) $l->login = ",".$_SESSION['login'].",";
         else $l->login = "anonyme";
 
         $l->description = filter_var($args['description'], FILTER_SANITIZE_STRING);
@@ -356,10 +347,49 @@ class ControlerGestionListe
      */
     private function recupererListesLogin(string $login){
         try {
-            return Liste::query()->where('login', '=', $login)->get();
+            return Liste::query()->where('login', 'like', "%,".$login.",%")->get();
         } catch (ModelNotFoundException $e) {
             return null;
         }
+    }
+
+    /**
+     * Fonction 28
+     * permet d'ajouter un proprietaire a une liste
+     */
+    public function ajouterProprietaire(Request $rq, Response $rs, array $args): Response{
+        try {
+
+            // la requette doit etre un post
+            if (!$rq->isPost()) throw new \Exception("La requête n'est pas du bon type");
+            if (!isset($_SESSION['login'])) throw new \Exception("L'utilisateur doit être connecté");
+
+            //on recupere la liste et le proprietaire
+            $token = $rq->getParsedBody()['token'];
+            $liste = $this->recupererListeEdition($token);
+            if ($liste == null) throw new \Exception("La liste n'existe pas");
+
+            //on modifie la liste
+            $this->ajouterProprioDansBDD($liste, $_SESSION['login']);
+
+            //on redirige
+            $rs = $rs->withRedirect($this->container->router->pathFor('accueil')); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
+
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la creation de la liste...<br>" . $e->getMessage()));
+        }
+        return $rs;
+    }
+
+    private function ajouterProprioDansBDD(Liste $liste, string $identifiant): void{
+        if($liste->login == "anonyme")
+            $liste->login = ",".$identifiant.",";
+
+        if (!str_contains($liste->login, ",".$identifiant.",")){
+            $liste->login .= $identifiant.",";
+        }
+        $liste->save();
     }
 
 }
