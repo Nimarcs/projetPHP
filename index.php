@@ -150,9 +150,13 @@ $app->post('/liste/{token}/newItem[/]', function (Request $rq, Response $rs, arr
  * @Author Fabrice Arnout
  */
 
-$app->get('liste/{token}/modifierItem/{id}', function (Request $rq, Response $rs, array $args) use ($container): Response {
+$app->get('/item/{token}/modifierItem/{id}', function (Request $rq, Response $rs, array $args) use ($container): Response {
     $controleur = new ControlerGestionItem($container);
     return $controleur->modifierItem($rq, $rs, $args);
+})->setName('modifierItem');
+$app->post('/item/{token}/modifierItem/{id}', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->modifierItem($rq, $rs, $_POST);
 })->setName('modifierItem');
 
 

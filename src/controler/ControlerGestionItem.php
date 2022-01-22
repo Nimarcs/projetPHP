@@ -67,7 +67,7 @@ class ControlerGestionItem{
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
             }
-        } catch (\Exception $e) {
+        } catch (\Error $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>" . $e->getMessage() . "<br>" . $e->getTrace())));
         }
@@ -327,16 +327,17 @@ class ControlerGestionItem{
         try {
             $vue = new VueGestionItem($this->container);
 
-            if (sizeof($args) == 5) {
+            if ($rq->isPost() && sizeof($args) == 6) {
 
-                $item = $this->recupererItem($args['token_edition'], $args['id']);
+                $item = $this->recupererItem($args['token'], intval($args['id']));
 
                 $this->modifierItemInBDD($item, $args);
-                $rs = $rs->withRedirect($this->container->router->pathFor('affichageListesPublique'));
+                $rs = $rs->withRedirect($this->container->router->pathFor('affichageItem', ['token'=>$item->liste->token_edition], ['id'=>$item->id] ));
             } else {
 
-                $item = $this->recupererItem();
-                $rs->getBody()->write($vue->render(4, $item));
+                $item = $this->recupererItem($args['token'], intval($args['id']));
+                $tab = array("item"=>$item);
+                $rs->getBody()->write($vue->render(4, $tab));
             }
 
         } catch (\Exception $e) {
@@ -356,10 +357,10 @@ class ControlerGestionItem{
      */
 
     private function modifierItemInBDD(Item $i, array $args) :void{
-        $i['nom'] = filter_var($args['nom'], FILTER_SANITIZE_STRING);
-        $i['descr'] = filter_var($args['descr'], FILTER_SANITIZE_STRING);
-        $i['img'] = filter_var($args['img'], FILTER_SANITIZE_STRING);
-        $i['tarif'] = filter_var($args['tarif'], FILTER_SANITIZE_STRING);
+        $i['nom'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
+        $i['descr'] = filter_var($args['description'], FILTER_SANITIZE_STRING);
+        $i['img'] = filter_var($args['image'], FILTER_SANITIZE_STRING);
+        $i['tarif'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
         $i->save();
     }
 
