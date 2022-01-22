@@ -66,7 +66,7 @@ class VueGestionCompte
         <input type="radio"  required>
         <label for="condition_gene">J'ai lu et j'accepte les <a href=''> conditions générales d'utilisation </a> et <a href=''>la politique de confidentialité </a></label><br>
         
-        <button type="submit" class="btn submit">Créer son compte</button>
+        <button type="submit" class="btn btn-primary">Créer son compte</button>
     </form>
 </div>
 END;
