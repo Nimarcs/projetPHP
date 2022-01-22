@@ -82,7 +82,7 @@ END;
 
 
         //si la date d'échéance est pas passé
-        if ($i->liste->expiration > date('YYYY-MM-DD')) {
+        if ($i->liste->expiration < date('YYYY-MM-DD')) {
             //la vision du propriétaire change
 
             //on check s'il est le propriétaire
@@ -102,6 +102,9 @@ END;
                 if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
                 else $texteReservation = "L'item n'est pas réservé";
             }
+        } else {
+            if ($i->reserverPar != null) $texteReservation = "L'item étais reservé par {$i->reserverPar}";
+            else $texteReservation = "L'item n'étais pas reservé";
         }
 
         //html
