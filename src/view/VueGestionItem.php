@@ -150,7 +150,7 @@ END;
                 if ($i->reserverPar == null) $texteReservation = <<<END
 <p>L'item n'est pas encore reservé</p>
 <form action="{$this->container->router->pathFor('reserverItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
-    <button type="submit" class="btn submit">Réserver l'item</button>
+    <button type="submit" class="btn btn-primary">Réserver l'item</button>
 </form>
 END;
                 else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
@@ -161,6 +161,16 @@ END;
             if ($i->reserverPar != null) $texteReservation = "L'item étais reservé par {$i->reserverPar}";
             else $texteReservation = "L'item n'étais pas reservé";
         }
+
+        //boutons suppression et modification
+        if ($args['edition']){
+            $boutonsEdit = <<<END
+<form action="{$this->container->router->pathFor('modifierItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
+    <button type="submit" class="btn btn-primary">Modifier l'item</button>
+</form>
+END;
+
+        } else $boutonsEdit = "";
 
         //url
         if ($i->url != ""){
@@ -186,6 +196,7 @@ END;
         <form action="{$this->container->router->pathFor('afficherListe', ['token' => $args['token']])}" method="get"> 
             <button type="submit" class="btn btn-primary">Retourner à la liste</button>
         </form>
+        $boutonsEdit
 </div>
 
 
