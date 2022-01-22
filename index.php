@@ -200,6 +200,21 @@ $app->get('/deconectionCompte', function (Request $rq, Response $rs, array $args
     return $controleur->seDeconnecterCompte($rq, $rs, $_POST);
 })->setName('deconectionCompte');
 
+
+/**
+ * Fonction 19, modification des information du compte
+ * @author Guillaume Renard
+ */
+$app->get('/modificationCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->modifierCompte($rq, $rs, $args);
+})->setName('modificationCompte');
+$app->post('/modificationCompte', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->modifierCompte($rq, $rs, $_POST);
+})->setName('modificationCompte');
+
+
 /**
  * Fonction 21, afficher les listes publiques
  * @author Lucas Weiss
