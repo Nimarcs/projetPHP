@@ -37,7 +37,6 @@ class ControlerGestionCompte
      */
     public function creerCompte(Request $rq, Response $rs, array $args): Response {
         try {
-            var_dump($args);
             $vue = new VueGestionCompte($this->container);
             if (sizeof($args) == 7) {
 
