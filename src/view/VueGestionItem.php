@@ -182,7 +182,9 @@ END;
                 <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
                 <input type="text" name="reservateur" maxlength="50" placeholder="nom" size="50" value="$login" required autofocus>
                 <input type="hidden" name="token" value="{$args['token']}" required>
-                <input type="hidden" name="id" value="{$args['id']}" required>
+                <input type="hidden" name="id" value="{$args['id']}" required><br>
+                <label for="memoriser">Enregister mon nom pour les prochaines fois : </label>
+                <input type="checkbox" name="memoriser">
                 <button type="submit" class="btn submit">
                     Réserver l'item
                 </button>

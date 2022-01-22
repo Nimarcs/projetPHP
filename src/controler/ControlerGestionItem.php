@@ -104,10 +104,20 @@ class ControlerGestionItem{
 
             //on fait l'action correspondante
             if ($rq->isPost()) {
+
+                //on nettoie le nom
                 $reservateur = filter_var( $rq->getParsedBody()['reservateur'] , FILTER_SANITIZE_STRING);
-                setcookie("lastPSEUDO", $reservateur, time() + 60*60, "/");
-                $this->reserverItemDansBDD($item, $reservateur); // On insere dans la BDD
+
+                //si on a cocher le fait de memoriser, on fait le cookie
+                if ($rq->getParsedBody()['memoriser']!=null) {
+                    setcookie("lastPSEUDO", $reservateur, time() + 60 * 60, "/");
+                }
+                // On insere dans la BDD
+                $this->reserverItemDansBDD($item, $reservateur);
+
+                //on redirige
                 $rs = $rs->withRedirect($this->container->router->pathFor('reserverItem', ['id'=>$id, 'token' => $token])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
+
             } else { // Si ce n'est pas le cas, la methode est un get
                 $rs->getBody()->write($vue->render(3, ['token' => $token, 'id' => $id, 'reserverPar' => $item->reserverPar, 'nom' => $item->nom]));
             }
