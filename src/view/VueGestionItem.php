@@ -28,8 +28,16 @@ class VueGestionItem
     /**
      * Fonction 8
      * Methode vue qui retourne l'html de la page afin d'ajouter un item sur une liste bien précise
+     * @author Lucas Weiss
+     * @author Marcus Richier
      */
     private function htmlCreationItemPourUneListe(array $arg) :string {
+        $imgs = $this->getImageEnregistree();
+        $options ="";
+        foreach ($imgs as $img){
+            $options.="<option value='$img'>$img</option>";
+        }
+
         return <<<END
             <div class="block-heading">
                 <h2 class="text-info">Ajouter un item</h2>
@@ -37,18 +45,36 @@ class VueGestionItem
             <h3>Pour la liste n°{$arg['liste']->no}.</h3>
         <form action="" method="post" enctype="multipart/form-data">
                 <label for="titre" class="form-label">Nom</label>
-                <input type="text" class="form-control" name="nom" placeholder="" required maxlength="30"><br>
+                <input type="text" id="titre" class="form-control" name="nom" placeholder="" required maxlength="30"><br>
                 
                 <label for="desc" class="form-label">Description</label>
-                <input type="text" class="form-control" name="description" placeholder="" required><br>
+                <input type="text" class="form-control" id="desc" name="description" placeholder="" required><br>
 
-                <label for="exp" class="form-label">Prix (en €)</label>
-                <input type="number" class="form-control" name="prix" placeholder="" required><br>
+                <label for="prix" class="form-label">Prix (en €)</label>
+                <input type="number" step="0.01" min="0" id="prix" class="form-control" name="prix" placeholder="" required><br>
                 
-                <label for="exp" class="form-label">Image</label>
+                
+                <h4>Image</h4>
+                
+                <input type="radio" name="typeEntree" value="file" id="file" >
+                <label for="file">Choisir un fichier</label>
+                <br>
+
                 <input type="file" name="fichier" accept="image/png, image/gif, image/jpeg" /><br>
                 
+                <br>
+                <p><strong>OU</strong></p>
+                
+                <input type="radio" name="typeEntree" value="predef" id="predef" checked>
+                <label for="predef">Choisir une image predéfinie</label>
+                <br>
+                <label for="image">Choisissez une image:</label>
+                <select id="images" name="image">
+                    $options
+                </select>
+                
                 <input type="hidden" name="token" value="{$arg['liste']->token_edition}">
+                <br><br>
                 
                 <button type="submit" class="btn btn-primary">
                     Créer l'item
@@ -57,6 +83,21 @@ class VueGestionItem
 
 END;
 
+    }
+
+    /**
+     * Methode qui recupere le nom des images
+     * @return array liste des images predefini
+     * @author Marcus Richier
+     */
+    private function getImageEnregistree():array{
+        $imgs = Item::query()->select('img')->where('img', 'not like', 'custom%')->groupBy("img")->get();
+        $res = [];
+        foreach ($imgs as $img){
+            if ($img->img != 'no-image.png') //valeur reserve pour quand aucune image n'est fournie
+                $res[] = $img->img;
+        }
+        return $res;
     }
 
     /**
@@ -261,6 +302,3 @@ END;
     }
 
 }
-/*
- *
- */

@@ -67,7 +67,7 @@ class ControlerGestionItem{
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
             }
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de l'item'...<br>" . $e->getMessage() . "<br>" . $e->getTrace())));
         }
