@@ -310,7 +310,7 @@ END;
                     <form action="{$this->container->router->pathFor('afficherListe', ['token' => $l['token_edition']])}" method="get">
                          <button type="submit" class="btn submit">AFFICHER LA LISTE</button>
                     </form><br>
-                    Token: <input type="text" value="{$l['token_lecture']}" disabled="disabled">
+                    Partager la liste: <input type="text" value="{$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${l['token_lecture']}" disabled="disabled" style="width: 700px;">
                     <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $l['token_edition']])}" method="get">
                          <button type="submit" class="btn submit">MODIFIER LISTE</button>
                     </form><br>
