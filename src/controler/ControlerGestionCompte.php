@@ -65,10 +65,11 @@ class ControlerGestionCompte
      * @author Lucas Weiss
      */
     private function loginValide( string $login) : bool{
-            $res =  Compte::where('login', '=', $login)->get();
-            $r = $res->count();
-            if ($r==0) return true;
-            else return false;
+        if ($login == "anonyme") return false; //valeur prise
+        $res =  Compte::where('login', '=', $login)->get();
+        $r = $res->count();
+        if ($r==0) return true;
+        else return false;
     }
 
     /**
