@@ -96,6 +96,7 @@ END;
         } else {
             $txt = '<p> Bonjour a toi, '.$_SESSION["login"].'</p>
                     <p><a href='.$this->container->router->pathFor("afficherListePerso").'>Afficher ses listes personnels</a></p>
+                    <p><a href='.$this->container->router->pathFor("creationListe").'>Creer une nouvelle liste</a></p>
                     <p><a href='.$this->container->router->pathFor("deconectionCompte").'>Se deconnecter</a></p>';
         }
 
