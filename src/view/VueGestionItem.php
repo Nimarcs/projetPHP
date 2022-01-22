@@ -195,7 +195,9 @@ END;
                 <input type="hidden" name="token" value="{$args['token']}" required>
                 <input type="hidden" name="id" value="{$args['id']}" required><br>
                 <label for="memoriser">Enregister mon nom pour les prochaines fois : </label>
-                <input type="checkbox" name="memoriser">
+                <input type="checkbox" name="memoriser"><br>
+                <label for="message">Un message à ajouter ? </label>
+                <input type="text" name="message" maxlength="50" size="50"><br>
                 <button type="submit" class="btn submit">
                     Réserver l'item
                 </button>

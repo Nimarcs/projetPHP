@@ -106,6 +106,9 @@ class ControlerGestionItem{
             //on fait l'action correspondante
             if ($rq->isPost()) {
 
+                //on récupère le message
+                $message = filter_var( $rq->getParsedBody()['message'] , FILTER_SANITIZE_STRING);
+
                 //on nettoie le nom
                 $reservateur = filter_var( $rq->getParsedBody()['reservateur'] , FILTER_SANITIZE_STRING);
 
@@ -114,7 +117,7 @@ class ControlerGestionItem{
                     setcookie("lastPSEUDO", $reservateur, time() + 60 * 60, "/");
                 }
                 // On insere dans la BDD
-                $this->reserverItemDansBDD($item, $reservateur);
+                $this->reserverItemDansBDD($item, $reservateur, $message);
 
                 //on redirige
                 $rs = $rs->withRedirect($this->container->router->pathFor('reserverItem', ['id'=>$id, 'token' => $token])); // On redirige l'utilisateur vers la pages d'affichages de toutes les listes
@@ -136,11 +139,12 @@ class ControlerGestionItem{
      * @param Item $item item a reserver
      * @param string $nom nom de la personne qui reserve
      * @author Marcus RICHIER
+     * @author Mathieu Vinot (Ajout du message)
      */
-    private function reserverItemDansBDD(Item $item, string $nom) : bool {
+    private function reserverItemDansBDD(Item $item, string $nom, string $message) : bool {
         if (!isset($item)) return false;
         if ($item->reserverPar != null) return false;
-
+        $item->message = $message;
         $item->reserverPar = $nom;
         $item->save();
         return true;
