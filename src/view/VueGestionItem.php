@@ -71,15 +71,6 @@ END;
     {
         $i = $args['item'];
 
-        //reservation
-        if ($i->reserverPar == null) $texteReservation = <<<END
-<p>L'item n'est pas encore reservé</p>
-<form action="{$this->container->router->pathFor('reserverItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
-    <button type="submit" class="btn submit">Réserver l'item</button>
-</form>
-END;
-        else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
-
 
         //si la date d'échéance est pas passé
         if ($i->liste->expiration < date('YYYY-MM-DD')) {
@@ -96,13 +87,27 @@ END;
                 }
             }
 
+            //si il est propriétaire
             if ($estProprietaire || $args['edition'] || (isset($_SESSION['login']) && $_SESSION['login'] == $i->liste->login)) {
 
                 //on change l'affichage de la reservation si c'est le propriétaire
                 if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
                 else $texteReservation = "L'item n'est pas réservé";
+
+                //sinon
+            } else {
+
+                if ($i->reserverPar == null) $texteReservation = <<<END
+<p>L'item n'est pas encore reservé</p>
+<form action="{$this->container->router->pathFor('reserverItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
+    <button type="submit" class="btn submit">Réserver l'item</button>
+</form>
+END;
+                else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
             }
-        } else {
+
+            //si la date est passé
+        } else {//l'affichage est le meme pour tous le monde
             if ($i->reserverPar != null) $texteReservation = "L'item étais reservé par {$i->reserverPar}";
             else $texteReservation = "L'item n'étais pas reservé";
         }
