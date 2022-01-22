@@ -160,4 +160,52 @@ class ControlerGestionCompte
         session_destroy();
     }
 
+
+
+    /**
+     * Fonction 19
+     * Methode qui modifie les informations du compte
+     * @author Guillaume Renard
+     */
+    public function modifierCompte(Request $rq, Response $rs, array $args) : Response {
+        try {
+            $vue = new VueGestionCompte($this->container);
+
+            var_dump($args);
+            if ($rq->isPost() && sizeof($args) == 5) {
+                $c = $this->recupererCompte($_SESSION['login']);
+
+                $this->modifierCompteInBDD($c, $args);
+                $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+            } else {
+                $com = $this->recupererCompte($_SESSION['login']);
+
+                $rs->getBody()->write($vue->render(3, $com));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+
+    private function recupererCompte(string $log) : ?Compte{
+        try {
+            return Compte::query()->where('login', '=', $log)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+    }
+
+    private function modifierCompteInBDD($compte, $chgemnt): void{
+
+        $compte->email = filter_var($chgemnt['email'], FILTER_SANITIZE_EMAIL);
+        $compte->date_naissance = $chgemnt['dateN'];
+        $compte->num_dep = filter_var($chgemnt['numDep'], FILTER_SANITIZE_NUMBER_INT);
+        $compte->ville = filter_var($chgemnt['ville'], FILTER_SANITIZE_STRING);
+        $compte->adresse = filter_var($chgemnt['adresse'], FILTER_SANITIZE_STRING);
+        $compte->save();
+    }
+
 }

@@ -76,6 +76,7 @@ END;
     /**
      * Fonctionnalite 18
      * affiche formulaire connection compte
+     * @author Lucas Weiss
      */
     private function htmlConnectionCompte() : string {
         //si il a deja utilise un pseudo on precomplete le champ
@@ -99,6 +100,55 @@ END;
 
     }
 
+    /**
+    *Fonctionnalité 19
+     * affiche les champs pour modifier les informations du compte
+     * @author Guillaume Renard
+    */
+    private function htmlModificationCompte($compte): string{
+        $html= <<<END
+<div class="container"> 
+<div class="block-heading">
+<h2 class="text-info">Modification des informations du compte</h2>
+<p>Modifiez vos informations en remplissant les formulaires</p>
+<div class="formulaire">
+    
+    <form action="" method="post">
+       
+      <button type="submit" class="btn btn-primary">Modifier mot de passe</button><br>
+        
+         <label for="Email"  class="form-label">Email</label>
+        <input type="email" name="email" value="${compte['email']}" required maxlength="30"  ><br>
+        
+         <label for="DateNais"  class="form-label">Date anniversaire</label>
+        <input type="date" name="dateN" value="${compte['date_naissance']}"required maxlength="30" ><br>
+        
+          <label for="numDep"  class="form-label">Numéro de votre département</label>
+        <input type="text" name="numDep" value="${compte['num_dep']}" required maxlength="6" ><br>
+        
+          <label for="ville"  class="form-label">Nom de votre ville</label>
+        <input type="text" name="ville" value="${compte['ville']}" required maxlength="30" ><br>
+        
+          <label for="adresse"  class="form-label">Adresse</label>
+        <input type="text" name="adresse" value="${compte['adresse']}" required maxlength="80" ><br>
+        
+        
+        <button type="submit" class="btn btn-primary" >Sauvegarder les modifications</button>
+    </form>
+</div>
+</div>
+</div>
+
+END;
+        return $html;
+
+    }
+
+    /**
+     * @param $selecteur
+     * @param null $args1
+     * @return string
+     */
     public function render($selecteur, $args1 = null) : string{
         $content = "";
         switch ($selecteur) {
@@ -107,8 +157,13 @@ END;
                 break;
             }
             case 2:
+            {
                 $content = $this->htmlConnectionCompte();
                 break;
+            }
+            case 3 :  {
+                $content = $this->htmlModificationCompte($args1);
+            }
         }
         $vue = new VueRender($this->container);
         return $vue->render($content);
