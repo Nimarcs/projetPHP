@@ -232,7 +232,7 @@ class ControlerGestionListe
             $vue = new VueGestionListe($this->container);
 
 
-            if (sizeof($args) == 5) {
+            if ($rq->isPost() && sizeof($args) == 5) {
                 //on est dans un post
                 //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
                 $liste = $this->recupererListeEdition($args['token_edition']);
