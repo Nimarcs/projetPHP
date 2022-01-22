@@ -233,7 +233,7 @@ class ControlerGestionItem{
                 //on verifie s'il y a un fichier
                 if ($typeEntree == 'predef') {
                     //pas de fichier
-                    throw new \Exception("predefstr");
+
                     //on cree l'item
                     $item = $this->ajouterNouvelItemInBDD($args, $imageChoisi);
 
