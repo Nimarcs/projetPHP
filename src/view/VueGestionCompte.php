@@ -101,9 +101,10 @@ END;
     }
 
     /**
-    *Fonctionnalité 19
+     *Fonctionnalité 19
      * affiche les champs pour modifier les informations du compte
      * @author Guillaume Renard
+     * @return string
     */
     private function htmlModificationCompte($compte): string{
         $html= <<<END
@@ -143,6 +144,13 @@ END;
 
     }
 
+    /**
+     * Fonction 19 suite
+     * affiche les champs pour modifier le mot de passe d'un compte
+     *
+     * @author Guillaume Renard
+     * @return string
+     */
     private function htmlModificationMotDePasse(){
         $html = <<<END
  <div class="block-heading">

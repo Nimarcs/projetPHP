@@ -166,6 +166,11 @@ class ControlerGestionCompte
     /**
      * Fonction 19
      * Methode qui modifie les informations du compte
+     * * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     *
      * @author Guillaume Renard
      */
     public function modifierCompte(Request $rq, Response $rs, array $args) : Response {
@@ -190,7 +195,13 @@ class ControlerGestionCompte
         return $rs;
     }
 
-
+    /**
+     * méthode qui permet de recupérer un compte en fonction du login en paramètre
+     * @param string $log
+     * @return Compte|null
+     *
+     * @author Guillaume Renard
+     */
     private function recupererCompte(string $log) : ?Compte{
         try {
             return Compte::query()->where('login', '=', $log)->firstOrFail();
@@ -199,6 +210,13 @@ class ControlerGestionCompte
         }
     }
 
+    /**
+     * méthode qui permet de mettre à jour les informations du compte en paramètre en fonction du tableau en paramètre
+     * @param $compte
+     * @param $chgemnt
+     *
+     * @author Guillaume Renard
+     */
     private function modifierCompteInBDD($compte, $chgemnt): void{
 
         $compte->email = filter_var($chgemnt['email'], FILTER_SANITIZE_EMAIL);
@@ -209,12 +227,21 @@ class ControlerGestionCompte
         $compte->save();
     }
 
-
+    /**
+     * Fonction 19 suite
+     * Méthode qui permet de modifier le mot de passe d'un compte + on lui redemande son mot de passe
+     * @param Request $rq
+     * @param Response $rs
+     * @param array $args
+     * @return Response
+     *
+     * @author Guillaume Renard
+     */
     public function modifierMdp(Request $rq, Response $rs, array $args) : Response {
         try {
             $vue = new VueGestionCompte($this->container);
 
-            var_dump($args);
+
             if ($rq->isPost() && sizeof($args) == 3) {
                 $log= $_SESSION['login'];
                 $psw=filter_var($args['anc_Mdp'], FILTER_SANITIZE_STRING);
