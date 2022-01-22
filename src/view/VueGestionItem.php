@@ -108,7 +108,8 @@ END;
             <h3>${i['nom']}</h3>
         </div>
         <p>
-            ${i['description']}<br>
+            ${i['descr']}<br>
+            prix : <strong>{$i['tarif']}</strong>
         </p>
         <img style='width: 100px;' src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
         <br>
