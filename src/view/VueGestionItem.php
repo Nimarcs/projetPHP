@@ -336,7 +336,13 @@ END;
                 
                 <h4>Modifier image</h4>
                 
-                <input type="radio" name="typeEntree" value="predef" id="predef" checked>
+                <input type="radio" name="typeEntree" value="rien" id="rien" checked>
+                <label for="rien">Ne pas changer l'image</label>
+                <br>
+                <br>
+                <p><strong>OU</strong></p>
+                
+                <input type="radio" name="typeEntree" value="predef" id="predef">
                 <label for="predef">Choisir une image predéfinie</label>
                 <br>
                 <label for="image">Choisissez une image:</label>

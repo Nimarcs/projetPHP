@@ -391,6 +391,12 @@ class ControlerGestionItem{
 
                         break;
                     }
+                    case "rien":
+                    {
+                        // on demande de ne pas changer
+                        $newImg = $item->img;
+                        break;
+                    }
                     default:
                     {
                         throw new \Exception("Etat de programme interdit");
