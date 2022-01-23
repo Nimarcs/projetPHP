@@ -293,7 +293,7 @@ class ControlerGestionCompte
     public function supprimerCompte(Request $rq, Response $rs, array $args) : Response {
         try {
             $vue = new VueGestionCompte($this->container);
-
+            
             if (isset($_SESSION['login'])) {
                 if ($rq->isPost() && sizeof($args) == 1) {
 
@@ -302,10 +302,15 @@ class ControlerGestionCompte
                         $listes= Liste::query()->where('login', '=', $log)->get();
 
                         foreach ($listes as $liste){
-                            Item::query()->where('liste_id', '=', $liste->no)->delete();
+                            $items =Item::query()->where('liste_id', '=', $liste->no)->get();
+
+                            $c = new ControlerGestionItem($this->container);
+                            foreach ($items as $item){
+                                $c->supprimerItemDansBDD($item);
+                            }
                         }
                         Liste::query()->where('login', '=', $log)->delete();
-                        Compte::query()->where('login','=',$log)->delete();
+                        Compte::query()->where('login','=',$_SESSION['login'])->delete();
 
                         //suppression de la session
                         $this->supprimerSessionConnexion();
@@ -323,6 +328,7 @@ class ControlerGestionCompte
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>" . $e->getMessage() . "<br>" . $e->getTrace()));
         }
+
         return $rs;
     }
 

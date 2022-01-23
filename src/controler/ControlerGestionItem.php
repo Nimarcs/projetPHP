@@ -526,7 +526,7 @@ class ControlerGestionItem{
      * Methode qui permet de supprimer un item de la base de donnée
      * @param Item $item a supprimer
      */
-    private function supprimerItemDansBDD(Item $item) : void{
+    public function supprimerItemDansBDD(Item $item) : void{
         $this->supprimerImage($item);
         $item->delete();
     }
