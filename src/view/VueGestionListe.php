@@ -58,7 +58,19 @@ class VueGestionListe
         else $public = 'La liste est actuellement privée.';
 
         if ($isTokenEdition){
-            $lesMessages = "";
+
+            //pas expiré
+            if ($liste->expiration >= date('Y-m-d')) {
+
+                $lesMessages = "";
+            } else {
+                $lesMessages = <<<END
+<h3>Messages des autres participants : </h3><br>
+{$liste['messages']}
+END;
+            }
+
+
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
 <div id="boutonModificationListe"
@@ -80,11 +92,16 @@ END;
         } else{
             $boutonsEdition ="";
             $boutonAjouterItem ="";
-            $log = $_SESSION['login'];
-            if ($log == null){
+
+            if (isset($_SESSION['login'])==null){
                 $log = 'anonyme';
+            } else {
+                $log = $_SESSION['login'];
             }
-            $lesMessages = <<<END
+
+
+            if ($liste->expiration >= date('Y-m-d')) {
+                $lesMessages = <<<END
 <h3>Messages des autres participants : </h3><br>
 {$liste['messages']}
 <form action="{$this->container->router->pathFor('posterUnMessage', ['token' => $liste['token_lecture']])}" method="post">
@@ -97,6 +114,13 @@ END;
                 </button>
             </form>
 END;
+            } else {
+                $lesMessages = <<<END
+<h3>Messages des autres participants : </h3><br>
+{$liste['messages']}
+END;
+            }
+
 
         }
 
