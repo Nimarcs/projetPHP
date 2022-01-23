@@ -73,7 +73,8 @@ END;
 
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
-<div id="boutonModificationListe"
+<div id="boutonModificationListe">
+    <label for="edition">Token de modification: <strong>(CE TOKEN PERMET DE MODIFIER ET SUPPRIMER LA LISTE, ATTENTION A QUI VOUS LE PARTAGEZ !)</strong></label><input name="edition" type="text" size="80" value="{$liste['token_edition']}" disabled="disabled"><br><br>
     <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" size="100">
     <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get">
         <button class="btn btn-primary" type="submit"> MODIFIER LISTE</button>
