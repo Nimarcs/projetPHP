@@ -19,15 +19,7 @@ class Liste extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     protected $table = 'liste';
     protected $primaryKey = 'no';
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'expiration' => 'datetime:YYYY-MM-DD',
-    ];
+    
 
     // CONSTRUCTEUR
 
