@@ -183,7 +183,8 @@ END;
         }
 
         //boutons suppression et modification
-        if ($args['edition']){
+        //possible uniquement si on utilise le token d'edition et que l'item n'est pas reserve
+        if ($args['edition'] && $i->reserverPar == null){
             $boutonsEdit = <<<END
 <form action="{$this->container->router->pathFor('modifierItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
     <button type="submit" class="btn btn-primary">Modifier l'item</button>
@@ -321,6 +322,19 @@ END;
     private function htmlModifierUnItem(array $args):string{
         $i = $args['item'];
 
+        //on ne peut pas modifier un item reserver
+        if ($i->reserverPar != null){
+            return <<<END
+<div class="block-heading">
+    <h2 class="text-info">L'item est déjà réservé, la modification est impossible</h2>
+</div> 
+<form action="{$this->container->router->pathFor('afficherItem', ['token' => $i->liste->token_edition, 'id' => $i->id])}" method="get"> 
+    <button type="submit" class="btn btn-primary">Retourner sur la page de l'item</button>
+</form>
+END;
+
+        }
+
         $imgs = $this->getImageEnregistree();
         $options ="";
         foreach ($imgs as $img){
@@ -328,10 +342,10 @@ END;
         }
 
         $html = <<<END
-            <div class="block-heading">
-                        <h2 class="text-info">Modifier l'item "{$i['nom']}" ?</h2>
-            </div>        <div class="formulaire">
-           <div class="formulaire">
+        <div class="block-heading">
+                    <h2 class="text-info">Modifier l'item "{$i['nom']}" ?</h2>
+        </div>        
+        <div class="formulaire">
             <form action="" method="post" enctype="multipart/form-data>
                 <label for="titre" class="form-label">Modifier le nom</label>
                 <input type="text" value=  "${i['nom']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>

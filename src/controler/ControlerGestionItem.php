@@ -369,61 +369,63 @@ class ControlerGestionItem{
 
                 $item = $this->recupererItem($args['token'], intval($args['id']));
 
-                //on filtre
-                $args['titre'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
-                $args['description']=filter_var($args['description'], FILTER_SANITIZE_STRING);
-                $args['prix'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
+                if ($item->reserverPar == null) { // pas possible si l'item est reservé
 
-                //on recupere l'image
+                    //on filtre
+                    $args['titre'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
+                    $args['description'] = filter_var($args['description'], FILTER_SANITIZE_STRING);
+                    $args['prix'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
 
-                $typeEntree = $rq->getParsedBody()['typeEntree'] ;
-                $imageChoisi = $rq->getParsedBody()['image'];
+                    //on recupere l'image
+
+                    $typeEntree = $rq->getParsedBody()['typeEntree'];
+                    $imageChoisi = $rq->getParsedBody()['image'];
 
 
-                switch ($typeEntree ) {
-                    case'predef' :
-                    {
-                        //on a choisi depuis la liste
-                        $newImg = $imageChoisi;
+                    switch ($typeEntree) {
+                        case'predef' :
+                        {
+                            //on a choisi depuis la liste
+                            $newImg = $imageChoisi;
 
-                        $this->supprimerImage($item);
+                            $this->supprimerImage($item);
 
-                        break;
+                            break;
+                        }
+                        case "url":
+                        {
+                            //on fourni une url
+                            $newImg = filter_var($rq->getParsedBody()['urlImg'], FILTER_SANITIZE_URL);
+
+                            $this->supprimerImage($item);
+
+                            break;
+                        }
+                        case "rien":
+                        {
+                            // on demande de ne pas changer
+                            $newImg = $item->img;
+                            break;
+                        }
+                        case "vider":
+                        {
+                            $newImg = 'no-image.png';
+                            $this->supprimerImage($item);
+                            break;
+                        }
+                        default:
+                        {
+                            throw new \Exception("Etat de programme interdit");
+                        }
                     }
-                    case "url":
-                    {
-                        //on fourni une url
-                        $newImg = filter_var($rq->getParsedBody()['urlImg'], FILTER_SANITIZE_URL);
 
-                        $this->supprimerImage($item);
+                    $args['image'] = $newImg;
 
-                        break;
-                    }
-                    case "rien":
-                    {
-                        // on demande de ne pas changer
-                        $newImg = $item->img;
-                        break;
-                    }
-                    case "vider":
-                    {
-                        $newImg = 'no-image.png';
-                        $this->supprimerImage($item);
-                        break;
-                    }
-                    default:
-                    {
-                        throw new \Exception("Etat de programme interdit");
-                    }
+                    //plus l'image
+
+
+                    $this->modifierItemInBDD($item, $args);
                 }
-
-                $args['image'] = $newImg;
-
-                //plus l'image
-
-
-
-                $this->modifierItemInBDD($item, $args);
                 $rs = $rs->withRedirect($this->container->router->pathFor('afficherItem', ['token'=>$item->liste->token_edition , 'id'=>$item->id] ));
             } else {
 
@@ -431,6 +433,7 @@ class ControlerGestionItem{
                 $tab = array("item"=>$item);
                 $rs->getBody()->write($vue->render(4, $tab));
             }
+
 
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
