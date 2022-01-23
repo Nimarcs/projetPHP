@@ -250,6 +250,19 @@ $app->get('/listesCreateur/{login}[/]', function (Request $rq, Response $rs, arr
     return $controleur->afficherListesCreateur($rq, $rs, $args);
 })->setName('affichageListesCreateur');
 
+/**
+ * Fonction 27, supression d'un compte
+ * @author Guillaume Renard
+ */
+$app->get('/modificationCompte/supression[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->supprimerCompte($rq, $rs, $args);
+})->setName('supprimerCompte');
+$app->post('/modificationCompte/supression[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionCompte($container);
+    return $controleur->supprimerCompte($rq, $rs, $_POST);
+})->setName('supprimerCompte');
+
 
 /**
  * Fonction 28, Joindre des listes à son compte

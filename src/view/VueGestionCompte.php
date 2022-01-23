@@ -137,6 +137,9 @@ END;
         
         <button type="submit" class="btn btn-primary" >Sauvegarder les modifications</button>
     </form>
+      <form action="{$this->container->router->pathFor('supprimerCompte')}" method="get"> 
+            <button type="submit" class="btn btn-primary">Supprimer votre compte</button><br>
+        </form>
 </div>
 
 END;
@@ -174,6 +177,35 @@ END;
         return $html;
     }
 
+
+    /**
+     * Fonction 27
+     * Affichage pour supprimer un compte ou non
+     * @author Guillaume Renard
+     */
+    private function afficherSupressionCompte():string{
+        $html= <<<END
+            <div class="block-heading">
+                        <h2 class="text-info">Supression d'un compte</h2>
+            </div>
+            <div class="formulaire">
+            <form action="" method="post">
+            
+                <label for="suppression compte" class="form-label">Etes-vous vraiment sûre de vouloir suprimer votre compte, </label><br> 
+                <label for="oui" class="form-label">Oui</label>
+                <input type="radio" value="0" class="form-control" name="supr" placeholder="" required >
+                 <label for="non" class="form-label">Non</label>
+                <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br> 
+                
+                <button type="submit" class="btn btn-primary"  >
+                   Valider
+                </button>
+            </form>
+        </div>
+END;
+        return $html;
+    }
+
     /**
      * @param $selecteur
      * @param null $args1
@@ -197,6 +229,10 @@ END;
             }
             case 4 :  {
                 $content = $this->htmlModificationMotDePasse();
+                break;
+            }
+            case 5 : {
+                $content=$this->afficherSupressionCompte();
                 break;
             }
         }

@@ -7,6 +7,8 @@ namespace mywishlist\controler;
 // IMPORTS
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use mywishlist\modele\Compte;
+use mywishlist\modele\Item;
+use mywishlist\modele\Liste;
 use mywishlist\view\VueGestionCompte;
 use mywishlist\view\VueRender;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -270,6 +272,42 @@ class ControlerGestionCompte
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+
+
+
+    public function supprimerCompte(Request $rq, Response $rs, array $args) : Response {
+        try {
+            $vue = new VueGestionCompte($this->container);
+
+            if ($rq->isPost() && sizeof($args) == 1) {
+
+                if( $args["supr"]==0){
+                    $log= ",".$_SESSION['login'].",";
+                    $listes= Liste::query()->where('login', '=', $log)->get();
+                    foreach ($listes as $liste){
+                        Item::query()->where('liste_id', '=', $liste->no)->delete();
+                    }
+
+                    Liste::query()->where('login', '=', $log)->delete();
+
+                    Compte::query()->where('login','=',$log)->delete();
+                    $this->supprimerSessionConnexion();
+                    $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+                } else {
+                    $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
+                }
+
+
+            } else {
+                $rs->getBody()->write($vue->render(5));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>" . $e->getMessage() . "<br>" . $e->getTrace()));
         }
         return $rs;
     }
