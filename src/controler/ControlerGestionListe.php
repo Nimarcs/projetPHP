@@ -60,11 +60,11 @@ class ControlerGestionListe
 
             } else {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le token de la liste...<br>")));
+                $rs->getBody()->write($vue->render($vue->htmlErreur("<br><br><div class='block-heading'><h2>Erreur dans le token de la liste...</h2></div><br>")));
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'affichage de la liste...<br>".$e->getMessage()."<br>".$e->getTrace())));
+            $rs->getBody()->write($vue->render($vue->htmlErreur("<br><br><div class='block-heading'><h2>Erreur dans l'affichage de la liste...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace())));
         }
         return $rs;
     }
@@ -120,7 +120,7 @@ class ControlerGestionListe
             } else throw new \Exception("<div class='block-heading'>Vous devez être connecté !</div>");
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes personnelles...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans l'affichage des listes personnelles...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -150,7 +150,7 @@ class ControlerGestionListe
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans l'envoie de message dans la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans l'envoie de message dans la liste...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -208,7 +208,7 @@ class ControlerGestionListe
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la creation de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la creation de la liste...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -266,7 +266,7 @@ class ControlerGestionListe
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la modification de la liste...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -310,7 +310,7 @@ class ControlerGestionListe
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>" . $e->getMessage() . "<br>" . $e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la modification de la liste...</h2></div><br>" . $e->getMessage() . "<br>" . $e->getTrace()));
         }
         return $rs;
     }
@@ -329,7 +329,7 @@ class ControlerGestionListe
             $rs->getBody()->write($vue->render(2, $listes));
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans l'affichage des listes publiques...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -362,7 +362,7 @@ class ControlerGestionListe
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes publiques...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans l'affichage des listes publiques...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
         }
         return $rs;
     }
@@ -408,7 +408,7 @@ class ControlerGestionListe
 
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la creation de la liste...<br>" . $e->getMessage()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la creation de la liste...</h2></div><br>" . $e->getMessage()));
         }
         return $rs;
     }
