@@ -140,10 +140,9 @@ END;
     public function htmlAfficherUnItem( array $args) : String
     {
         $i = $args['item'];
-
-
+        
         //si la date d'échéance est pas passé
-        if ($i->liste->expiration < date('YYYY-MM-DD')) {
+        if ($i->liste->expiration >= date('Y-m-d')) {
             //la vision du propriétaire change
 
             //on check s'il est le propriétaire
@@ -162,7 +161,8 @@ END;
 
                 //on change l'affichage de la reservation si c'est le propriétaire
                 if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
-                else $texteReservation = "L'item n'est pas réservé";
+                    else $texteReservation = "L'item n'est pas réservé";
+
 
                 //sinon
             } else {
