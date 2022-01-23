@@ -210,7 +210,7 @@ class ControlerGestionItem{
 
             if ($token == null) {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render("Erreur : aucun token fourni"));
+                $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur : aucun token fourni</h2></div><br>"));
                 return $rs;
             }
 
@@ -218,7 +218,7 @@ class ControlerGestionItem{
             $liste = $this->recupererListeAvecTokenCreation($token);
             if ($liste == null) {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render("Erreur la liste n'existe pas"));
+                $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur la liste n'existe pas</h2></div><br>"));
                 return $rs;
             }
 
@@ -316,7 +316,7 @@ class ControlerGestionItem{
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans la creation de l'item...<br>".$e->getMessage()."<br>".$e->getTrace())));
+            $rs->getBody()->write($vue->render($vue->htmlErreur("<br><br><div class='block-heading'><h2>Erreur dans la creation de l'item...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace())));
         }
         return $rs;
     }
@@ -376,7 +376,7 @@ class ControlerGestionItem{
             //erreur
             if ($item == null) {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render("<p>Erreur, item non trouver, verifier le token</p>"));
+                $rs->getBody()->write($vue->render('<br><br><div class="block-heading"><h2>Erreur item non trouvé</h2></div><br>'));
                 return $rs;
             }
 
@@ -456,7 +456,7 @@ class ControlerGestionItem{
 
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la modification de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la modification de l'item...</h2><br>".$e->getMessage()."<br>".$e->getTrace()));
 
         }
         return $rs;
@@ -495,7 +495,7 @@ class ControlerGestionItem{
             //erreur
             if ($item == null) {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render("<p>Erreur, item non trouver, verifier le token</p>"));
+                $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur, item non trouver, vérifier le token</h2></div><br>"));
                 return $rs;
             }
 
@@ -515,7 +515,7 @@ class ControlerGestionItem{
             //erreur
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la modification de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans la suppresion de l'item...</h2><br>".$e->getMessage()."<br>".$e->getTrace()));
 
         }
         return $rs;
