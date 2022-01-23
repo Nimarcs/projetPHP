@@ -121,21 +121,27 @@ END;
         $num = 1;
         foreach ($i as $itemCurr) {
 
+            //reservation
             if ($itemCurr->reserverPar == null) $reserver = 'état : disponible';
             else $reserver = 'état : reservée';
-            if ($itemCurr->img == "NULL") $lienImage = "{$this->container->router->pathFor('accueil')}assets/gift1.jpg";
-            else $lienImage = "{$this->container->router->pathFor('accueil')}img/{$itemCurr->img}";
+
+            //img
+            if (filter_var($itemCurr['img'], FILTER_VALIDATE_URL)){
+                $urlImg = $itemCurr['img'];
+            } else{
+                $urlImg ="{$this->container->router->pathFor('accueil')}img/{$itemCurr['img']}";
+            }
 
             $res .= <<<END
                 <div class="row align-items-center">
-            <div class="col-md-6Img"><img class="img-thumbnail imgItem" src=$lienImage  /></div>
+            <div class="col-md-6Img"><img class="img-thumbnail imgItem" src=$urlImg /></div>
             <div class="col-md-6Texte">
                 <h3>$num. {$itemCurr->nom}</h3>
                 <form action="{$this->container->router->pathFor('afficherItem', ['token' => $tokenL, 'id' => $itemCurr->id])}" method="get">
                     <button class="btn btn-primary" type="submit">AFFICHER ITEM</button>
                 </form><br>
                 <div class="getting-started-info">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <p>{$itemCurr->descr}</p>
                 </div>
                 <p>{$reserver}</p>
             </div>

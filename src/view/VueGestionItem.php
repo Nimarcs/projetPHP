@@ -75,6 +75,17 @@ class VueGestionItem
                     $options
                 </select>
                 
+                <br>
+                <p><strong>OU</strong></p>
+                
+                <input type="radio" name="typeEntree" value="url" id="urlImg" >
+                <label for="urlImg">Entrez l'url d'une image :</label>
+                <br>
+
+                <input type="url" name="urlImg" class="form-control"><br>
+                
+                
+                
                 <input type="hidden" name="token" value="{$arg['liste']->token_edition}">
                 <br><br>
                 
@@ -177,6 +188,13 @@ END;
             $url = "<p>Lien externe :<a href='$i->url'>$i->url</a></p>";
         } else $url = "";
 
+        //img
+        if (filter_var($i['img'], FILTER_VALIDATE_URL)){
+            $urlImg = $i['img'];
+        } else{
+            $urlImg ="{$this->container->router->pathFor('accueil')}img/{$i['img']}";
+        }
+
         //html
         return <<<END
             <div class="block-heading">
@@ -188,7 +206,7 @@ END;
             prix : <strong>{$i['tarif']}</strong>
             $url
         </p>
-        <img class="imgItem img-thumbnail" src="{$this->container->router->pathFor('accueil')}img/{$i['img']}"
+        <img class="imgItem img-thumbnail" src="$urlImg" >
         <br>
         <div class="reservation">
             $texteReservation

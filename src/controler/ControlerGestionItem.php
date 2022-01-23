@@ -236,36 +236,55 @@ class ControlerGestionItem{
                 $fichiers = $rq->getUploadedFiles();
                 $fichier = $fichiers['fichier'];
                 //on verifie s'il y a un fichier
-                if ($typeEntree == 'predef') {
-                    //pas de fichier
-
-                    //on cree l'item
-                    $item = $this->ajouterNouvelItemInBDD($args, $imageChoisi);
-
-                } else {
-                    if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK){
-                        //pas d'image
-                        $this->ajouterNouvelItemInBDD($args, 'no-image.png');
-                    } else {
-
-                        //s'il y a un fichier
-                        $nomImg = 'temp';
+                switch ($typeEntree ){
+                    case'predef' :
+                    {
+                        //pas de fichier
 
                         //on cree l'item
-                        $item = $this->ajouterNouvelItemInBDD($args, $nomImg);
+                        $this->ajouterNouvelItemInBDD($args, $imageChoisi);
+                        break;
+                    }
+                    case "url":
+                    {
+                        //on fourni une url
+                        $urlImg = filter_var($rq->getParsedBody()['urlImg'], FILTER_SANITIZE_URL);
+                        $this->ajouterNouvelItemInBDD($args, $urlImg);
 
-                        //on recupere l'extension du fichier
-                        $nomFichier = (explode(".", $fichier->getClientFilename()));
-                        $extension = $nomFichier[array_key_last($nomFichier)];
+                        break;
+                    }
+                    case "file" :
+                    {
+                        //on fourni un fichier
 
-                        //on met l'image au bon endroit
-                        $nomImg = "custom" . DIRECTORY_SEPARATOR . $nom . $item->id . "." . $extension;
-                        $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
-                        $fichier->moveTo($route);
+                        if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK) {
+                            //pas d'image
+                            $this->ajouterNouvelItemInBDD($args, 'no-image.png');
+                        } else {
 
-                        //on redefini le bon nom de l'image
-                        $item->img = $nomImg;
-                        $item->save();
+                            //s'il y a un fichier
+                            $nomImg = 'temp';
+
+                            //on cree l'item
+                            $item = $this->ajouterNouvelItemInBDD($args, $nomImg);
+
+                            //on recupere l'extension du fichier
+                            $nomFichier = (explode(".", $fichier->getClientFilename()));
+                            $extension = $nomFichier[array_key_last($nomFichier)];
+
+                            //on met l'image au bon endroit
+                            $nomImg = "custom" . DIRECTORY_SEPARATOR . $nom . $item->id . "." . $extension;
+                            $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
+                            $fichier->moveTo($route);
+
+                            //on redefini le bon nom de l'image
+                            $item->img = $nomImg;
+                            $item->save();
+                        }
+                        break;
+                    }
+                    default: {
+                        throw new \Exception("Etat de programme interdit");
                     }
                 }
 
