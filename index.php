@@ -89,6 +89,20 @@ $app->post('/reserverItem/{token}/{id}[/]', function (Request $rq, Response $rs,
     return $controleur->reserverItem($rq, $rs, $_POST);
 })->setName('reserverItem');
 
+/**
+ * Fonctionnalité 5, ajout d'un message sur une liste
+ * @author Mathieu Vinot
+ */
+
+$app->get('/posterUnMessage/{token}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->posterUnMessage($rq, $rs, $args);
+})->setName('posterUnMessage');
+$app->post('/posterUnMessage/{token}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionListe($container);
+    return $controleur->posterUnMessage($rq, $rs, $_POST);
+})->setName('posterUnMessage');
+
 
 /**
  * Fonction 6, créer une liste

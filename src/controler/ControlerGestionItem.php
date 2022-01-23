@@ -435,8 +435,15 @@ class ControlerGestionItem{
                 $rs = $rs->withRedirect($this->container->router->pathFor('afficherItem', ['token'=>$item->liste->token_edition , 'id'=>$item->id] ));
             } else {
 
-                $tab = array("item"=>$item);
-                $rs->getBody()->write($vue->render(4, $tab));
+                if($item==null){
+                    $vue = new VueRender($this->container);
+                    $rs->getBody()->write($vue->render('<br><br><div class="block-heading"><h2>Erreur vous ne pouvez pas modifier cet Item</h2></div><br>'));
+
+                } else {
+                    $tab = array("item"=>$item);
+                    $rs->getBody()->write($vue->render(4, $tab));
+                }
+
             }
 
 

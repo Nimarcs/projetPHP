@@ -91,29 +91,29 @@ END;
 
         $val = isset($_SESSION['login']);
         if ($val==0) {
-            $txt = '<p><a href='.$this->container->router->pathFor("creationCompte").'>Se creer un compte</a></p>
+            $txt = '<p><a href='.$this->container->router->pathFor("creationCompte").'>Se créer un compte</a></p>
                     <p><a href='.$this->container->router->pathFor("connectionCompte").'>Se connecter</a></p>
-                    <p><a href='.$this->container->router->pathFor("creationListe").'>Creer une nouvelle liste</a></p>';
+                    <p><a href='.$this->container->router->pathFor("creationListe").'>Créer une nouvelle liste</a></p>';
         } else {
             $txt = <<<END
 <p> Bonjour a toi, {$_SESSION["login"]}</p>
 <p><a href={$this->container->router->pathFor("afficherListePerso")}>Afficher ses listes personnelles</a></p>
-<p><a href={$this->container->router->pathFor("creationListe")}>Creer une nouvelle liste</a></p>
+<p><a href={$this->container->router->pathFor("creationListe")}>Créer une nouvelle liste</a></p>
 <p>Ajouter une liste dans les listes perso : <form action="{$this->container->router->pathFor('ajouterProprietaire')}" method="post"><input type="text" size="50" name="token" placeholder="notez votre token d'édition ici" autocomplete="off" required> <button type="submit" class="btn btn-primary">Ajouter</button></form></p>
 <p><a href={$this->container->router->pathFor("modificationCompte")}>Modifier les informations du compte</a></p>
-<p><a href={$this->container->router->pathFor("deconectionCompte")}>Se deconnecter</a></p>
+<p><a href={$this->container->router->pathFor("deconectionCompte")}>Se déconnecter</a></p>
 END;
         }
 
         $html = <<<END
                     <div class="block-heading">
                         <h2 class="text-info">Bienvenue</h2>
-                        <p>Bienvenue sur notre projet PHP de 3ème semestre.<br>Crée votre liste et accès à vos listes et réserver les items ! Où encore modifier vos items de vos listes pour créer des superbes listes.<br><br></p>
+                        <p>Bienvenue sur notre projet PHP de 3ème semestre.<br>Créez votre liste et accéder à vos listes et réserver les items ! Ou encore modifier vos items de vos listes pour créer des superbes listes.<br><br></p>
                     </div>
                     <div class="row align-items-center">
                         <div class="col-md-6ImgAccueil"><img class="img-thumbnail" src="assets/img/gift1.jpg"></div>
                             <div class="col-md-6">
-                                <h3>Envie d'avoir des cadeaux qui vous plaisent ?<br>A vous de jouer !</h3>
+                                <h3>Envie d'avoir des cadeaux qui vous plaisent ?<br>À vous de jouer !</h3>
                                 <div class="getting-started-info">
                                     <p><a href={$this->container->router->pathFor("affichageListesPublique")}>Afficher toutes les listes publiques</a></p>
                                     {$txt}

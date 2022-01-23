@@ -173,13 +173,13 @@ END;
     <button type="submit" class="btn btn-primary">Réserver l'item</button>
 </form>
 END;
-                else $texteReservation = "L'item est reserver par : {$i->reserverPar}";
+                else $texteReservation = "L'item est reservé par : {$i->reserverPar}";
             }
 
             //si la date est passé
         } else {//l'affichage est le meme pour tous le monde
-            if ($i->reserverPar != null) $texteReservation = "L'item étais reservé par {$i->reserverPar}";
-            else $texteReservation = "L'item n'étais pas reservé";
+            if ($i->reserverPar != null) $texteReservation = "L'item était reservé par {$i->reserverPar}";
+            else $texteReservation = "L'item n'était pas reservé";
         }
 
         //boutons suppression et modification
@@ -298,11 +298,11 @@ END;
             $form = <<<END
             <p>l'item n'est pas reservé</p>
             <form action="" method="post">     
-                <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
+                <label for="reservateur">Nom avec lequel vous voulez réserver :</label>
                 <input type="text" name="reservateur" maxlength="50" placeholder="nom" size="50" value="$login" required autofocus>
                 <input type="hidden" name="token" value="{$args['token']}" required>
                 <input type="hidden" name="id" value="{$args['id']}" required><br>
-                <label for="memoriser">Enregister mon nom pour les prochaines fois : </label>
+                <label for="memoriser">Enregistrer mon nom pour les prochaines fois : </label>
                 <input type="checkbox" name="memoriser"><br>
                 <label for="message">Un message à ajouter ? </label>
                 <input type="text" name="message" maxlength="50" size="50"><br>
@@ -311,13 +311,13 @@ END;
                 </button>
             </form>
 END;
-        else $form = "<p>l'item est reserver par {$args['reserverPar']}</p>";
+        else $form = "<p>l'item est réservé par {$args['reserverPar']}</p>";
 
 
         //on renvoie la page complete
         return <<<END
             <div class="block-heading">
-                        <h2 class="text-info">Reserver l'item "{$args['nom']}" ?</h2>
+                        <h2 class="text-info">Réserver l'item "{$args['nom']}" ?</h2>
             </div>
         <div class="formulaire">
             $form
@@ -385,7 +385,7 @@ END;
                 <p><strong>OU</strong></p>
                 
                 <input type="radio" name="typeEntree" value="predef" id="predef">
-                <label for="predef">Choisir une image predéfinie</label>
+                <label for="predef">Choisir une image prédéfinie</label>
                 <br>
                 <label for="image">Choisissez une image:</label>
                 <select id="images" name="image">

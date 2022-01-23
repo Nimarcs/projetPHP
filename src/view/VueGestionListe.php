@@ -37,7 +37,7 @@ class VueGestionListe
      * @param $isTokenEdition bool est ce que le token d'edition a été utilisé
      * @return string html a afficher
      *
-     * @author Mathieu Vinot (lecture)
+     * @author Mathieu Vinot (lecture et les messages)
      * @author Marcus (fusion des deux fonctionnalités (1 et 1bis))
      * @author Lucas Weiss (modification)
      * @author Guillaume Renard (modifcation)
@@ -58,20 +58,21 @@ class VueGestionListe
         else $public = 'La liste est actuellement privée.';
 
         if ($isTokenEdition){
+            $lesMessages = "";
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
 <div id="boutonModificationListe"
     <label for="partage">PARTAGER LA LISTE :</label> <input type="text" name="partage" value={$_SERVER['HTTP_HOST']}{$this->container->router->pathFor('accueil')}liste/${liste['token_lecture']} disabled="disabled" size="100">
-    <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
+    <form action="{$this->container->router->pathFor('modifierListe', ['token_edition' => $liste['token_edition']])}" method="get">
         <button class="btn btn-primary" type="submit"> MODIFIER LISTE</button>
     </form>
-    <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $liste['token_edition']])}" method="get"> 
+    <form action="{$this->container->router->pathFor('suprimerListe', ['token_edition' => $liste['token_edition']])}" method="get">
         <button class="btn btn-primary" type="submit"> SUPPRIMER LISTE</button>
     </form>
 </div>
 END;
             $boutonAjouterItem = <<<END
-<form action="{$this->container->router->pathFor('newItem', ['token' => $liste['token_edition']])}" method="get"> 
+<form action="{$this->container->router->pathFor('newItem', ['token' => $liste['token_edition']])}" method="get">
     <button type="submit" class="btn btn-primary"> AJOUTER ITEM</button>
 </form>
 END;
@@ -79,6 +80,24 @@ END;
         } else{
             $boutonsEdition ="";
             $boutonAjouterItem ="";
+            $log = $_SESSION['login'];
+            if ($log == null){
+                $log = 'anonyme';
+            }
+            $lesMessages = <<<END
+<h3>Messages des autres participants : </h3><br>
+{$liste['messages']}
+<form action="{$this->container->router->pathFor('posterUnMessage', ['token' => $liste['token_lecture']])}" method="post">
+                <input type="hidden" name="token" value="{$liste['token_lecture']}">
+                <input type="hidden" name="login" value="$log">
+                <label for="nom" class="form-label">Ajouter un message : </label>
+                <input type="text" value=  "" class="form-control" name="message" autocomplete="off" required maxlength="100"><br>
+                <button type="submit" class="btn btn-primary" >
+                   Envoyer
+                </button>
+            </form>
+END;
+
         }
 
         if ($liste->login == "anonyme") $createur = "anonyme";
@@ -92,13 +111,13 @@ END;
                     Créer par {$createur}.<br>Expire le {$liste['expiration']}.<br>$public
                     </p>
             </div>
-                <p>Token: <input type="text" size="80" value="{$liste['token_lecture']}" disabled="disabled"></p>
-                <div class="boite-liste"'>
-                    $boutonsEdition
-                    $items
-                    
-                    $boutonAjouterItem
-                </div>
+            <p>Token: <input type="text" size="80" value="{$liste['token_lecture']}" disabled="disabled"></p>
+            <div class="boite-liste"'>
+                $boutonsEdition
+                $items
+                
+                $boutonAjouterItem
+                $lesMessages
             </div>
             <br><br>
 END;
@@ -169,7 +188,7 @@ END;
             <form action="" method="post">
                 <label for="titre" class="form-label">Titre</label>
                 <input type="text" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
-                
+
                 <label for="desc" class="form-label">Description</label>
                 <input type="text" class="form-control" name="description" placeholder="" required><br>
 
@@ -207,19 +226,19 @@ END;
             <form action="" method="post">
                 <label for="titre" class="form-label">Modifier le titre</label>
                 <input type="text" value=  "${l['titre']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
-                
+
                 <label for="desc" class="form-label">Modifier la description</label>
                 <input type="text" value="{$l['description']}" class="form-control" name="description" placeholder="" required><br>
 
                 <label for="exp" class="form-label">Modifier la date limite</label>
-                <input type="date" value="{$l["expiration"]}" class="form-control" name="expiration" placeholder="" required><br> 
-                
-                <label for="listePublic" class="form-label">Mettre en public</label><br> 
+                <input type="date" value="{$l["expiration"]}" class="form-control" name="expiration" placeholder="" required><br>
+
+                <label for="listePublic" class="form-label">Mettre en public</label><br>
                 <label for="public" class="form-label">Oui</label>
                 <input type="radio" value="0" class="form-control" name="public" placeholder="" required $p_oui>
                  <label for="public" class="form-label">Non</label>
-                <input type="radio" value="1" class="form-control" name="public" placeholder="" required $p_non><br> 
-                
+                <input type="radio" value="1" class="form-control" name="public" placeholder="" required $p_non><br>
+
                 <button type="submit" class="btn btn-primary" value="{$l["token_edition"]}" name="token_edition">
                    Enregistrer les modifications
                 </button>
@@ -242,13 +261,13 @@ END;
             </div>
             <div class="formulaire">
             <form action="" method="post">
-            
-                <label for="listeSupression" class="form-label">Etes-vous vraiment sûre de vouloir suprimer cette liste</label><br> 
+
+                <label for="listeSupression" class="form-label">Êtes-vous vraiment sûr.e de vouloir suprimer cette liste</label><br>
                 <label for="supression" class="form-label">Oui</label>
                 <input type="radio" value="0" class="form-control" name="supr" placeholder="" required >
                  <label for="supression" class="form-label">Non</label>
-                <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br> 
-                
+                <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br>
+
                 <button type="submit" class="btn btn-primary" value="{$l["token_edition"]}" name="token_edition">
                    Valider
                 </button>
@@ -292,7 +311,7 @@ END;
     <a href="{$this->container->router->pathFor('afficherListe', ['token' => $l->token_lecture])}">
         <div class="titreDeListe">
             <h2>• ${l['titre']}</h2>
-        </div>                  
+        </div>
     </a>
 </div>
 <br><br>
@@ -337,7 +356,7 @@ END;
                     <p>
                         ${l['description']} <br>
                         --- Expire le ${l['expiration']}</li>
- 
+
                     </p>
                     <form action="{$this->container->router->pathFor('afficherListe', ['token' => $l['token_edition']])}" method="get">
                          <button class="btn btn-primary" type="submit">AFFICHER LA LISTE</button>
