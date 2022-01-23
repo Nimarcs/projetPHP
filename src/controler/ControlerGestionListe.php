@@ -270,7 +270,8 @@ class ControlerGestionListe
             if (sizeof($args) == 2) {
 
                 if($args["supr"]==0){
-
+                    $liste = $this->recupererListeEdition($args['token_edition']);
+                    Item::query()->where('liste_id', '=', $liste['no'])->delete();
                     Liste::query()->where('token_edition', '=', $args['token_edition'])->delete();
                 }
 

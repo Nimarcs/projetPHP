@@ -253,7 +253,7 @@ class ControlerGestionCompte
                         $c->save();
                         var_dump($args);
                         $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
-                    }else {
+                    } else {
                         $vue = new VueRender($this->container);
                         $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Il y a une différence entre les 2 nouveaux mot de passe.")));
                     }
