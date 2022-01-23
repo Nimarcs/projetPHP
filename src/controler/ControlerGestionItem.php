@@ -274,7 +274,7 @@ class ControlerGestionItem{
                             $extension = $nomFichier[array_key_last($nomFichier)];
 
                             //on met l'image au bon endroit
-                            $nomImg = "custom" . DIRECTORY_SEPARATOR . $nom . $item->id . "." . $extension;
+                            $nomImg = "custom" . DIRECTORY_SEPARATOR . str_replace(" ", "_" , $nom) . $item->id . "." . $extension;
                             $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $nomImg;
                             $fichier->moveTo($route);
 
@@ -283,6 +283,11 @@ class ControlerGestionItem{
                             $item->save();
                         }
                         break;
+                    }
+                    case "vider":
+                    {
+                        //on creer un item sans image
+                        $this->ajouterNouvelItemInBDD($args,  'no-image.png');
                     }
                     default: {
                         throw new \Exception("Etat de programme interdit");
@@ -370,7 +375,6 @@ class ControlerGestionItem{
                 $args['prix'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
 
                 //on recupere l'image
-                $newImg = 'no-image.png';
 
                 $typeEntree = $rq->getParsedBody()['typeEntree'] ;
                 $imageChoisi = $rq->getParsedBody()['image'];
@@ -382,6 +386,8 @@ class ControlerGestionItem{
                         //on a choisi depuis la liste
                         $newImg = $imageChoisi;
 
+                        $this->supprimerImage($item);
+
                         break;
                     }
                     case "url":
@@ -389,12 +395,20 @@ class ControlerGestionItem{
                         //on fourni une url
                         $newImg = filter_var($rq->getParsedBody()['urlImg'], FILTER_SANITIZE_URL);
 
+                        $this->supprimerImage($item);
+
                         break;
                     }
                     case "rien":
                     {
                         // on demande de ne pas changer
                         $newImg = $item->img;
+                        break;
+                    }
+                    case "vider":
+                    {
+                        $newImg = 'no-image.png';
+                        $this->supprimerImage($item);
                         break;
                     }
                     default:
@@ -443,21 +457,32 @@ class ControlerGestionItem{
         $i->save();
     }
 
-    /**
-     * Fonction 13
-     *
-     */
-    /*
-    private function supprimerImageItem(Request $rq, Response $rs, array $args){
-        try{
 
-        }catch (\Exception $e){
-            $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("Erreur dans la suppression de l'image de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+    /**
+     * Fonctionnalité 13
+     * Methode qui permet de supprimer l'image d'un item
+     * la supprime en local et de la bdd
+     *
+     * /!\ On ne supprime que les images customisé qui ont été upload
+     * les image prédéfinie ne peuvent être supprimée
+     *
+     * @param Item $item item dont on veut supprimer l'image
+     * @return bool revoie vrai si et seulement si la suppression a été effectué avec succès
+     */
+    private function supprimerImage(Item $item): bool {
+        $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $item->img ;
+        if (file_exists($route)){
+            $res = unlink($route);
+            if ($res) {
+                $item->img = 'no-image.png';
+                $res = $item->save();
+            }
+            return $res;
+        } else {
+            $item->img = 'no-image.png';
+            return $item->save();
         }
     }
-    */
-
 
 
 }

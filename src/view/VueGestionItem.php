@@ -58,6 +58,12 @@ class VueGestionItem
                 
                 <h4>Image</h4>
                 
+                <input type="radio" name="typeEntree" value="vider" id="vider" checked>
+                <label for="vider">Pas d'image</label>
+                <br>
+                <br>
+                <p><strong>OU</strong></p>
+                
                 <input type="radio" name="typeEntree" value="file" id="file" >
                 <label for="file">Choisir un fichier</label>
                 <br>
@@ -338,6 +344,12 @@ END;
                 <br> 
                 
                 <h4>Modifier image</h4>
+                
+                <input type="radio" name="typeEntree" value="vider" id="vider" checked>
+                <label for="vider">Pas d'image</label>
+                <br>
+                <br>
+                <p><strong>OU</strong></p>
                 
                 <input type="radio" name="typeEntree" value="rien" id="rien" checked>
                 <label for="rien">Ne pas changer l'image</label>
