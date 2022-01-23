@@ -292,10 +292,13 @@ class ControlerGestionListe
 
     /**
      * Fonction 21
-     * Methode privee qui retourne toutes les listes publique
+     * Methode privee qui retourne toutes les listes publique qui ne sont pas expirée
      */
     private function selectListePubliques() {
-        return Liste::query()->where('public', '=', 'true')->get();
+        return Liste::query()
+            ->where('public', '=', 'true')
+            ->where('expiration', '<' , date("YYYY-MM-DD"))
+            ->get();
 
     }
 

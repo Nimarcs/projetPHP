@@ -268,9 +268,13 @@ END;
                         <h2 class="text-info">Listes publique</h2>
             </div>
 END;
-
+        $pasVide = false;
         foreach ($listes as $l) {
+            $pasVide = true;
             $html = $html . $this->afficherEnLigneUneListe($l);
+        }
+        if (!$pasVide){
+            $html = $html . "<p>Il semble qu'il n'y a pas de liste publique actuellement !</p>";
         }
         return $html;
     }
