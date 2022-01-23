@@ -222,6 +222,13 @@ class ControlerGestionItem{
                 return $rs;
             }
 
+            //si la liste est expiré
+            if ($liste->expiration < date('Y-m-d')){
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("La liste est expirée, on ne peut plus ajouter d'item"));
+                return $rs;
+            }
+
             if ($rq->isPost()) {
 
                 //on ajoute la liste au arguments

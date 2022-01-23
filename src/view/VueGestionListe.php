@@ -83,11 +83,16 @@ END;
     </form>
 </div>
 END;
-            $boutonAjouterItem = <<<END
+            //si la liste est pas expirée
+            if ($liste->expiration >= date('Y-m-d')) {
+                $boutonAjouterItem = <<<END
 <form action="{$this->container->router->pathFor('newItem', ['token' => $liste['token_edition']])}" method="get">
     <button type="submit" class="btn btn-primary"> AJOUTER ITEM</button>
 </form>
 END;
+            } else {
+                $boutonAjouterItem ="";
+            }
 
         } else{
             $boutonsEdition ="";
