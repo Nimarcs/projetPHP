@@ -109,7 +109,10 @@ END;
      * @author Marcus Richier
      */
     private function getImageEnregistree():array{
-        $imgs = Item::query()->select('img')->where('img', 'not like', 'custom%')->groupBy("img")->get();
+        $imgs = Item::query()->select('img')
+            ->where('img', 'not like', 'custom%') //on evite les images cree manuellement
+            ->where('img', 'not like', '%/%') //on évite les liens
+            ->groupBy("img")->get();
         $res = [];
         foreach ($imgs as $img){
             if ($img->img != 'no-image.png') //valeur reserve pour quand aucune image n'est fournie
