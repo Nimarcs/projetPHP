@@ -145,6 +145,8 @@ END;
         if ($i->liste->expiration >= date('Y-m-d')) {
             //la vision du propriétaire change
 
+            //le texte des messages sont cachés
+            $texteMessage="";
             //on check s'il est le propriétaire
             $estProprietaire = false;
             if (isset($_COOKIE['listeCree'])) {
@@ -163,7 +165,6 @@ END;
                 if ($i->reserverPar != null) $texteReservation = "L'item est réservé";
                     else $texteReservation = "L'item n'est pas réservé";
 
-
                 //sinon
             } else {
 
@@ -180,6 +181,14 @@ END;
         } else {//l'affichage est le meme pour tous le monde
             if ($i->reserverPar != null) $texteReservation = "L'item était reservé par {$i->reserverPar}";
             else $texteReservation = "L'item n'était pas reservé";
+
+            //affichage message de l'item à la date échéante
+            if (( $i->message!=null)&& (isset($_SESSION['login']))) {
+                $texteMessage= <<<End
+ <div class="mb-3"><label class="form-label" for="message mis"><br>Message de la personne qui à réservé </label><input class="form-control" type="text" value="$i->message" disabled="disabled" size="100" maxlength="20"></div>
+End;
+
+            } else $texteMessage="";
         }
 
         //boutons suppression et modification
@@ -188,9 +197,6 @@ END;
             $boutonsEdit = <<<END
 <form action="{$this->container->router->pathFor('modifierItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
     <button type="submit" class="btn btn-primary">Modifier l'item</button>
-</form>
-<form action="{$this->container->router->pathFor('supprimerItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
-    <button type="submit" class="btn btn-primary">Supprimer l'item</button>
 </form>
 END;
 
@@ -223,6 +229,8 @@ END;
         <br>
         <div class="reservation">
             $texteReservation
+            <br>
+            $texteMessage
         </div>
         <form action="{$this->container->router->pathFor('afficherListe', ['token' => $args['token']])}" method="get"> 
             <button type="submit" class="btn btn-primary">Retourner à la liste</button>
@@ -263,16 +271,6 @@ END;
             case 4:
             {
                 $content = $this->htmlModifierUnItem($arg1);
-                break;
-            }
-            case 5:
-            {
-                $content = $this->htmlSupprimerUnItem($arg1);
-                break;
-            }
-            default :
-            {
-                throw new \Exception("Etat interdit");
             }
 
         }
@@ -298,11 +296,11 @@ END;
             $form = <<<END
             <p>l'item n'est pas reservé</p>
             <form action="" method="post">     
-                <label for="reservateur">Nom avec lequel vous voulez réserver :</label>
+                <label for="reservateur">Nom avec lequel vous voulez reserver :</label>
                 <input type="text" name="reservateur" maxlength="50" placeholder="nom" size="50" value="$login" required autofocus>
                 <input type="hidden" name="token" value="{$args['token']}" required>
                 <input type="hidden" name="id" value="{$args['id']}" required><br>
-                <label for="memoriser">Enregistrer mon nom pour les prochaines fois : </label>
+                <label for="memoriser">Enregister mon nom pour les prochaines fois : </label>
                 <input type="checkbox" name="memoriser"><br>
                 <label for="message">Un message à ajouter ? </label>
                 <input type="text" name="message" maxlength="50" size="50"><br>
@@ -311,13 +309,13 @@ END;
                 </button>
             </form>
 END;
-        else $form = "<p>l'item est réservé par {$args['reserverPar']}</p>";
+        else $form = "<p>l'item est reserver par {$args['reserverPar']}</p>";
 
 
         //on renvoie la page complete
         return <<<END
             <div class="block-heading">
-                        <h2 class="text-info">Réserver l'item "{$args['nom']}" ?</h2>
+                        <h2 class="text-info">Reserver l'item "{$args['nom']}" ?</h2>
             </div>
         <div class="formulaire">
             $form
@@ -385,7 +383,7 @@ END;
                 <p><strong>OU</strong></p>
                 
                 <input type="radio" name="typeEntree" value="predef" id="predef">
-                <label for="predef">Choisir une image prédéfinie</label>
+                <label for="predef">Choisir une image predéfinie</label>
                 <br>
                 <label for="image">Choisissez une image:</label>
                 <select id="images" name="image">
@@ -414,29 +412,6 @@ END;
 
 
         return $html;
-    }
-
-    /**
-     * Methode qui retourne le contenu de la page de confirmation de la suppression
-     * @author Marcus Richier
-     */
-    private function htmlSupprimerUnItem(array $arg1) : string
-    {
-        return <<<END
-<div class="block-heading">
-    <h2 class="text-info">Voulez vous vraiment supprimer l'item "{$arg1['item']->nom}" ?</h2>
-    <p>Cette action est irreversible</p>
-</div> 
-<form action="{$this->container->router->pathFor('supprimerItem', ['token' => $arg1['item']->liste->token_edition, 'id' => $arg1['item']->id])}" method="post"> 
-    <input type="hidden" value="{$arg1['item']->id}" name="id">
-    <input type="hidden" value="{$arg1['item']->liste->token_edition}" name="token">
-    <button type="submit" class="btn btn-primary">Confirmer</button>
-</form>
-<form action="{$this->container->router->pathFor('afficherItem', ['token' => $arg1['item']->liste->token_edition, 'id' => $arg1['item']->id])}" method="get"> 
-    <button type="submit" class="btn btn-primary">Retourner sur la page de l'item</button>
-</form>
-END;
-
     }
 
 }
