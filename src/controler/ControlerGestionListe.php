@@ -298,6 +298,7 @@ class ControlerGestionListe
         return Liste::query()
             ->where('public', '=', 'true')
             ->whereDate('expiration', '>' , date("Y-m-d"))
+            ->orderBy('expiration')
             ->get();
     }
 

@@ -68,3 +68,8 @@ html {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.boite-liste > a {
+    color: var(--bs-body-color);
+    text-decoration: none;
+}

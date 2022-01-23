@@ -92,11 +92,13 @@ END;
                     Créer par {$createur}.<br>Expire le {$liste['expiration']}.<br>$public
                     </p>
             </div>
-              <div class="boite-liste"'>
-                $boutonsEdition
-                $items
-                
-                $boutonAjouterItem
+                <p>Token: <input type="text" size="80" value="{$liste['token_lecture']}" disabled="disabled"></p>
+                <div class="boite-liste"'>
+                    $boutonsEdition
+                    $items
+                    
+                    $boutonAjouterItem
+                </div>
             </div>
             <br><br>
 END;
@@ -287,20 +289,13 @@ END;
     private function afficherEnLigneUneListe($l) : String {
         return <<<END
 <div class="boite-liste"'>
-                <div class="titreDeListe">
-                    <h2>${l['titre']}</h2>
-                </div>
-                    <p>
-                        ${l['description']} <br>
-                        --- Expire le ${l['expiration']}</li>
- 
-                    </p>
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='liste/${l['token_lecture']}';">
-                        AFFICHER LA LISTE
-                    </button>
-                    Token: <input type="text" size="80" value="{$l['token_lecture']}" disabled="disabled">
-            </div>
-            <br><br>
+    <a href="{$this->container->router->pathFor('afficherListe', ['token' => $l->token_lecture])}">
+        <div class="titreDeListe">
+            <h2>• ${l['titre']}</h2>
+        </div>                  
+    </a>
+</div>
+<br><br>
 END;
 
     }
