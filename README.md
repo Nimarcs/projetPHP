@@ -1,4 +1,4 @@
-Projet MyWishList
+# Projet MyWishList
 Ce projet est un site web qui permet de créer et de partager des wishlists, codés en php avec Slim et Eloquent.
 Voici les instructions pour pouvoir installer notre projet « MyWishList » sur votre ordinateur personnel.
 
@@ -19,7 +19,7 @@ Il faut donc accéder au fichier dbconfig.ini.txt qui est dans ce répertoire �
 4°) Fichier .htaccess
 Vérifiez bien que votre fichier .htaccess est bien présent dans votre projet.
 Si votre projet n’est pas dans la racine de votre serveur, veuillez décommenter la ligne :
-# RewriteBase /www/username0/mywishlist
+"# RewriteBase /www/username0/mywishlist"
 et veuillez remplacer “/www/username0/mywishlist” par le chemin d’accès relatif de votre projet sur votre serveur.
 
 5°) Jeu de données à éxécuter
