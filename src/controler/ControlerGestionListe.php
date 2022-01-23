@@ -104,23 +104,6 @@ class ControlerGestionListe
     }
 
     /**
-     * fonction 1.3
-     * Permet de récupérer la liste des items de la liste
-     *
-     * @param $idliste , id de la liste
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|null
-     *
-     * @author Mathieu Vinot
-     */
-    private function recupererListeItem(int $idliste): ?Collection{
-        try {
-            return Item::query()->where('liste_id', '=', $idliste)->get();
-        } catch (ModelNotFoundException $e) {
-            return null;
-        }
-    }
-
-    /**
      * Fonction afficher listes personnels
      * @param $rq
      * @param $rs
