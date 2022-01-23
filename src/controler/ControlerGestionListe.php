@@ -347,27 +347,6 @@ class ControlerGestionListe
     }
 
     /**
-     * Fonction 26
-     * Métjo
-     */
-    public function afficherListesCreateur(Request $rq, Response $rs, array $args): Response{
-        try {
-            $vue = new VueGestionListe($this->container);
-            $liste = $this->recupererListesLogin($args['login']);
-            if ($liste != null) {
-                $rs->getBody()->write($vue->render(6, $liste));
-            } else {
-                $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans le login...<br>")));
-            }
-        } catch (\Exception $e) {
-            $vue = new VueRender($this->container);
-            $rs->getBody()->write($vue->render("<br><br><div class='block-heading'><h2>Erreur dans l'affichage des listes publiques...</h2></div><br>".$e->getMessage()."<br>".$e->getTrace()));
-        }
-        return $rs;
-    }
-
-    /**
      * Fonction 26.2
      * Permet de récupérer les listes d'une personne
      *

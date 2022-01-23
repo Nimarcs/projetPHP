@@ -270,15 +270,6 @@ $app->get('/listes', function (Request $rq, Response $rs, array $args) use ($con
 
 
 /**
- * Fonction 26, afficher les listes du créateur
- * @author Mathieu Vinot
- */
-$app->get('/listesCreateur/{login}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
-    $controleur = new ControlerGestionListe($container);
-    return $controleur->afficherListesCreateur($rq, $rs, $args);
-})->setName('affichageListesCreateur');
-
-/**
  * Fonction 27, supression d'un compte
  * @author Guillaume Renard
  */
