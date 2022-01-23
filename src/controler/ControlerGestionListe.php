@@ -126,6 +126,50 @@ class ControlerGestionListe
     }
 
     /**
+     * Fonction 5
+     * @author Mathieu Vinot
+     */
+
+    public function posterUnMessage($rq, $rs, array $args):Response{
+        try {
+            $vue = new VueGestionListe($this->container);
+
+            if ($rq->isPost()) {
+                //on est dans un post
+                //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
+                $liste = $this->recupererListeLecture($args['token']);
+
+                $this->messageListeInBDD($liste, $args);
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token'=>$args['token']]));
+            } else {
+                //on est dans le get
+
+                //on prend les informations de la liste de la page avec la méthode vue dans Fonction 1
+                $liste = $this->recupererListeLecture($args['token']);
+                $rs->getBody()->write($vue->render(2, $liste));
+            }
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans l'envoie de message dans la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
+        }
+        return $rs;
+    }
+
+
+    /**
+     * Fonction 5
+     * Methode privee qui permet d'ajouter un message dans la liste au sein de la BDD grâce à la méthode save()
+     * @author Mathieu Vinot
+     */
+
+    private function messageListeInBDD(Liste $l, array $args):void {
+        $newMessage=$args['login'].' : '.filter_var($args['message'], FILTER_SANITIZE_STRING);
+        $l['messages'] .= "<p>$newMessage</p><br>";
+        $l->save();
+    }
+
+
+    /**
      * Fonction 6
      * Methode pour gérer la creation d'une liste
      *     GET: on obtient la page qui permet de créer une nouvelle liste

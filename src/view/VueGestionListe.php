@@ -37,7 +37,7 @@ class VueGestionListe
      * @param $isTokenEdition bool est ce que le token d'edition a été utilisé
      * @return string html a afficher
      *
-     * @author Mathieu Vinot (lecture)
+     * @author Mathieu Vinot (lecture et les messages)
      * @author Marcus (fusion des deux fonctionnalités (1 et 1bis))
      * @author Lucas Weiss (modification)
      * @author Guillaume Renard (modifcation)
@@ -58,6 +58,7 @@ class VueGestionListe
         else $public = 'La liste est actuellement privée.';
 
         if ($isTokenEdition){
+            $lesMessages = "";
             $boutonsEdition = <<<END
 <p> Vous êtes dans la partie edition de votre liste, pour aller sur la page que vous devez partager <a href="{$this->container->router->pathFor('afficherListe', ['token' => $liste['token_lecture']])}">cliquez ici</a> ou copier le lien ci-dessous</p>
 <div id="boutonModificationListe"
@@ -79,6 +80,20 @@ END;
         } else{
             $boutonsEdition ="";
             $boutonAjouterItem ="";
+            $lesMessages = <<<END
+<h3>Messages des autres participants : </h3><br>
+{$liste['messages']}
+<form action="{$this->container->router->pathFor('posterUnMessage', ['token' => $liste['token_lecture']])}" method="post">
+                <input type="hidden" name="token" value="{$liste['token_lecture']}">
+                <input type="hidden" name="login" value="{$_SESSION['login']}">
+                <label for="nom" class="form-label">Ajouter un message : </label>
+                <input type="text" value=  "" class="form-control" name="message" autocomplete="off" required maxlength="100"><br>      
+                <button type="submit" class="btn btn-primary" >
+                   Envoyer
+                </button>
+            </form>
+END;
+
         }
 
         if ($liste->login == "anonyme") $createur = "anonyme";
@@ -97,6 +112,7 @@ END;
                 $items
                 
                 $boutonAjouterItem
+                $lesMessages
             </div>
             <br><br>
 END;
