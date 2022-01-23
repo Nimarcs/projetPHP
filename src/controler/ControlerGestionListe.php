@@ -297,9 +297,8 @@ class ControlerGestionListe
     private function selectListePubliques() {
         return Liste::query()
             ->where('public', '=', 'true')
-            ->where('expiration', '<' , date("YYYY-MM-DD"))
+            ->whereDate('expiration', '>' , date("Y-m-d"))
             ->get();
-
     }
 
     /**
