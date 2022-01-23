@@ -80,12 +80,16 @@ END;
         } else{
             $boutonsEdition ="";
             $boutonAjouterItem ="";
+            $log = $_SESSION['login'];
+            if ($log == null){
+                $log = 'anonyme';
+            }
             $lesMessages = <<<END
 <h3>Messages des autres participants : </h3><br>
 {$liste['messages']}
 <form action="{$this->container->router->pathFor('posterUnMessage', ['token' => $liste['token_lecture']])}" method="post">
                 <input type="hidden" name="token" value="{$liste['token_lecture']}">
-                <input type="hidden" name="login" value="{$_SESSION['login']}">
+                <input type="hidden" name="login" value="$log">
                 <label for="nom" class="form-label">Ajouter un message : </label>
                 <input type="text" value=  "" class="form-control" name="message" autocomplete="off" required maxlength="100"><br>      
                 <button type="submit" class="btn btn-primary" >
