@@ -197,7 +197,7 @@ END;
                  <label for="non" class="form-label">Non</label>
                 <input type="radio" value="1" class="form-control" name="supr" placeholder="" required checked><br> 
                 
-                <button type="submit" class="btn btn-primary"  >
+                <button type="submit" class="btn btn-primary">
                    Valider
                 </button>
             </form>
