@@ -189,6 +189,9 @@ END;
 <form action="{$this->container->router->pathFor('modifierItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
     <button type="submit" class="btn btn-primary">Modifier l'item</button>
 </form>
+<form action="{$this->container->router->pathFor('supprimerItem', ['token' => $args['token'], 'id' => $args['id']])}" method="get"> 
+    <button type="submit" class="btn btn-primary">Supprimer l'item</button>
+</form>
 END;
 
         } else $boutonsEdit = "";
@@ -260,6 +263,16 @@ END;
             case 4:
             {
                 $content = $this->htmlModifierUnItem($arg1);
+                break;
+            }
+            case 5:
+            {
+                $content = $this->htmlSupprimerUnItem($arg1);
+                break;
+            }
+            default :
+            {
+                throw new \Exception("Etat interdit");
             }
 
         }
@@ -401,6 +414,29 @@ END;
 
 
         return $html;
+    }
+
+    /**
+     * Methode qui retourne le contenu de la page de confirmation de la suppression
+     * @author Marcus Richier
+     */
+    private function htmlSupprimerUnItem(array $arg1) : string
+    {
+        return <<<END
+<div class="block-heading">
+    <h2 class="text-info">Voulez vous vraiment supprimer l'item "{$arg1['item']->nom}" ?</h2>
+    <p>Cette action est irreversible</p>
+</div> 
+<form action="{$this->container->router->pathFor('supprimerItem', ['token' => $arg1['item']->liste->token_edition, 'id' => $arg1['item']->id])}" method="post"> 
+    <input type="hidden" value="{$arg1['item']->id}" name="id">
+    <input type="hidden" value="{$arg1['item']->liste->token_edition}" name="token">
+    <button type="submit" class="btn btn-primary">Confirmer</button>
+</form>
+<form action="{$this->container->router->pathFor('afficherItem', ['token' => $arg1['item']->liste->token_edition, 'id' => $arg1['item']->id])}" method="get"> 
+    <button type="submit" class="btn btn-primary">Retourner sur la page de l'item</button>
+</form>
+END;
+
     }
 
 }

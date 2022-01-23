@@ -65,7 +65,7 @@ class ControlerGestionItem{
             //cas où l'item n'existe pas
             } else {
                 $vue = new VueRender($this->container);
-                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
+                $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur l'item est introuvable...<br>")));
             }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
@@ -364,11 +364,16 @@ class ControlerGestionItem{
         try {
             $vue = new VueGestionItem($this->container);
 
+            //on recupère l'item
+            $item = $this->recupererItem($args['token'], intval($args['id']));
+            //erreur
+            if ($item == null) {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("<p>Erreur, item non trouver, verifier le token</p>"));
+                return $rs;
+            }
+
             if ($rq->isPost()) {
-
-                //on recupère l'item
-
-                $item = $this->recupererItem($args['token'], intval($args['id']));
 
                 if ($item->reserverPar == null) { // pas possible si l'item est reservé
 
@@ -430,7 +435,6 @@ class ControlerGestionItem{
                 $rs = $rs->withRedirect($this->container->router->pathFor('afficherItem', ['token'=>$item->liste->token_edition , 'id'=>$item->id] ));
             } else {
 
-                $item = $this->recupererItem($args['token'], intval($args['id']));
                 $tab = array("item"=>$item);
                 $rs->getBody()->write($vue->render(4, $tab));
             }
@@ -463,6 +467,58 @@ class ControlerGestionItem{
 
 
     /**
+     * Fontionnalité 10, supprimer un item
+     *
+     * @author Marcus Richier
+     */
+    public function supprimerItem(Request $rq, Response $rs, array $args) :Response
+    {
+        try {
+            $vue = new VueGestionItem($this->container);
+
+            //on recupère l'item
+            $item = $this->recupererItem($args['token'], intval($args['id']));
+            //erreur
+            if ($item == null) {
+                $vue = new VueRender($this->container);
+                $rs->getBody()->write($vue->render("<p>Erreur, item non trouver, verifier le token</p>"));
+                return $rs;
+            }
+
+            if ($rq->isPost()) {
+                //post
+
+                if ($item->reserverPar == null) { // pas possible si l'item est reservé
+                    $this->supprimerItemDansBDD($item);
+                }
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherListe', ['token'=>$item->liste->token_edition] ));
+            } else {
+                //get
+
+                $tab = array("item"=>$item);
+                $rs->getBody()->write($vue->render(5, $tab));
+            }
+            //erreur
+        } catch (\Exception $e) {
+            $vue = new VueRender($this->container);
+            $rs->getBody()->write($vue->render("Erreur dans la modification de l'item...<br>".$e->getMessage()."<br>".$e->getTrace()));
+
+        }
+        return $rs;
+    }
+
+
+    /**
+     * Methode qui permet de supprimer un item de la base de donnée
+     * @param Item $item a supprimer
+     */
+    private function supprimerItemDansBDD(Item $item) : void{
+        $this->supprimerImage($item);
+        $item->delete();
+    }
+
+
+    /**
      * Fonctionnalité 13
      * Methode qui permet de supprimer l'image d'un item
      * la supprime en local et de la bdd
@@ -474,7 +530,7 @@ class ControlerGestionItem{
      * @return bool revoie vrai si et seulement si la suppression a été effectué avec succès
      */
     private function supprimerImage(Item $item): bool {
-        $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . $item->img ;
+        $route = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . "custom " .DIRECTORY_SEPARATOR. $item->img ;
         if (file_exists($route)){
             $res = unlink($route);
             if ($res) {

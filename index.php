@@ -159,6 +159,20 @@ $app->post('/modifierItem/{token}/{id}[/]', function (Request $rq, Response $rs,
     return $controleur->modifierItem($rq, $rs, $_POST);
 })->setName('modifierItem');
 
+/**
+ * Fonction 10, supprimer un item
+ * @Author Marcus Richier
+ */
+
+$app->get('/supprimerItem/{token}/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->supprimerItem($rq, $rs, $args);
+})->setName('supprimerItem');
+$app->post('/supprimerItem/{token}/{id}[/]', function (Request $rq, Response $rs, array $args) use ($container): Response {
+    $controleur = new ControlerGestionItem($container);
+    return $controleur->supprimerItem($rq, $rs, $_POST);
+})->setName('supprimerItem');
+
 
 /**
  * Fonction 13, Supprimer une image d'un item
