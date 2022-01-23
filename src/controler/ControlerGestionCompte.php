@@ -179,17 +179,19 @@ class ControlerGestionCompte
         try {
             $vue = new VueGestionCompte($this->container);
 
+            if (isset($_SESSION['login'])) {
+                if ($rq->isPost() && sizeof($args) == 5) {
+                    $c = $this->recupererCompte($_SESSION['login']);
 
-            if ($rq->isPost() && sizeof($args) == 5) {
-                $c = $this->recupererCompte($_SESSION['login']);
+                    $this->modifierCompteInBDD($c, $args);
+                    $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+                } else {
+                    $com = $this->recupererCompte($_SESSION['login']);
 
-                $this->modifierCompteInBDD($c, $args);
-                $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
-            } else {
-                $com = $this->recupererCompte($_SESSION['login']);
+                    $rs->getBody()->write($vue->render(3, $com));
+                }
+            } else throw new \Exception("<div class='block-heading'>Vous devez être connecté pour pouvoir modifier votre compte !</div>");
 
-                $rs->getBody()->write($vue->render(3, $com));
-            }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la modification du compte...<br>".$e->getMessage()."<br>".$e->getTrace()));
@@ -243,32 +245,34 @@ class ControlerGestionCompte
         try {
             $vue = new VueGestionCompte($this->container);
 
+            if (isset($_SESSION['login'])) {
+                if ($rq->isPost() && sizeof($args) == 3) {
+                    $log= $_SESSION['login'];
+                    $psw=filter_var($args['anc_Mdp'], FILTER_SANITIZE_STRING);
+                    if ($this->mdpValide($log, $psw) == true) {
 
-            if ($rq->isPost() && sizeof($args) == 3) {
-                $log= $_SESSION['login'];
-                $psw=filter_var($args['anc_Mdp'], FILTER_SANITIZE_STRING);
-                if ($this->mdpValide($log, $psw) == true) {
+                        if($args['new_Mdp']===$args['conf_Mdp']){
+                            $c= $this->recupererCompte($log);
+                            $c->sel = password_hash(filter_var($args['new_Mdp'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
+                            $c->save();
+                            var_dump($args);
+                            $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
+                        } else {
+                            $vue = new VueRender($this->container);
+                            $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Il y a une différence entre les 2 nouveaux mot de passe.")));
+                        }
 
-                    if($args['new_Mdp']===$args['conf_Mdp']){
-                        $c= $this->recupererCompte($log);
-                        $c->sel = password_hash(filter_var($args['new_Mdp'], FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
-                        $c->save();
-                        var_dump($args);
-                        $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
                     } else {
                         $vue = new VueRender($this->container);
-                        $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Il y a une différence entre les 2 nouveaux mot de passe.")));
+                        $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Vous avez mis le mauvais mot de passe.")));
                     }
 
                 } else {
-                    $vue = new VueRender($this->container);
-                    $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur, la connexion n'a pas pu aboutir. Vous avez mis le mauvais mot de passe.")));
+                    $rs->getBody()->write($vue->render(4));
                 }
+            } else throw new \Exception("<div class='block-heading'>Vous devez être connecté pour modifier votre compte !</div>");
 
-            } else {
 
-                $rs->getBody()->write($vue->render(4));
-            }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>".$e->getMessage()."<br>".$e->getTrace()));
@@ -290,28 +294,31 @@ class ControlerGestionCompte
         try {
             $vue = new VueGestionCompte($this->container);
 
-            if ($rq->isPost() && sizeof($args) == 1) {
+            if (isset($_SESSION['login'])) {
+                if ($rq->isPost() && sizeof($args) == 1) {
 
-                if( $args["supr"]==0){
-                    $log= ",".$_SESSION['login'].",";
-                    $listes= Liste::query()->where('login', '=', $log)->get();
+                    if( $args["supr"]==0){
+                        $log= ",".$_SESSION['login'].",";
+                        $listes= Liste::query()->where('login', '=', $log)->get();
 
-                    foreach ($listes as $liste){
-                        Item::query()->where('liste_id', '=', $liste->no)->delete();
+                        foreach ($listes as $liste){
+                            Item::query()->where('liste_id', '=', $liste->no)->delete();
+                        }
+                        Liste::query()->where('login', '=', $log)->delete();
+                        Compte::query()->where('login','=',$log)->delete();
+
+                        //suppression de la session
+                        $this->supprimerSessionConnexion();
+                        $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
+                    } else {
+                        $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
                     }
-                    Liste::query()->where('login', '=', $log)->delete();
-                    Compte::query()->where('login','=',$log)->delete();
 
-                    //suppression de la session
-                    $this->supprimerSessionConnexion();
-                    $rs = $rs->withRedirect($this->container->router->pathFor('accueil'));
                 } else {
-                    $rs = $rs->withRedirect($this->container->router->pathFor('modificationCompte'));
+                    $rs->getBody()->write($vue->render(5));
                 }
+            } else throw new \Exception("<div class='block-heading'>Vous devez être connecté pour supprimer votre compte!</div>");
 
-            } else {
-                $rs->getBody()->write($vue->render(5));
-            }
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans la modification de la liste...<br>" . $e->getMessage() . "<br>" . $e->getTrace()));

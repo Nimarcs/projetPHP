@@ -117,7 +117,7 @@ class ControlerGestionListe
             if (isset($_SESSION['login'])) {
                 $listes = $this->recupererListesLogin($_SESSION['login']);
                 $rs->getBody()->write($vue->render(7, $listes));
-            } else throw new \Exception("Vous devez être connecté !");
+            } else throw new \Exception("<div class='block-heading'>Vous devez être connecté !</div>");
         } catch (\Exception $e) {
             $vue = new VueRender($this->container);
             $rs->getBody()->write($vue->render("Erreur dans l'affichage des listes personnelles...<br>".$e->getMessage()."<br>".$e->getTrace()));

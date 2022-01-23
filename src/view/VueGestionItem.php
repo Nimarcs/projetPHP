@@ -140,7 +140,7 @@ END;
     public function htmlAfficherUnItem( array $args) : String
     {
         $i = $args['item'];
-        
+
         //si la date d'échéance est pas passé
         if ($i->liste->expiration >= date('Y-m-d')) {
             //la vision du propriétaire change
