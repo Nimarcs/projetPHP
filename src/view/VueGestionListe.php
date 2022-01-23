@@ -261,7 +261,7 @@ END;
             <div class="formulaire">
             <form action="" method="post">
             
-                <label for="listeSupression" class="form-label">Etes-vous vraiment sûre de vouloir suprimer cette liste</label><br> 
+                <label for="listeSupression" class="form-label">Êtes-vous vraiment sûr.e de vouloir suprimer cette liste</label><br> 
                 <label for="supression" class="form-label">Oui</label>
                 <input type="radio" value="0" class="form-control" name="supr" placeholder="" required >
                  <label for="supression" class="form-label">Non</label>
