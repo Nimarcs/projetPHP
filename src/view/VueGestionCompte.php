@@ -42,25 +42,25 @@ class VueGestionCompte
     <p>Afin de créer un nouveau compte, veuillez remplir ce formulaire.</p>
     <form action="" method="post">
         <label for="NomUser">Login</label>
-        <input type="text" name="login" required maxlength="30" value="$lastPSEUDO"><br>
+        <input type="text" name="login" required maxlength="50" value="$lastPSEUDO"><br>
         
         <label for="Mdp">Mot de passe</label>
         <input type="password" name="psw" required maxlength="20"><br>
         
          <label for="Email">Email</label>
-        <input type="email" name="email" required maxlength="30"><br>
+        <input type="email" name="email" required maxlength="254"><br>
         
          <label for="DateNais">Date anniversaire</label>
-        <input type="date" name="dateN" required maxlength="30"><br>
+        <input type="date" name="dateN" required maxlength="10"><br>
         
           <label for="numDep">Numéro de votre département</label>
         <input type="text" name="numDep" required maxlength="6"><br>
         
           <label for="ville">Nom de votre ville</label>
-        <input type="text" name="ville" required maxlength="30"><br>
+        <input type="text" name="ville" required maxlength="254"><br>
         
           <label for="adresse">Adresse</label>
-        <input type="text" name="adresse" required maxlength="80"><br>
+        <input type="text" name="adresse" required maxlength="254"><br>
         
          
         <input type="radio"  required>
@@ -88,7 +88,7 @@ END;
                         <h2 class="text-info">Connection à un compte</h2>
             </div><div class="formulaire">
             <form action="" method="post">
-        <div class="mb-3"><label class="form-label" for="NomUser">Login</label><input class="form-control item" type="text" name="login" required maxlength="30" value="$lastPSEUDO"></div>
+        <div class="mb-3"><label class="form-label" for="NomUser">Login</label><input class="form-control item" type="text" name="login" required maxlength="50" value="$lastPSEUDO"></div>
         <div class="mb-3"><label class="form-label" for="Mdp">Mot de passe</label><input class="form-control" type="password" name="psw" required maxlength="20"></div>
         <div class="mb-3">
             <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox"><label class="form-check-label" for="checkbox">Remember me</label></div>
@@ -120,19 +120,19 @@ END;
         </form>
         <form action="" method="post">
          <label for="Email"  class="form-label">Email</label>
-        <input type="email" name="email" value="${compte['email']}" required maxlength="30"  ><br>
+        <input type="email" name="email" value="${compte['email']}" required maxlength="254"  ><br>
         
          <label for="DateNais"  class="form-label">Date anniversaire</label>
-        <input type="date" name="dateN" value="${compte['date_naissance']}"required maxlength="30" ><br>
+        <input type="date" name="dateN" value="${compte['date_naissance']}"required maxlength="10" ><br>
         
           <label for="numDep"  class="form-label">Numéro de votre département</label>
         <input type="text" name="numDep" value="${compte['num_dep']}" required maxlength="6" ><br>
         
           <label for="ville"  class="form-label">Nom de votre ville</label>
-        <input type="text" name="ville" value="${compte['ville']}" required maxlength="30" ><br>
+        <input type="text" name="ville" value="${compte['ville']}" required maxlength="254" ><br>
         
           <label for="adresse"  class="form-label">Adresse</label>
-        <input type="text" name="adresse" value="${compte['adresse']}" required maxlength="80" ><br>
+        <input type="text" name="adresse" value="${compte['adresse']}" required maxlength="254" ><br>
         
         
         <button type="submit" class="btn btn-primary" >Sauvegarder les modifications</button>

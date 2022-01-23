@@ -211,7 +211,7 @@ END;
         <div class="formulaire">
             <form action="" method="post">
                 <label for="titre" class="form-label">Titre</label>
-                <input type="text" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
+                <input type="text" class="form-control" name="titre" placeholder="" required maxlength="254"><br>
 
                 <label for="desc" class="form-label">Description</label>
                 <input type="text" class="form-control" name="description" placeholder="" required><br>
@@ -249,7 +249,7 @@ END;
         <div class="formulaire">
             <form action="" method="post">
                 <label for="titre" class="form-label">Modifier le titre</label>
-                <input type="text" value=  "${l['titre']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
+                <input type="text" value=  "${l['titre']}" class="form-control" name="titre" placeholder="" required maxlength="254"><br>
 
                 <label for="desc" class="form-label">Modifier la description</label>
                 <input type="text" value="{$l['description']}" class="form-control" name="description" placeholder="" required><br>
