@@ -62,7 +62,7 @@ class ControlerGestionItem{
             if ($item != null) {
                 $rs->getBody()->write($vue->render(2, ['item' => $item, 'token' => $token, 'id' => $id, 'edition' => $edition]));
 
-            //cas où l'item n'esxiste pas
+            //cas où l'item n'existe pas
             } else {
                 $vue = new VueRender($this->container);
                 $rs->getBody()->write($vue->render($vue->htmlErreur("Erreur dans l'id de l'item...<br>")));
@@ -288,6 +288,7 @@ class ControlerGestionItem{
                     {
                         //on creer un item sans image
                         $this->ajouterNouvelItemInBDD($args,  'no-image.png');
+                        break;
                     }
                     default: {
                         throw new \Exception("Etat de programme interdit");
