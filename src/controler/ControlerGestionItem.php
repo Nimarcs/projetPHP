@@ -232,10 +232,6 @@ class ControlerGestionItem{
                 $args['url'] = $url;
 
 
-                //on recupere le fichier uploads
-                $fichiers = $rq->getUploadedFiles();
-                $fichier = $fichiers['fichier'];
-                //on verifie s'il y a un fichier
                 switch ($typeEntree ){
                     case'predef' :
                     {
@@ -256,6 +252,11 @@ class ControlerGestionItem{
                     case "file" :
                     {
                         //on fourni un fichier
+
+                        //on recupere le fichier uploads
+                        $fichiers = $rq->getUploadedFiles();
+                        $fichier = $fichiers['fichier'];
+                        //on verifie s'il y a un fichier
 
                         if ($fichier == null || $fichier->getError() !== UPLOAD_ERR_OK) {
                             //pas d'image
@@ -357,12 +358,53 @@ class ControlerGestionItem{
         try {
             $vue = new VueGestionItem($this->container);
 
-            if ($rq->isPost() && sizeof($args) == 6) {
+            if ($rq->isPost()) {
+
+                //on recupère l'item
 
                 $item = $this->recupererItem($args['token'], intval($args['id']));
 
+                //on filtre
+                $args['titre'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
+                $args['description']=filter_var($args['description'], FILTER_SANITIZE_STRING);
+                $args['prix'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
+
+                //on recupere l'image
+                $newImg = 'no-image.png';
+
+                $typeEntree = $rq->getParsedBody()['typeEntree'] ;
+                $imageChoisi = $rq->getParsedBody()['image'];
+
+
+                switch ($typeEntree ) {
+                    case'predef' :
+                    {
+                        //on a choisi depuis la liste
+                        $newImg = $imageChoisi;
+
+                        break;
+                    }
+                    case "url":
+                    {
+                        //on fourni une url
+                        $newImg = filter_var($rq->getParsedBody()['urlImg'], FILTER_SANITIZE_URL);
+
+                        break;
+                    }
+                    default:
+                    {
+                        throw new \Exception("Etat de programme interdit");
+                    }
+                }
+
+                $args['image'] = $newImg;
+
+                //plus l'image
+
+
+
                 $this->modifierItemInBDD($item, $args);
-                $rs = $rs->withRedirect($this->container->router->pathFor('affichageItem', ['token'=>$item->liste->token_edition], ['id'=>$item->id] ));
+                $rs = $rs->withRedirect($this->container->router->pathFor('afficherItem', ['token'=>$item->liste->token_edition , 'id'=>$item->id] ));
             } else {
 
                 $item = $this->recupererItem($args['token'], intval($args['id']));
@@ -383,14 +425,15 @@ class ControlerGestionItem{
     /**
      * Fonction 9
      * Methode prive qui permet de modifier un item dans la bdd
+     * /!\ doit etre filtrée en amont
      * @author Fabrice Arnout
      */
 
     private function modifierItemInBDD(Item $i, array $args) :void{
-        $i['nom'] = filter_var($args['titre'], FILTER_SANITIZE_STRING);
-        $i['descr'] = filter_var($args['description'], FILTER_SANITIZE_STRING);
-        $i['img'] = filter_var($args['image'], FILTER_SANITIZE_STRING);
-        $i['tarif'] = filter_var($args['prix'], FILTER_SANITIZE_STRING);
+        $i['nom'] = $args['titre'];
+        $i['descr'] = $args['description'];
+        $i['img'] = $args['image'];
+        $i['tarif'] = $args['prix'];
         $i->save();
     }
 

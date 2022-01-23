@@ -312,23 +312,48 @@ END;
     private function htmlModifierUnItem(array $args):string{
         $i = $args['item'];
 
+        $imgs = $this->getImageEnregistree();
+        $options ="";
+        foreach ($imgs as $img){
+            $options.="<option value='$img'>$img</option>";
+        }
+
         $html = <<<END
             <div class="block-heading">
                         <h2 class="text-info">Modifier l'item "{$i['nom']}" ?</h2>
             </div>        <div class="formulaire">
            <div class="formulaire">
-            <form action="" method="post">
-                <label for="nom" class="form-label">Modifier le nom</label>
+            <form action="" method="post" enctype="multipart/form-data>
+                <label for="titre" class="form-label">Modifier le nom</label>
                 <input type="text" value=  "${i['nom']}" class="form-control" name="titre" placeholder="" required maxlength="22"><br>
 
-                <label for="desc" class="form-label">Modifier la description</label>
+                <label for="description" class="form-label">Modifier la description</label>
                 <input type="text" value="{$i['description']}" class="form-control" name="description" placeholder="" required><br>
                 
-                <label for="img" class="form-label">Modifier l'image</label>
-                <input type="text" value="{$i['img']}" class="form-control" name="image" placeholder="" required><br> 
-              
                 <label for="prix" class="form-label">Modifier le prix</label>
-                <input type="number" value="{$i['tarif']}" class="form-control" name="prix" placeholder="" required><br> 
+                <input type="number" step="0.01" min="0" value="{$i['tarif']}" class="form-control" name="prix" placeholder="" required>
+                <br> 
+                
+                <h4>Modifier image</h4>
+                
+                <input type="radio" name="typeEntree" value="predef" id="predef" checked>
+                <label for="predef">Choisir une image predéfinie</label>
+                <br>
+                <label for="image">Choisissez une image:</label>
+                <select id="images" name="image">
+                    $options
+                </select>
+                
+                <br>
+                <p><strong>OU</strong></p>
+                
+                <input type="radio" name="typeEntree" value="url" id="urlImg" >
+                <label for="urlImg">Entrez l'url d'une image :</label>
+                <br>
+
+                <input type="url" name="urlImg" class="form-control"><br>
+                
+                
                 <input type="hidden" value="{$i['id']}" name="id">
                 <input type="hidden" value="{$i['liste']->token_edition}" name="token">
                 
